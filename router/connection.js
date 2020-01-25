@@ -2,8 +2,8 @@
 //const config = {user: 'iEx', password: 'iEx', server: '192.168.0.200', database: 'VENTAS', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
 //const config = {user: 'iEx', password: 'iEx', server: 'ONNE\\SQL2014', database: 'VENTAS', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
 
-//const config = {user: 'iEx', password: 'iEx', server: 'ONNE\\SQLDEVELOPMENT', database: 'ONNE', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
-const config = {user: 'iEx', password: 'iEx', server: 'ONNE\\SQLDEVELOPMENT', database: 'VENTAS', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
+const config = {user: 'iEx', password: 'iEx', server: 'ONNE\\SQLDEVELOPMENT', database: 'DB_A45479_EXPRESS', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
+//const config = {user: 'iEx', password: 'iEx', server: 'ONNE\\SQLDEVELOPMENT', database: 'VENTAS', pool: {max: 100,min: 0,idleTimeoutMillis: 30000}};
 
 const sql = require('mssql');
 

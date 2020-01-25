@@ -1,3 +1,15 @@
+.mapcontainer {
+    width: 100%;
+    height: 330px;
+    box-shadow: 5px 5px 5px #888;
+}
+
+.mapcontainer2 {
+    width: 100%;
+    height: 580px;
+    box-shadow: 5px 5px 5px #888;
+}
+
 @media print{
     .oculto-impresion, .oculto-impresion *{
         display:none !important;
@@ -16,6 +28,18 @@
       bottom: 0;
     }
 }
+
+
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+   
+  .abs-form {
+    width: 450px;
+  }
 
 .foot {
     bottom: 0;

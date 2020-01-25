@@ -36,7 +36,7 @@ btnMenuSalir.addEventListener('click',()=>{
 });
 
 
-classNavegar.inicio();
+classNavegar.login();
 
 function createNotification(text) {
   // eslint-disable-next-line no-undef

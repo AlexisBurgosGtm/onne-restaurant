@@ -117,8 +117,8 @@
                                 </a>
                             </div>                           
 
-                            <!-- app settings -->
-                            <div class="hidden-md-down">
+                            <!-- app settings hidden-md-down-->
+                            <div class="hidden">
                                 <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-settings">
                                     <i class="fal fa-cog"></i>
                                 </a>
@@ -129,13 +129,9 @@
                                     <i class="fal fa-sign-out"></i>
                                 </a>
                             </div>
-                            <div class="">
-                                <a href="#" class="header-icon" id="btnMenu" data-toggle="modal" data-target="#modalMenu">
-                                    <i class="fal fa-globe"></i>
-                                </a>
-                            </div>
+                            
                             <div>
-                                <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                                <a href="#" data-toggle="dropdown" title="" class="header-icon d-flex align-items-center justify-content-center ml-2">
                                     <img src="img/logo.png" class="profile-image rounded-circle" alt="Menú">
                                     <!-- you can also add username next to the avatar with the codes below:
 									<span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
@@ -148,32 +144,35 @@
                                                 <img src="img/logo.png" class="rounded-circle profile-image" alt="Usuario">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg">Usuario</div>
-                                                <span class="text-truncate text-truncate-md opacity-80">correo@mercadosefectivos.com</span>                                                
+                                                <div class="fs-lg text-truncate text-truncate-lg" id="divUsuario">Usuario</div>
+                                                <span class="text-truncate text-truncate-md opacity-80" id="lbTipo">correo@mercadosefectivos.com</span>                                                
                                             </div>
                                         </div>
                                     </div>
                                     <div class="dropdown-divider m-0"></div>
-                                    <a href="#" class="dropdown-item" data-action="app-reset">
-                                        <span data-i18n="drpdwn.reset_layout">Reset Layout</span>
-                                    </a>
-                                    <a href="#" class="dropdown-item" data-toggle="modal" data-target=".js-modal-settings">
-                                        <span data-i18n="drpdwn.settings">Settings</span>
-                                    </a>
-                                    <div class="dropdown-divider m-0"></div>
-                                    <a href="#" class="dropdown-item" data-action="app-fullscreen">
-                                        <span data-i18n="drpdwn.fullscreen">Fullscreen</span>
-                                        <i class="float-right text-muted fw-n">F11</i>
-                                    </a>
-                                    <a href="#" class="dropdown-item" data-action="app-print">
-                                        <span data-i18n="drpdwn.print">Print</span>
-                                        <i class="float-right text-muted fw-n">Ctrl + P</i>
-                                    </a>
+                                    
+                                    <div id="rootMenu">
+                                        <a href="#" class="dropdown-item">
+                                            <span data-i18n="drpdwn.reset_layout">Reset Layout</span>
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            <span data-i18n="drpdwn.settings">Settings</span>
+                                        </a>
+                                    
+                                        <a href="#" class="dropdown-item">
+                                            <span data-i18n="drpdwn.fullscreen">Fullscreen</span>
+                                            
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            <span data-i18n="drpdwn.print">Print</span>
+                                        </a>
+                                    
+                                    </div>
                                     
                                     <div class="dropdown-divider m-0"></div>
+
                                     <a class="dropdown-item fw-500 pt-3 pb-3" href="index.html">
-                                        <span data-i18n="drpdwn.page-logout">Logout</span>
-                                        <span class="float-right fw-n">&commat;codexlantern</span>
+                                        <span data-i18n="drpdwn.page-logout">Salir</span>
                                     </a>
                                 </div>
                             </div>
@@ -452,8 +451,9 @@
         <script src="./libs/funciones.js"></script>
         <script src="./controllers/classNavegar.js"></script>
         <script src="./controllers/GlobalVars.js"></script>
+        <script src="./controllers/apicalls.js"></script>
+        
         <script src="./index.js"></script>
-
         <script src="./models/socketHandler.js"></script>
      
     </body>

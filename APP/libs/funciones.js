@@ -456,6 +456,31 @@ let funciones = {
         funciones.AvisoError(error.toString());
     }
     },
+    ComboSemana :(letnum)=>{
+      let str = '';
+      if(letnum=="LETRAS"){
+        str =  `<option value="LUNES">LUNES</option>
+                <option value="MARTES">MARTES</option>
+                <option value="MIERCOLES">MIERCOLES</option>
+                <option value="JUEVES">JUEVES</option>
+                <option value="VIERNES">VIERNES</option>
+                <option value="SABADO">SABADO</option>
+                <option value="DOMINGO">DOMINGO</option>
+                `
+      }else{
+        str =  `<option value="1">LUNES</option>
+                <option value="2">MARTES</option>
+                <option value="3">MIERCOLES</option>
+                <option value="4">JUEVES</option>
+                <option value="5">VIERNES</option>
+                <option value="6">SABADO</option>
+                <option value="7">DOMINGO</option>
+                `
+      };
+
+      return str;
+      
+    },
     ComboMeses: ()=>{
     let str =`<option value='1'>Enero</option>
               <option value='2'>Febrero</option>

@@ -1,23 +1,51 @@
 let classNavegar = {
     login : async()=>{
-        funciones.loadView('./DASHBOARD/views/login/viewLogin.html','root')
-        .then(()=>{
-          funciones.loadScript('./DASHBOARD/views/login/controller.js','root')
+        GlobalCodUsuario=99999;
+        GlobalUsuario = '';
+        GlobalTipoUsuario ='';
+          funciones.loadScript('../views/login/index.js','root')
             .then(()=>{
                 GlobalSelectedForm='LOGIN';
-                InicializarLogin();
-            })
-        })
-    },
-    inicio : async()=>{
-        funciones.loadView('../views/inicio/index.html','root')
-        .then(()=>{
-          funciones.loadScript('../views/inicio/controller.js','root')
-            .then(()=>{
-                GlobalSelectedForm='INICIO';
                 InicializarVista();
             })
-        })
+        
+    },
+    inicio : async(tipousuario)=>{
+        
+        console.log(tipousuario);
+
+        switch (tipousuario) {
+            case 'VENDEDOR':
+                funciones.loadScript('../views/inicio/vendedor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
+                break;
+
+            case 'SUPERVISOR':
+                funciones.loadScript('../views/inicio/supevisor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
+                break;
+            
+            case 'REPARTIDOR':
+                funciones.loadScript('../views/inicio/repartidor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
+                break;
+        
+            default:
+                break;
+        }
+
+      
+      
+      
     },
     ventas: async()=>{
         funciones.loadView('../views/facturacion/index.html','root')

@@ -2,6 +2,25 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+
+router.post("/listavendedor", async(req,res)=>{
+
+    const {app,sucursal,codven,dia}  = req.body;
+
+    let qry = '';
+    qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Municipios.DESMUNI, ME_Clientes.TELCLIE AS TELEFONO, ME_Clientes.LATITUD AS LAT, 
+            ME_Clientes.LONGITUD AS LONG
+            FROM ME_Clientes LEFT OUTER JOIN
+            ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.EMP_NIT = ME_Municipios.EMP_NIT AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
+            WHERE (ME_Clientes.CODSUCURSAL = '${sucursal}') AND (ME_Clientes.VISITA = '${dia}') AND (ME_Clientes.CODVEN = ${codven})`
+
+    console.log(qry);
+    
+    execute.Query(res,qry);
+
+})
+
+
 // BUSCA CLIENTE POR NOMBRE
 router.get("/buscarcliente", async(req,res)=>{
     const {app,empnit,filtro} = req.query;
