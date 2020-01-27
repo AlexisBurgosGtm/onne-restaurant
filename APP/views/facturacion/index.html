@@ -8,15 +8,15 @@
                         <div class="panel-toolbar">
                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
                             <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                            <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                            
                         </div>
                     </div>
-                    <div class="panel-container show">
+                    <div class="panel-container collapse">
                         <div class="panel-content">
                             <div class="">
                                 <div class="input-group">
-                                    <input id="txtNit" type="text" ref="txtNit" class="form-control" placeholder="NIT del cliente.." aria-label="" aria-describedby="button-addon4" />
-                                    <div class="input-group-prepend">
+                                    <input id="txtNit" type="text" ref="txtNit" class="form-control" placeholder="Código del cliente.." aria-label="" aria-describedby="button-addon4" />
+                                    <div class="hidden input-group-prepend">
                                         <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
                                             <i class="fal fa-search"></i>
                                         </button>
@@ -42,10 +42,10 @@
                         <div class="panel-toolbar">
                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
                             <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                            <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>                                
+                            
                         </div>
                     </div>
-                    <div class="panel-container show">
+                    <div class="panel-container collapse"> <!--show-->
                         <div class="panel-content">
                             <div class="row">
                                 <div class="col-6">
@@ -99,7 +99,7 @@
                     <div class="panel-toolbar">
                         <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
                         <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                        <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                       
                     </div>
                 </div>
                 <div class="panel-container show">
@@ -402,16 +402,17 @@
                         <div class="row">
                                 <div class="col-sm-6 ml-sm-auto">
                                     <div class="form-group">
-                                        <label>Recoge en:</label>
+                                        <label>Entregar en:</label>
                                         <select class="form-control" id="cmbEntregaTipo">
                                             <option value="TIENDA">TIENDA</option>
-                                            <option value="DOMICILIO">ENVIAR A SU DOMICILIO</option>
+                                            <option value="DOMICILIO">DOMICILIO</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea rows="4" cols="80" class="form-control" id="txtEntregaObs" placeholder="Escriba aqui sus observaciones..."></textarea>
-                                    </div>                               
+                                        <label>Dirección de Entrega:</label>
+                                        <textarea rows="4" cols="80" class="form-control" id="txtEntregaDireccion" placeholder="Escriba aqui a dirección de entrega..."></textarea>
+                                    </div>
+                                    
                                 </div>
 
                                 <div class="col-sm-6 ml-sm-auto">
@@ -420,22 +421,29 @@
                                         <input type="date" class="form-control" id="txtEntregaFecha">
                                     </div>
                                     <div class="form-group">
-                                        <label>Dirección de Entrega:</label>
-                                        <textarea rows="4" cols="80" class="form-control" id="txtEntregaDireccion" placeholder="Escriba aqui a dirección de entrega..."></textarea>
-                                    </div>                               
+                                        <label>Observaciones</label>
+                                        <textarea rows="4" cols="80" class="form-control" id="txtEntregaObs" placeholder="Escriba aqui sus observaciones..."></textarea>
+                                    </div>                                                              
                                 </div>
+                        </div>
+                        <div class="row">
+                            <label id="lbDocLat">0</label>
+                            <label id="lbDocLong">0</label>
                         </div>
                         
                         <br>
 
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-5">
                                 <button class="btn btn-secondary btn-lg  btn-pills btn-block waves-effect waves-themed" data-dismiss="modal" id="btnEntregaCancelar">
                                     <i class="fal fa-times mr-1"></i>
                                     Cancelar
                                 </button>                                
                             </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+
+                            <div class="col-1"></div>
+
+                            <div class="col-5">
                                 <button class="btn btn-success btn-lg btn-pills btn-block waves-effect waves-themed" id="btnFinalizarPedido">
                                     <i class="fal fa-check mr-1"></i>
                                     Finalizar
@@ -449,4 +457,101 @@
                
             </div>
         </div>
+</div>
+
+<!--MODAL CANTIDAD-->
+<div class="modal fade" id="ModalCantidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="modal-title text-danger h3" id="">Nueva Cantidad</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-2">
+                        <h1 class="text-danger fw-700">Cant:</h1>
+                    </div>
+                    <div class="col-8 text-center">
+                        <h1 class="text-danger fw-700" id="lbCalcTotal">0</h1>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                
+                <br>
+
+                <div class="row">
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc1">1</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc2">2</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc3">3</button>
+                    </div>
+                </div>
+                
+                <br>
+
+                <div class="row">
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc4">4</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc5">5</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc6">6</button>
+                    </div>
+                </div>
+                
+                <br>
+
+                <div class="row">
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc7">7</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc8">8</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc9">9</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-4">
+                
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-xl btn-circle btn-info" id="btnCalc0">0</button>
+                    </div>
+                    <div class="col-4">
+                
+                    </div>
+                </div>
+
+                <br><br><br>
+
+                <div class="row">
+                    <div class="col-4">
+                        <button class="btn btn-danger btn-lg" data-dismiss="modal">Cancelar</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-primary btn-lg" id="btnCalcLimpiar">Limpiar</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-success btn-lg" data-dismiss="modal" id="btnCalcAceptar">Aceptar</button>
+                    </div>
+                </div>
+             
+            </div>
+            
+        </div>
+    </div>
 </div>

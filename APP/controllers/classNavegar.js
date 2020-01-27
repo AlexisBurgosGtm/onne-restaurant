@@ -1,9 +1,13 @@
 let classNavegar = {
     login : async()=>{
+        divUsuario.innerText = 'DESCONECTADO';
+        lbTipo.innerText = "Inicie sesión";
+        rootMenu.innerHTML = '';
+        GlobalCoddoc = '';
         GlobalCodUsuario=99999;
         GlobalUsuario = '';
         GlobalTipoUsuario ='';
-          funciones.loadScript('../views/login/index.js','root')
+            funciones.loadScript('../views/login/index.js','root')
             .then(()=>{
                 GlobalSelectedForm='LOGIN';
                 InicializarVista();
@@ -11,15 +15,41 @@ let classNavegar = {
         
     },
     inicio : async(tipousuario)=>{
+        divUsuario.innerText = GlobalUsuario;
+        lbTipo.innerText = GlobalTipoUsuario;
+
         
-        console.log(tipousuario);
+        let strMenu ='';
 
         switch (tipousuario) {
             case 'VENDEDOR':
+                strMenu =   `
+                            <a class="dropdown-item" id="btnMenuVendedorClientes">
+                                <span>Clientes</span>
+                            </a>
+                            <a class="dropdown-item" id="btnMenuVendedorPedidos">
+                                <span>Pedidos</span>
+                            </a>
+                            <a class="dropdown-item" id="btnMenuVendedorLogro">
+                                <span>Logros</span>
+                            </a>
+                            `
+
                 funciones.loadScript('../views/inicio/vendedor.js','root')
                 .then(()=>{
                     GlobalSelectedForm='INICIO';
                     InicializarVista();
+                    rootMenu.innerHTML = strMenu;
+                      // handlers del menu
+                    let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
+                    btnMenuVendedorClientes.addEventListener('click',()=>{
+                        console.log('menu clientes');
+                        classNavegar.inicio('VENDEDOR');
+                    });
+                    let btnMenuVendedorPedidos = document.getElementById('btnMenuVendedorPedidos');
+                    btnMenuVendedorPedidos.addEventListener('click',()=>{
+                        classNavegar.pedidos();
+                    });
                 })          
                 break;
 
@@ -41,24 +71,30 @@ let classNavegar = {
         
             default:
                 break;
-        }
 
-      
+        };
+
+        
       
       
     },
-    ventas: async()=>{
+    ventas: async(nit,nombre,direccion)=>{
         funciones.loadView('../views/facturacion/index.html','root')
-        .then(()=>{
-            funciones.loadScript('./models/classTipoDocumentos.js','root')
-            funciones.loadScript('./models/classEmpleados.js','root')
+        .then(()=>{            
             funciones.loadScript('./views/facturacion/controller.js','root')
             .then(()=>{
                 GlobalSelectedForm ='VENTAS';
-                controllerventa.iniciarVistaVentas();
-
+                //controllerventa.iniciarVistaVentas(nit,nombre,direccion);
+                iniciarVistaVentas(nit,nombre,direccion);
             })
         })
+    },
+    pedidos: async ()=>{
+        funciones.loadScript('../views/pedidos/vendedor.js','root')
+        .then(()=>{
+            GlobalSelectedForm='PEDIDOS';
+            inicializarVistaPedidos();
+        })             
     },
     despacho: async()=>{
         funciones.loadView('../views/despacho/index.html','root')

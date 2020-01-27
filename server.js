@@ -5,9 +5,7 @@ var bodyParser = require('body-parser');
 
 const execute = require('./router/connection');
 var routerVentas = require('./router/routerVentas');
-var routerUsers = require('./router/routerUsers');
 var routerTipoDocs = require('./router/routerTipoDocs');
-var routerPedidos = require('./router/routerPedidos');
 var routerEmpleados = require('./router/routerEmpleados');
 var routerClientes = require('./router/routerClientes');
 
@@ -52,21 +50,14 @@ app.get("/api/index",function(req,res){
 //Router para app VENTAS
 app.use('/ventas', routerVentas);
 
-//Router para usuarios
-app.use('/usuarios', routerUsers);
-
 // Router para Tipodocumentos
 app.use('/tipodocumentos', routerTipoDocs);
-
-// Router para pedidos en linea
-app.use('/pedidos', routerPedidos);
 
 // Router para empleados o vendedores
 app.use('/empleados', routerEmpleados);
 
 // Router para clientes
 app.use('/clientes', routerClientes);
-
 
 
 app.use("/",router);
@@ -103,8 +94,3 @@ http.listen(PORT, function(){
   console.log('listening on *:' + PORT);
 });
 
-/*
-app.listen(PORT, function(){
-  console.log('listening on *:' + PORT);
-});
-*/

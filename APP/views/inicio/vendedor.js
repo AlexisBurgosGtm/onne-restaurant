@@ -1,4 +1,3 @@
-let map;
 
 function getView(){
     let view = {
@@ -10,17 +9,19 @@ function getView(){
                         </div>
                         <div class="card-body">
                             <div class="row">
+
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                     <select class="form-control" id="cmbDiaVisita"></select>
                                 </div>
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 text-right">
                                     <button class="btn btn-success btn-rounded" id="btnCargarClientes">
                                         Ver Lista
                                     </button>
-                                </div>
+                                </div>                                        
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <input type="text" id="txtFiltrarCliente" class="form-control" placeholder="Buscar en la lista...">
                                 </div>
+
                             </div> 
                         </div>
 
@@ -35,7 +36,7 @@ function getView(){
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-responsive table-striped table-hover table-bordered">
+                                <table class="table table-responsive table-striped table-hover table-bordered" id="tblLista">
                                     <thead>
                                         <tr>
                                             <td>Nombre/Código</td>
@@ -165,6 +166,10 @@ function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){
     document.getElementById('txtDirClie').value = direccion;
     document.getElementById('txtTelClie').value = telefono;
     
+    GlobalSelectedCodCliente = codigo;
+    GlobalSelectedNomCliente = nombre;
+    GlobalSelectedDirCliente = direccion;
+    
     $('#modalMenuCliente').modal('show',function(){
         //aca puedo meterle focus a algún control
     });
@@ -172,14 +177,20 @@ function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){
 };
 
 function addListeners(){
+
+    //handler del dia de la semana
     let cmbDiaVisita = document.getElementById('cmbDiaVisita');
     cmbDiaVisita.innerHTML = funciones.ComboSemana("LETRAS");
-
-    
+       
     let btnCargarClientes = document.getElementById('btnCargarClientes');
     btnCargarClientes.addEventListener('click',async()=>{
         await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes')
     });
+    
+    let f = new Date();
+    cmbDiaVisita.value = funciones.getDiaSemana(f.getDay());
+
+    btnCargarClientes.click();
 
     let btnCerrarModalCliente = document.getElementById('btnCerrarModalCliente');
     btnCerrarModalCliente.addEventListener('click',()=>{
@@ -190,8 +201,13 @@ function addListeners(){
     let btnVenderCliente = document.getElementById('btnVenderCliente');
     btnVenderCliente.addEventListener('click',()=>{
         $("#modalMenuCliente").modal('hide');
-        classNavegar.ventas();
+        classNavegar.ventas(GlobalSelectedCodCliente,GlobalSelectedNomCliente,GlobalSelectedDirCliente);
     });
+
+    let txtFiltrarCliente = document.getElementById('txtFiltrarCliente');
+    txtFiltrarCliente.addEventListener('keyup',(e)=>{
+        funciones.FiltrarTabla('tblLista','txtFiltrarCliente');
+    })
 
 };
 

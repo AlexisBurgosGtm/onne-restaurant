@@ -481,6 +481,34 @@ let funciones = {
       return str;
       
     },
+    getDiaSemana:(numdia)=>{
+      switch (numdia) {
+        case 0:
+          return 'DOMINGO';
+          break;
+        case 1:
+          return 'LUNES';
+          break;
+        case 2:
+          return 'MARTES';
+          break;
+        case 3:
+          return 'MIERCOLES';
+          break;
+        case 4:
+          return 'JUEVES';
+          break;
+        case 5:
+          return 'VIERNES';
+          break;
+        case 6:
+          return 'SABADO';
+          break;
+      
+        default:
+          break;
+      }
+    },
     ComboMeses: ()=>{
     let str =`<option value='1'>Enero</option>
               <option value='2'>Febrero</option>

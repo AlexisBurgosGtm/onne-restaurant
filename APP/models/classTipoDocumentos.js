@@ -1,4 +1,3 @@
-
 let classTipoDocumentos = {
     comboboxTipodoc : async(tipo,idContainer)=>{
 

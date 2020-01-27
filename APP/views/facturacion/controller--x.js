@@ -1,5 +1,5 @@
-
-async function iniciarVistaVentas(nit,nombre,direccion){
+let controllerventa = {
+iniciarVistaVentas: async function(nit,nombre,direccion){
      
     let txtFecha = document.getElementById('txtFecha');txtFecha.value = funciones.getFecha();
     let txtEntregaFecha = document.getElementById('txtEntregaFecha');txtEntregaFecha.value = funciones.getFecha();
@@ -8,29 +8,29 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     let txtNit = document.getElementById('txtNit');
     txtNit.addEventListener('keydown',(e)=>{
         if(e.code=='Enter'){
-            fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
+            controllerventa.fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
         }
         if(e.code=='NumpadEnter'){
-            fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
+            controllerventa.fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
         }
     });
 
     document.getElementById('btnBuscarCliente').addEventListener('click',()=>{
-        //fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
+        //controllerventa.fcnBuscarCliente('txtNit','txtNombre','txtDireccion');    
     });
 
     document.getElementById('txtBusqueda').addEventListener('keyup',(e)=>{
         if(e.code=='Enter'){
-            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+            controllerventa.fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
             $('#ModalBusqueda').modal('show');
         }
         if(e.code=='NumpadEnter'){
-            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+            controllerventa.fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
             $('#ModalBusqueda').modal('show');
         }
     });
     document.getElementById('btnBuscarProducto').addEventListener('click',()=>{
-        fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+        controllerventa.fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
         $('#ModalBusqueda').modal('show');
     });
 
@@ -44,7 +44,6 @@ async function iniciarVistaVentas(nit,nombre,direccion){
            if(txtNit.value==''){
                funciones.AvisoError('Especifique el cliente a quien se carga la venta');
            }else{
-               funciones.ObtenerUbicacion('lbDocLat','lbDocLong')
                 switch (GlobalTipoCobro) {
                     case 'COBRO':
                         $('#ModalCobro').modal('show');
@@ -75,7 +74,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
 
     let btnFinalizarPedido = document.getElementById('btnFinalizarPedido');
     btnFinalizarPedido.addEventListener('click',async ()=>{
-        fcnFinalizarPedido();
+        controllerventa.fcnFinalizarPedido();
     });
 
     //BUSQUEDA CLIENTES
@@ -85,7 +84,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
         funciones.Confirmacion('¿Está seguro que desea guardar este cliente?')
         .then((value)=>{
             if(value==true){
-                fcnGuardarNuevoCliente(frmNuevoCliente);
+                controllerventa.fcnGuardarNuevoCliente(frmNuevoCliente);
             }
         })
 
@@ -99,20 +98,20 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     let txtBusquedaCliente = document.getElementById('txtBusquedaCliente');
     txtBusquedaCliente.addEventListener('keyup',(e)=>{
         if(e.code=='Enter'){
-            fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
+            controllerventa.fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
         }
         if(e.code=='NumpadEnter'){
-            fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
+            controllerventa.fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
         }
     });
 
     document.getElementById('btnBuscarCliente').addEventListener('click',()=>{
-        fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
+        controllerventa.fcnBusquedaCliente('txtBusquedaCliente','tblResultadoBusquedaCliente');
     });
     document.getElementById('btnNuevoCliente').addEventListener('click',()=>{
         //$('#ModalNuevoCliente').modal('show');
         if(txtNit.value!==''){
-            fcnBuscarCliente('txtNit','txtNombre','txtDireccion');
+            controllerventa.fcnBuscarCliente('txtNit','txtNombre','txtDireccion');
         }else{
             funciones.AvisoError('Escriba el NIT o código de cliente para comprobar');
         };
@@ -141,22 +140,18 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     
     classTipoDocumentos.comboboxTipodoc('PED','cmbCoddoc')
         .then(async()=>{
-            cmbCoddoc.value = GlobalCoddoc;
             await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
         })
         .then(async()=>{
-            await fcnCargarGridTempVentas('tblGridTempVentas');
-            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+            await controllerventa.fcnCargarGridTempVentas('tblGridTempVentas');
+            await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
         })
     
-    await fcnGetMunicipios('cmbClienteMunicipio');
-    await fcnGetDepartamentos('cmbClienteDepartamento');
-    await classEmpleados.comboboxVendedores('cmbVendedor')
-            .then(()=>{
-                cmbVendedor.value = GlobalCodUsuario;
-            })
+    await controllerventa.fcnGetMunicipios('cmbClienteMunicipio');
+    await controllerventa.fcnGetDepartamentos('cmbClienteDepartamento');
+    await classEmpleados.comboboxVendedores('cmbVendedor');
 
-    fcnCargarComboTipoPrecio();
+    controllerventa.fcnCargarComboTipoPrecio();
 
     let txtPagadoEfectivo = document.getElementById('txtPagadoEfectivo');
     let txtVuelto = document.getElementById('txtVuelto');
@@ -171,21 +166,21 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     let btnCobrarVenta = document.getElementById('btnCobrarVenta');
     btnCobrarVenta.addEventListener('click',async ()=>{
         
-        fcnFinalizarPedido();
+        controllerventa.fcnFinalizarPedido();
       
     });
 
     // inicializa la calculadora de cantidad
-    iniciarModalCantidad();
+    controllerventa.iniciarModalCantidad();
 
     //carga los datos del cliente
     document.getElementById('txtNit').value = nit;
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
-    
+
    
-}
-function iniciarModalCantidad(){
+},
+iniciarModalCantidad:()=>{
     let total = document.getElementById('lbCalcTotal');
     total.innerText = "";
     let btnCalcAceptar = document.getElementById('btnCalcAceptar');
@@ -215,16 +210,16 @@ function iniciarModalCantidad(){
 
     btnCalcAceptar.addEventListener('click',async ()=>{
         let n = Number(total.innerText);
-        fcnUpdateTempRow(GlobalSelectedId,n)
+        controllerventa.fcnUpdateTempRow(GlobalSelectedId,n)
         .then(async()=>{
-            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');      
-            await fcnCargarGridTempVentas('tblGridTempVentas');
+            await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');      
+            await controllerventa.fcnCargarGridTempVentas('tblGridTempVentas');
         })
         total.innerText = "";
     })
 
-}
-async function fcnBusquedaProducto(idFiltro,idTablaResultado){
+},
+fcnBusquedaProducto: async function(idFiltro,idTablaResultado){
     
     let filtro = document.getElementById(idFiltro).value;
     let tabla = document.getElementById(idTablaResultado);
@@ -250,7 +245,7 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado){
             <td>${rows.DESMARCA}</td>
             <td>
                 <button class="btn btn-sm btn-success btn-circle text-white" 
-                onclick="fcnAgregarProductoVenta('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
+                onclick="controllerventa.fcnAgregarProductoVenta('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
                     +
                 </button>
             <td>
@@ -262,8 +257,8 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado){
         console.log(error);
     });
 
-}
-async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
+},
+fcnAgregarProductoVenta: async function(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
     document.getElementById('tblResultadoBusqueda').innerHTML = '';
         let coddoc = document.getElementById('cmbCoddoc').value;
         try {        
@@ -303,8 +298,8 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                     {
                         //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
                         $('#ModalBusqueda').modal('hide')
-                        await fcnCargarGridTempVentas('tblGridTempVentas');
-                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                        await controllerventa.fcnCargarGridTempVentas('tblGridTempVentas');
+                        await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
 
                         let txbusqueda = document.getElementById('txtBusqueda');
                         txbusqueda.value = '';txbusqueda.focus();
@@ -321,8 +316,8 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                 }
                 
 
-}
-async function fcnBuscarCliente(idNit,idNombre,idDireccion){
+},
+fcnBuscarCliente: async(idNit,idNombre,idDireccion)=>{
     
     let nit = document.getElementById(idNit);
     let nombre = document.getElementById(idNombre);
@@ -372,8 +367,8 @@ async function fcnBuscarCliente(idNit,idNombre,idDireccion){
     }, (error) => {
         console.log(error);
     });
-}
-async function fcnBusquedaCliente(idFiltro,idTablaResultado){
+},
+fcnBusquedaCliente: async function(idFiltro,idTablaResultado){
     
     let filtro = document.getElementById(idFiltro).value;
     let tabla = document.getElementById(idTablaResultado);
@@ -400,7 +395,7 @@ async function fcnBusquedaCliente(idFiltro,idTablaResultado){
                         <td>${funciones.setMoneda(rows.SALDO,'Q')}</td>
                         <td>
                             <button class="btn btn-sm btn-success btn-circle text-white" 
-                            onclick="fcnAgregarClienteVenta('${rows.CODCLIE}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}')">
+                            onclick="controllerventa.fcnAgregarClienteVenta('${rows.CODCLIE}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}')">
                                 +
                             </button>
                         <td>
@@ -412,15 +407,15 @@ async function fcnBusquedaCliente(idFiltro,idTablaResultado){
         console.log(error);
     });
 
-}
-async function fcnAgregarClienteVenta(codigo,nit,nombre,direccion){
+},
+fcnAgregarClienteVenta: async function(codigo,nit,nombre,direccion){
     document.getElementById('tblResultadoBusquedaCliente').innerHTML = '';
     document.getElementById('txtNit').value = nit;
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
     $('#ModalBusquedaCliente').modal('hide');  
-}
-async function fcnGuardarNuevoCliente(form){
+},
+fcnGuardarNuevoCliente: async (form)=>{
     
     let nit = form[0].value;
     let nomclie = form[1].value;
@@ -480,8 +475,8 @@ async function fcnGuardarNuevoCliente(form){
     });
 
 
-}
-async function fcnEliminarItem(id){
+},
+fcnEliminarItem: async function(id){
     
     try {        
             var data =JSON.stringify({
@@ -505,7 +500,7 @@ async function fcnEliminarItem(id){
                     console.log(id.toString());
                     document.getElementById(id.toString()).remove();
                     //await fcnCargarGridTempVentas('tblGridTempVentas');
-                    await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                    await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
                 }
               })
               .catch(
@@ -517,8 +512,8 @@ async function fcnEliminarItem(id){
         } catch (error) {
 
         }
-}
-async function fcnCargarGridTempVentas(idContenedor){
+},
+fcnCargarGridTempVentas: async function(idContenedor){
     let tabla = document.getElementById(idContenedor);
 
     tabla.innerHTML = GlobalLoader;
@@ -540,14 +535,14 @@ async function fcnCargarGridTempVentas(idContenedor){
                         <td class="text-right">${rows.CODMEDIDA}<br>
                             <small>${rows.EQUIVALE} item</small></td>
                         <td class="text-center">
-                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
+                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="controllerventa.fcnCambiarCantidad(${rows.ID});">+</button>
                             <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
                             
                         </td>
                         <td class="text-right">${funciones.setMoneda(rows.PRECIO,'Q')}</td>
                         <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
                         <td>
-                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="fcnEliminarItem(${rows.ID});">
+                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="controllerventa.fcnEliminarItem(${rows.ID});">
                                 x
                             </button>
                         <td>
@@ -560,14 +555,14 @@ async function fcnCargarGridTempVentas(idContenedor){
         console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
         tabla.innerHTML = 'No se logró cargar la lista...';
     }
-}
-async function fcnCambiarCantidad(id){
+},
+fcnCambiarCantidad: function (id){
     
     GlobalSelectedId = id;
     $('#ModalCantidad').modal('show');
     
-}
-async function fcnCargarTotal(idContenedor,idContenedor2){
+},
+fcnCargarTotal: async function (idContenedor,idContenedor2){
     let container = document.getElementById(idContenedor);
     let container2 = document.getElementById(idContenedor2);
     
@@ -602,8 +597,8 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
     }else{
         socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
     }
-}
-async function fcnFinalizarPedido(){
+},
+fcnFinalizarPedido: async()=>{
     
     let codcliente = GlobalSelectedCodcliente;
     let ClienteNombre = document.getElementById('txtNombre').value;
@@ -635,9 +630,6 @@ async function fcnFinalizarPedido(){
 
     let nit = document.getElementById('txtNit').value;
 
-    let latdoc = document.getElementById('lbDocLat').innerText;
-    let longdoc = document.getElementById('lbDocLong').innerText;
-
     funciones.Confirmacion('¿Está seguro que desea Finalizar este Pedido')
     .then((value)=>{
         if(value==true){
@@ -665,8 +657,8 @@ async function fcnFinalizarPedido(){
                 direntrega:direntrega,
                 usuario:GlobalUsuario,
                 codven:cmbVendedor.value,
-                lat:latdoc,
-                long:longdoc
+                lat:0,
+                long:0
             })
             .then(async(response) => {
                 const data = response.data;
@@ -679,8 +671,8 @@ async function fcnFinalizarPedido(){
                     $('#ModalCobro').modal('hide');
         
                     socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
-                    fcnEliminarTempVentas(GlobalUsuario);
-                    fcnNuevoPedido();
+                    controllerventa.fcnEliminarTempVentas(GlobalUsuario);
+                    controllerventa.fcnNuevoPedido();
                 }
             }, (error) => {
                 console.log(error);
@@ -688,8 +680,8 @@ async function fcnFinalizarPedido(){
             
         }
     })
-}
-async function fcnEliminarTempVentas(usuario){
+},
+fcnEliminarTempVentas: async(usuario)=>{
     let coddoc = document.getElementById('cmbCoddoc').value;
     axios.post('/ventas/tempVentastodos', {
         empnit: GlobalEmpnit,
@@ -707,9 +699,10 @@ async function fcnEliminarTempVentas(usuario){
     }, (error) => {
         console.log(error);
     });
-}
-async function fcnNuevoPedido(){
-    
+},
+fcnNuevoPedido:async()=>{
+    classEmpleados = undefined;
+    delete(classEmpleados);
     classNavegar.inicio(GlobalTipoUsuario);
     /*
     document.getElementById('txtNit').value ='CF';
@@ -719,11 +712,11 @@ async function fcnNuevoPedido(){
     document.getElementById('txtEntregaDireccion').value = 'SN';
 
     await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
-    await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-    await fcnCargarGridTempVentas('tblGridTempVentas');
+    await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+    await controllerventa.fcnCargarGridTempVentas('tblGridTempVentas');
     */
-}
-async function fcnUpdateTempRow(id,cantidad){
+},
+fcnUpdateTempRow: async(id,cantidad)=>{
     
     let costo = 0; let precio = 0; let equivale = 0; let exento = 0;
     
@@ -760,7 +753,7 @@ async function fcnUpdateTempRow(id,cantidad){
                         if (data2.rowsAffected[0]==0){
                             funciones.AvisoError('No se logró Eliminar la lista de productos agregados');
                         }else{
-                            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                            await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
                             console.log('Row actualizada exitosamente')
                         }
                     }, (error) => {
@@ -777,8 +770,8 @@ async function fcnUpdateTempRow(id,cantidad){
             reject();
         });
     
-}
-async function fcnGetMunicipios(idContainer){
+},
+fcnGetMunicipios: async(idContainer)=>{
     let container = document.getElementById(idContainer);
     container.innerHTML = GlobalLoader;
 
@@ -795,8 +788,8 @@ async function fcnGetMunicipios(idContainer){
         console.log(error);
         container.innerHTML = '';
     });
-}
-async function fcnGetDepartamentos(idContainer){
+},
+fcnGetDepartamentos: async(idContainer)=>{
     let container = document.getElementById(idContainer);
     container.innerHTML = GlobalLoader;
 
@@ -813,8 +806,8 @@ async function fcnGetDepartamentos(idContainer){
         console.log(error);
         container.innerHTML = '';
     });
-}
-async function fcnCargarComboTipoPrecio(){
+},
+fcnCargarComboTipoPrecio: ()=>{
    let cmbp = document.getElementById('cmbClienteTipoPrecio');
    if(GlobalSistema=='ISC'){
     cmbp.innerHTML =`<option value="P">PÚBLICO</option>
@@ -826,4 +819,5 @@ async function fcnCargarComboTipoPrecio(){
                      <option value="A">MAYORISTA A</option>`;
    }
    
+}
 }

@@ -18,19 +18,8 @@ router.get("/vendedores", async(req,res)=>{
     const {app,empnit} = req.query;
         
     let qry ='';
+    qry = `SELECT CODVEN,NOMVEN,CLAVE FROM ME_VENDEDORES WHERE EMP_NIT='${empnit}' AND ACTIVO='SI'`     
 
-    switch (app) {
-        case 'ISC':
-            qry = `SELECT CODVEN,NOMVEN,CLAVE FROM ME_VENDEDORES WHERE EMP_NIT='${empnit}' AND ACTIVO='SI'`     
-            break;
-        case 'COMMUNITY':
-            qry = `SELECT CODEMPLEADO AS CODVEN, NOMEMPLEADO AS NOMVEN, CLAVE FROM EMPLEADOS WHERE EMPNIT='${empnit}' AND CODTIPOEMPLEADO=3 AND ACTIVO='SI'`  
-            break;
-    
-        default:
-            break;
-    }
-    
     execute.Query(res,qry);
 
 })
