@@ -4,6 +4,8 @@ function getView(){
             return `
             <div class="row bg-trans-gradient text-white">
                 <h5>Seleccione un Mes y un Reporte</h5>
+                <label>Total : </label>
+                <b><label id="lbTotal">Q 0.00</label></b>
             </div>
 
             <div class="row">
@@ -85,15 +87,15 @@ function addListeners(){
     cmbAnio.value = f.getFullYear();
 
     let btnCargarDinero = document.getElementById('btnCargarDinero');
-    btnCargarDinero.addListeners('click',()=>{
+    btnCargarDinero.addEventListener('click',()=>{
         getRptDinero(cmbMes.value, cmbAnio.value);
     });
     let btnCargarProductos = document.getElementById('btnCargarProductos');
-    btnCargarProductos.addListeners('click',()=>{
+    btnCargarProductos.addEventListener('click',()=>{
         getRptProductos(cmbMes.value, cmbAnio.value);
     });
     let btnCargarMarcas = document.getElementById('btnCargarMarcas');
-    btnCargarMarcas.addListeners('click',()=>{
+    btnCargarMarcas.addEventListener('click',()=>{
         getRptMarcas(cmbMes.value, cmbAnio.value);
     });
 };
@@ -105,11 +107,11 @@ function inicializarVistaLogro(){
 
 
 function getRptDinero(mes,anio){
-
+    api.reporteDinero(GlobalCodSucursal,GlobalCodUsuario,anio,mes,'tblReport','lbTotal');
 };
 function getRptProductos(mes,anio){
-
+    api.reporteProductos(GlobalCodSucursal,GlobalCodUsuario,anio,mes,'tblReport','lbTotal');
 };
 function getRptMarcas(mes,anio){
-
+    api.reporteMarcas(GlobalCodSucursal,GlobalCodUsuario,anio,mes,'tblReport','lbTotal');
 };

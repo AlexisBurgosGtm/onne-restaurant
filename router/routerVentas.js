@@ -360,6 +360,21 @@ router.post("/listapedidos", async(req,res)=>{
 
     
     execute.Query(res,qry);
-})
+});
     
+router.post("/reportedinero", async (req,res)=>{
+
+    const {anio,mes,sucursal,codven} = req.body;
+
+    let qry = `SELECT ME_Documentos.DOC_FECHA AS FECHA, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALVENTA
+                FROM ME_Documentos LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+                WHERE (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Tipodocumentos.TIPODOC = 'PED') AND 
+                             (ME_Documentos.DOC_ESTATUS <> 'A')
+                GROUP BY ME_Documentos.DOC_FECHA`;
+    
+    execute.Query(res,qry);
+                             
+});
+
 module.exports = router;
