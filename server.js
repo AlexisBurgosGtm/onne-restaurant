@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 777;
 
 app.use(bodyParser.json());
 
-app.use(express.static('APP'));
+app.use(express.static('build'));
 
 var path = __dirname + '/'
 
@@ -40,12 +40,6 @@ app.get("/",function(req,res){
   execute.start();
 	res.sendFile(path + 'index.html');
 }); 
-
-app.get("/api/index",function(req,res){
-  
-	res.sendFile(path + '/APP/VENTAS/index.html');
-}); 
-
 
 //Router para app VENTAS
 app.use('/ventas', routerVentas);

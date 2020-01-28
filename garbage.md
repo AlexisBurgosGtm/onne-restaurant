@@ -1,5 +1,17 @@
 // @ts-check
 
+function createNotification(text) {
+  // eslint-disable-next-line no-undef
+  new Noty({
+    type: 'info',
+    layout: 'topRight',
+    timeout: '2000',
+    theme: 'metroui',
+    progressBar: false,
+    text,
+  }).show();
+}
+
 // CODIGO HTML PARA SMART PANEL
    <div id="panel-2" class="panel col-12">
         <div class="panel-hdr">
