@@ -217,7 +217,7 @@ function iniciarModalCantidad(){
         let n = Number(total.innerText);
         fcnUpdateTempRow(GlobalSelectedId,n)
         .then(async()=>{
-            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');      
+            //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');      
             await fcnCargarGridTempVentas('tblGridTempVentas');
         })
         total.innerText = "";
@@ -759,19 +759,21 @@ async function fcnUpdateTempRow(id,cantidad){
                         const data2 = re.data;
                         if (data2.rowsAffected[0]==0){
                             funciones.AvisoError('No se logró Eliminar la lista de productos agregados');
+                            reject();
                         }else{
                             await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-                            console.log('Row actualizada exitosamente')
+                            resolve();
                         }
                     }, (error) => {
                         console.log(error);
                     });  
             }, (error) => {
                 console.log(error);
+                reject();
             });  
     
     //finaliza la promesa
-            resolve();
+            
         }, (error) => {
             console.log(error);
             reject();

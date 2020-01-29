@@ -4,6 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 
 const execute = require('./router/connection');
+var routerNoticias = require('./router/routerNoticias');
 var routerVentas = require('./router/routerVentas');
 var routerTipoDocs = require('./router/routerTipoDocs');
 var routerEmpleados = require('./router/routerEmpleados');
@@ -41,6 +42,9 @@ app.get("/",function(req,res){
 	res.sendFile(path + 'index.html');
 }); 
 
+//Router para app NOTICIAS
+app.use('/noticias', routerNoticias);
+
 //Router para app VENTAS
 app.use('/ventas', routerVentas);
 
@@ -64,14 +68,16 @@ app.use("*",function(req,res){
 // SOCKET HANDLER
 io.on('connection', function(socket){
   
+  socket.on('noticias nueva', (msg,usuario)=>{
+    io.emit('noticias nueva', msg,usuario);
+
+  });
+
   socket.on('ordenes nueva', function(msg,form){
 	  io.emit('ordenes nueva', msg, form);
   });
 
-  socket.on('ordenes escribiendo', function(msg,form){
-	  io.emit('ordenes escribiendo', msg, form);
-  });
-  
+   
   socket.on('ordenes finalizada', function(cliente,monto){
 	  io.emit('ordenes finalizada', cliente, monto);
   });

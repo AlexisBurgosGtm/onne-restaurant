@@ -136,6 +136,7 @@ let api = {
         let tbl = `<table class="table-responsive table-hover table-striped">
                     <thead class="bg-trans-gradient text-white"><tr>
                         <td>Fecha</td>
+                        <td>Pedidos</td>
                         <td>Importe</td></tr>
                     <tbody>`;
 
@@ -150,20 +151,22 @@ let api = {
         })
         .then((response) => {
             const data = response.data.recordset;
-            let total =0;
+            let total =0; let pedidos = 0;
             data.map((rows)=>{
                     total = total + Number(rows.TOTALVENTA);
+                    pedidos = pedidos + Number(rows.PEDIDOS);
                     strdata = strdata + `<tr>
                                             <td>
                                                 ${rows.FECHA.toString().replace('T00:00:00.000Z','')}
                                             </td>
+                                            <td>${rows.PEDIDOS}</td>
                                             <td>
                                                 ${funciones.setMoneda(rows.TOTALVENTA,'Q')}
                                             </td>
                                         </tr>`
             })
             container.innerHTML = tbl + strdata + tblfoot;
-            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+            lbTotal.innerText = funciones.setMoneda(total,'Q ') + ' Pedidos: ' + pedidos.toString();
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';
@@ -182,14 +185,16 @@ let api = {
 
         let strdata = '';
         let tbl = `<table class="table-responsive table-hover table-striped">
-                    <thead class="bg-trans-gradient"><tr>
-                        <td>Fecha</td>
-                        <td>Importe</td></tr>
+                    <thead class="bg-trans-gradient text-white"><tr>
+                        <td>Producto</td>
+                        <td>Unidades</td>
+                        <td>Importe</td>
+                        </tr>
                     <tbody>`;
 
         let tblfoot = `</tbody></table>`;
 
-        axios.post('/ventas/reportedinero', {
+        axios.post('/ventas/reporteproductos', {
             app:GlobalSistema,
             sucursal: sucursal,
             codven:codven,
@@ -200,13 +205,16 @@ let api = {
             const data = response.data.recordset;
             let total =0;
             data.map((rows)=>{
-                    total = total + Number(rows.TOTALVENTA);
+                    total = total + Number(rows.TOTALPRECIO);
                     strdata = strdata + `<tr>
                                             <td>
-                                                ${rows.FECHA}
+                                                ${rows.DESPROD}
+                                                <br>
+                                                <small class="text-danger">${rows.CODPROD}</small>
                                             </td>
+                                            <td>${rows.TOTALUNIDADES}</td>
                                             <td>
-                                                ${funciones.setMoneda(rows.TOTALVENTA,'Q')}
+                                                ${funciones.setMoneda(rows.TOTALPRECIO,'Q')}
                                             </td>
                                         </tr>`
             })
@@ -230,14 +238,14 @@ let api = {
 
         let strdata = '';
         let tbl = `<table class="table-responsive table-hover table-striped">
-                    <thead class="bg-trans-gradient"><tr>
-                        <td>Fecha</td>
+                    <thead class="bg-trans-gradient text-white"><tr>
+                        <td>Marca</td>
                         <td>Importe</td></tr>
                     <tbody>`;
 
         let tblfoot = `</tbody></table>`;
 
-        axios.post('/ventas/reportedinero', {
+        axios.post('/ventas/reportemarcas', {
             app:GlobalSistema,
             sucursal: sucursal,
             codven:codven,
@@ -248,13 +256,13 @@ let api = {
             const data = response.data.recordset;
             let total =0;
             data.map((rows)=>{
-                    total = total + Number(rows.TOTALVENTA);
+                    total = total + Number(rows.TOTALPRECIO);
                     strdata = strdata + `<tr>
                                             <td>
-                                                ${rows.FECHA}
+                                                ${rows.DESMARCA}
                                             </td>
                                             <td>
-                                                ${funciones.setMoneda(rows.TOTALVENTA,'Q')}
+                                                ${funciones.setMoneda(rows.TOTALPRECIO,'Q')}
                                             </td>
                                         </tr>`
             })
@@ -267,5 +275,54 @@ let api = {
             lbTotal.innerText = 'Q 0.00';
         });
            
+    },
+    noticiaslistado : (sucursal,user,idContenedor)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+
+        let str = '';
+
+        axios.get('/noticias/listado', {
+            sucursal: sucursal,
+            user:user
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                let classprioridad ='';
+                switch (rows.PRIORIDAD) {
+                    case 'ALTA':
+                        classprioridad = 'bg-danger';
+                        break;
+                    case 'MEDIA':
+                        classprioridad = 'bg-warning';
+                        break;
+                    case 'BAJA':
+                        classprioridad = 'bg-info';
+                         break;               
+                    default:
+                        break;
+                }
+                str = str + `
+                        <div class="card">
+                            <div class="card-header ${classprioridad}">
+                                <label class="text-white">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</label>
+                            </div>
+                            <div class="card-body">
+                                <label>${rows.NOTICIA}</label>
+                            </div>
+                            <div class="card-footer text-right">
+                                <label><i>${rows.USUARIO}</i></label>
+                            </div>
+                        </div>`        
+            })
+            container.innerHTML = str;
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+
     }
 }

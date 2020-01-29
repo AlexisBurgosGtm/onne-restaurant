@@ -3,9 +3,14 @@ function getView(){
         encabezado : ()=>{
             return `
             <div class="row bg-trans-gradient text-white">
-                <h5>Seleccione un Mes y un Reporte</h5>
-                <label>Total : </label>
-                <b><label id="lbTotal">Q 0.00</label></b>
+                <div class="col-5">
+                    <h5>Seleccione un Mes y un Reporte</h5>
+                </div>
+                
+                <div class="col-5 text-left">
+                    <label>Total : </label>
+                    <b><label id="lbTotal">Q 0.00</label></b>
+                </div>
             </div>
 
             <div class="row">
@@ -62,9 +67,10 @@ function getView(){
         },
         listado: ()=>{
             return `
-            <div class="row">
+            <br>
+            <div class="row card">
                 <div class="table-responsive">
-                    <table class="table table-responsive table-striped table-hover" id="tblReport">
+                    <table class="table table-responsive table-striped table-hover table-bordered" id="tblReport">
                         
                     </table>
                 </div>
