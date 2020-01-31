@@ -47,7 +47,6 @@ let classNavegar = {
                       // handlers del menu
                     let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
                     btnMenuVendedorClientes.addEventListener('click',()=>{
-                        console.log('menu clientes');
                         classNavegar.inicio('VENDEDOR');
                     });
                     let btnMenuVendedorPedidos = document.getElementById('btnMenuVendedorPedidos');
@@ -80,7 +79,52 @@ let classNavegar = {
                     InicializarVista();
                 })          
                 break;
-        
+            case 'GERENTE':
+                    strMenu =  `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
+                                <span>Inicio</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteVendedores">
+                                <span>Vendedores</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteProductos">
+                                <span>Productos</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteLogro">
+                                <span>Logros</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteNoticias">
+                                <span>Noticias</span>
+                            </a>
+                            `
+                    rootMenu.innerHTML = strMenu;
+                       
+                    
+                     // handlers del menu
+                    let btnMenuGerenteInicio = document.getElementById('btnMenuGerenteInicio');
+                    btnMenuGerenteInicio.addEventListener('click',()=>{
+                        classNavegar.gerenteInicio();
+                    });
+                    let btnMenuGerenteVendedores = document.getElementById('btnMenuGerenteVendedores');
+                    btnMenuGerenteVendedores.addEventListener('click',()=>{
+                        classNavegar.gerenteVendedores();
+                    });
+                    let btnMenuGerenteProductos = document.getElementById('btnMenuGerenteProductos');
+                    btnMenuGerenteProductos.addEventListener('click',()=>{
+                        
+                    });
+                    let btnMenuGerenteLogro = document.getElementById('btnMenuGerenteLogro');
+                    btnMenuGerenteLogro.addEventListener('click',()=>{
+                        
+                    });
+                    let btnMenuGerenteNoticias = document.getElementById('btnMenuGerenteNoticias');
+                    btnMenuGerenteNoticias.addEventListener('click',()=>{
+                        
+                    });
+
+                    classNavegar.gerenteInicio();
+                        
+                break;
             default:
                 break;
 
@@ -131,6 +175,20 @@ let classNavegar = {
         .then(()=>{
             GlobalSelectedForm='NOTICIAS';
             inicializarVistaNoticias();
+        })
+    },
+    gerenteInicio: ()=>{
+        funciones.loadScript('../views/gerente/inicio.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTE';
+            InicializarVistaGerente();
+        })
+    },
+    gerenteVendedores: ()=>{
+        funciones.loadScript('../views/gerente/vendedores.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTEVENDEDORES';
+            InicializarVistaGerenteVendedores();
         })
     }
 

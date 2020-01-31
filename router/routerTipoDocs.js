@@ -26,4 +26,15 @@ router.get("/correlativodoc", async(req,res)=>{
 
 });
 
+// OBTIENE LAS SUCURSALES
+router.get("/sucursales", async(req,res)=>{
+            
+    let qry ='';
+
+    qry = `SELECT CODSUCURSAL, NOMBRE, ENCARGADO FROM ME_SUCURSALES`     
+  
+    execute.Query(res,qry);
+
+});
+
 module.exports = router;

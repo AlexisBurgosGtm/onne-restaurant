@@ -105,7 +105,7 @@ function getView(){
                         
                     </div>
 
-                        <div class="card">
+                        <div class="col-12 text-center">
                             <div class="mapcontainer" id="mapcontainer"></div>    
                         </div>
                         

@@ -15,10 +15,7 @@ function getView(){
                         <form class="" id="frmLogin" autocomplete="off">
                             <div class="form-group">
                                 <select class="form-control" id="cmbSucursal">
-                                    <option value="ME-IZABAL">MERCADOS IZABAL</option>
-                                    <option value="ME-COBAN">MERCADOS COBAN</option>
-                                    <option value="ME-JUTIAPA">MERCADOS JUTIAPA</option>
-                                    <option value="ME-ZACAPA">MERCADOS ZACAPA</option>
+                                    
                                 </select>
                             </div>
                             <div class="form-group">
@@ -59,7 +56,10 @@ function addListeners(){
     })
 };
 
+
 function InicializarVista(){
    getView();
    addListeners();
+   classTipoDocumentos.getSucursales('cmbSucursal');
+   
 };

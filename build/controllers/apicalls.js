@@ -324,5 +324,42 @@ let api = {
             container.innerHTML = 'No se pudo cargar la lista';
         });
 
+    },
+    tblVendedores : (sucursal,idContainer)=>{
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+
+        let str = '';
+
+        axios.post('/empleados/vendedores', {
+            sucursal: sucursal,
+            user:GlobalUsuario
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                str = str + `<tr>
+                                <td>
+                                    ${rows.NOMBRE}<br>
+                                    <small>
+                                        Tel:<b class="text-danger">${rows.TELEFONO}</b> - 
+                                        Cod:${rows.CODIGO} - 
+                                        Inicio:${rows.FINICIAL.replace('T00:00:00.000Z','')}
+                                    </small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-circle btn-sm" onclick="">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>`        
+            })
+            container.innerHTML = str;
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+
     }
 }

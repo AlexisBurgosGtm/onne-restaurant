@@ -6,19 +6,23 @@ router.post("/login",async(req,res)=>{
 
     const {app,codsucursal,user,pass} = req.body;
 
+    
     let qry ='';
-    qry = `SELECT CODUSUARIO AS CODIGO, NOMBRE AS USUARIO, TIPO, CODDOC, CODSUCURSAL FROM ME_USUARIOS WHERE CODSUCURSAL='${codsucursal}' AND NOMBRE='${user}' AND PASS='${pass}'`;
+    qry = `SELECT CODUSUARIO AS CODIGO, NOMBRE AS USUARIO, TIPO, CODDOC, CODSUCURSAL 
+            FROM ME_USUARIOS 
+            WHERE CODSUCURSAL='${codsucursal}' AND NOMBRE='${user}' AND PASS='${pass}' 
+            OR CODSUCURSAL='TODOS' AND NOMBRE='${user}' AND PASS='${pass}'`;
     
     execute.Query(res,qry);
 })
 
-// VENTAS BUSCAR PRODUCTO POR DESCRIPCION
-router.get("/vendedores", async(req,res)=>{
+// OBTIENE LA LISTA DE VENDEDORES DISPONIBLES DE LA LISTA DE USUARIOS
+router.post("/vendedores", async(req,res)=>{
     
-    const {app,empnit} = req.query;
+    const {sucursal} = req.body;
         
-    let qry ='';
-    qry = `SELECT CODVEN,NOMVEN,CLAVE FROM ME_VENDEDORES WHERE EMP_NIT='${empnit}' AND ACTIVO='SI'`     
+    let qry =''; 
+    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, INICIOLABORES AS FINICIAL, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
 
     execute.Query(res,qry);
 

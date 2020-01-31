@@ -43,5 +43,31 @@ let classTipoDocumentos = {
             console.log(error);
         });
     },
+    getSucursales: async(idContainer)=>{
+
+        return new Promise((resolve, reject) => {
+            let container = document.getElementById(idContainer);
+            let str = '';
+            axios.get('/tipodocumentos/sucursales')
+            .then((response) => {
+                const data = response.data;        
+                data.recordset.map((rows)=>{
+                    str = str + `<option value=${rows.CODSUCURSAL}>${rows.NOMBRE}</option>`;
+                })
+                container.innerHTML = str;
+                resolve();            
+            }, (error) => {
+                container.innerHTML = '';
+                console.log(error);
+                reject();
+            });
+               
+        }, (error) => {
+            console.log(error);
+            reject();
+        });
+
+        
+    }
 
 }
