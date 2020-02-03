@@ -244,16 +244,18 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado){
                 <br>
                 <small class="text-danger"><b>${rows.CODPROD}</b></small>
             </td>
-            <td>${rows.CODMEDIDA}<br>
+            <td><b class"bg-danger text-white">${rows.CODMEDIDA}</b>
+                <br>
                 <small>${rows.EQUIVALE} item</small></td>
             <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}</td>
-            <td>${rows.DESMARCA}</td>
+            
             <td>
                 <button class="btn btn-sm btn-success btn-circle text-white" 
                 onclick="fcnAgregarProductoVenta('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
                     +
                 </button>
             <td>
+            <td>${rows.DESMARCA}</td>
         </tr>`
         })
         tabla.innerHTML= str;
@@ -711,17 +713,7 @@ async function fcnEliminarTempVentas(usuario){
 async function fcnNuevoPedido(){
     
     classNavegar.inicio(GlobalTipoUsuario);
-    /*
-    document.getElementById('txtNit').value ='CF';
-    document.getElementById('txtNombre').value = 'CONSUMIDOR FINAL';
-    document.getElementById('txtDireccion').value = 'CIUDAD';
-    document.getElementById('txtEntregaObs').value = 'SN';
-    document.getElementById('txtEntregaDireccion').value = 'SN';
-
-    await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
-    await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-    await fcnCargarGridTempVentas('tblGridTempVentas');
-    */
+    
 }
 async function fcnUpdateTempRow(id,cantidad){
     

@@ -9,13 +9,30 @@ function getView(){
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <input type="date" class="form-control" id="txtFechaPedido">
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <button class="btn btn-success" id="btnCargarPedidos">
-                        Cargar
-                    </button>                
-                </div>
+                
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <h1 class="text-danger" id="lbTotalPedidos">Q 0.00</h1>
+                </div>
+            
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button class="btn btn-success" id="btnCargarPedidos">
+                        <i class="fal fa-tag"></i>
+                        Pedidos
+                    </button>                
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-success" id="btnCargarProductos">
+                        <i class="fal fa-cube"></i>
+                        Productos
+                    </button>                
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-success" id="btnCargarMarcas">
+                        <i class="fal fa-credit-card-front"></i>    
+                        Marcas
+                    </button>                
                 </div>
             </div>
             `

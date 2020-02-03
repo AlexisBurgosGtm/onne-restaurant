@@ -344,7 +344,7 @@ let api = {
                                     <small>
                                         Tel:<b class="text-danger">${rows.TELEFONO}</b> - 
                                         Cod:${rows.CODIGO} - 
-                                        Inicio:${rows.FINICIAL.replace('T00:00:00.000Z','')}
+                                        
                                     </small>
                                 </td>
                                 <td>
@@ -361,5 +361,88 @@ let api = {
             container.innerHTML = 'No se pudo cargar la lista';
         });
 
+    },
+    gerenciaResumenSucursal: (mes,anio,idContenedor,idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+
+        axios.post('/ventas/rptsucursalesventas', {
+            mes:mes,
+            anio: anio
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    strdata = strdata + `
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="p-3 bg-${rows.COLOR}-300 rounded overflow-hidden position-relative text-white mb-g">
+                            <div class="">
+                                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                                            ${funciones.setMoneda(rows.IMPORTE,'Q')}
+                                    <small class="m-0 l-h-n">${rows.SUCURSAL}</small>
+                                </h3>
+                            </div>
+                                <i class="fal fa-lightbulb position-absolute pos-right pos-bottom opacity-15 mb-n5 mr-n6" style="font-size:6rem"></i>
+                            </div>
+                        </div>
+                    </div>
+                    `
+            })
+            container.innerHTML = strdata;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+    },
+    gerenciaRankingVendedores: (mes,anio,idContenedor)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+            
+        let strdata = '';
+        let tblHead = `<table class="table table-responsive table-striped table-hover table-bordered'>
+                        <thead class="bg-trans-gradient">
+                            <tr>
+                                <td>Vendedor</td>
+                                <td>Venta</td>
+                                <td>Sucursal</td>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+        let tblFoot = `</tbody></table>`;
+
+        axios.post('/ventas/rptrankingvendedores', {
+            mes:mes,
+            anio: anio
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <tr>
+                        <td>${rows.NOMVEN}</td>
+                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                        <td>${rows.SUCURSAL}</td>
+                    </tr>
+                    `
+            })
+            container.innerHTML = tblHead + strdata + tblFoot;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
     }
 }

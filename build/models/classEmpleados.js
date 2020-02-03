@@ -4,11 +4,11 @@ let classEmpleados = {
             let combobox = document.getElementById(idContainer);
         
             let str = ""; 
-            axios.get('/empleados/vendedores?empnit=' + GlobalEmpnit + '&app=' + GlobalSistema)
+            axios.get('/empleados/vendedores?sucursal=' + GlobalCodSucursal)
             .then((response) => {
                 const data = response.data;        
                 data.recordset.map((rows)=>{
-                    str += `<option value="${rows.CODVEN}">${rows.NOMVEN}</option>`
+                    str += `<option value="${rows.CODIGO}">${rows.NOMBRE}</option>`
                 })            
                 combobox.innerHTML = str;
                resolve(); 

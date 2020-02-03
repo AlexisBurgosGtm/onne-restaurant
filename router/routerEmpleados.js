@@ -14,18 +14,31 @@ router.post("/login",async(req,res)=>{
             OR CODSUCURSAL='TODOS' AND NOMBRE='${user}' AND PASS='${pass}'`;
     
     execute.Query(res,qry);
-})
+});
 
 // OBTIENE LA LISTA DE VENDEDORES DISPONIBLES DE LA LISTA DE USUARIOS
+router.get("/vendedores", async(req,res)=>{
+    
+    const {sucursal} = req.query;
+        
+    let qry =''; 
+    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
+    console.log(qry);
+    
+    execute.Query(res,qry);
+
+});
+
 router.post("/vendedores", async(req,res)=>{
     
     const {sucursal} = req.body;
         
     let qry =''; 
-    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, INICIOLABORES AS FINICIAL, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
-
+    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
+    console.log(qry);
+    
     execute.Query(res,qry);
 
-})
+});
 
 module.exports = router;

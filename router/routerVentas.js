@@ -417,4 +417,33 @@ router.post('/reportemarcas',async(req,res)=>{
 
 });
 
+router.post('/rptsucursalesventas',async(req,res)=>{
+
+    const {anio,mes} = req.body;
+
+    let qry = `SELECT ME_Sucursales.NOMBRE AS SUCURSAL, SUM(ME_Documentos.DOC_TOTALCOSTO) AS COSTO, SUM(ME_Documentos.DOC_TOTALVENTA) AS IMPORTE, Me_Sucursales.COLOR
+                    FROM     ME_Documentos LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
+                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT LEFT OUTER JOIN
+                             ME_Sucursales ON ME_Documentos.CODSUCURSAL = ME_Sucursales.CODSUCURSAL
+                    WHERE   (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Tipodocumentos.TIPODOC = 'PED')
+                    GROUP BY ME_Sucursales.NOMBRE, ME_Sucursales.COLOR`;
+
+    execute.Query(res,qry);
+
+});
+
+router.post('/rptrankingvendedores', async(req,res)=>{
+    const {anio,mes} = req.body;
+    let qry = `SELECT ME_Vendedores.NOMVEN, ME_Sucursales.NOMBRE AS SUCURSAL, SUM(ME_Documentos.DOC_TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
+                FROM ME_Documentos LEFT OUTER JOIN
+                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL LEFT OUTER JOIN
+                ME_Sucursales ON ME_Vendedores.CODSUCURSAL = ME_Sucursales.CODSUCURSAL
+                WHERE (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes})
+                GROUP BY ME_Vendedores.NOMVEN, ME_Sucursales.NOMBRE
+                ORDER BY TOTALPRECIO DESC`;
+    
+    execute.Query(res,qry);
+});
+
 module.exports = router;
