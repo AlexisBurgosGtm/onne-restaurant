@@ -446,4 +446,5 @@ router.post('/rptrankingvendedores', async(req,res)=>{
     execute.Query(res,qry);
 });
 
+
 module.exports = router;

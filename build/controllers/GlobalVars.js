@@ -31,6 +31,11 @@ let GlobalSelectedCodCliente;
 let GlobalSelectedNomCliente;
 let GlobalSelectedDirCliente;
 
+let GlobalSelectedCodprod;
+let GlobalSelectedDesprod;
+let GlobalSelectedStatus=0;
+
+
 let GlobalSelectedApp = '';
 
 let GlobalSistema = 'ISC';
@@ -53,4 +58,4 @@ let GlobalLoader = `
 //'<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
 
 
-let GlobalSelectedCodcliente = 0;
+

@@ -23,23 +23,6 @@ let funciones = {
 
       });
 
-      /*
-      let nit = document.getElementById(idNit).value;
-      var data =JSON.stringify({
-        nit: nit
-      });
-      var peticion = new Request('https://free.feel.com.gt/api/v1/obtener_contribuyente', {
-        method: 'POST',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        }),
-        body: data
-      });
-      const response = await fetch(peticion)
-      const json = await response.json();
-      document.getElementById(idCliente).value = json.descripcion;
-      document.getElementById(idDireccion).value = json.direcciones.direccion;
-      */
     },
     instalationHandlers: (idBtnInstall)=>{
       //INSTALACION APP

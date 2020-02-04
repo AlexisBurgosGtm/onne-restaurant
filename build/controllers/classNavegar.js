@@ -111,7 +111,7 @@ let classNavegar = {
                     });
                     let btnMenuGerenteProductos = document.getElementById('btnMenuGerenteProductos');
                     btnMenuGerenteProductos.addEventListener('click',()=>{
-                        
+                       classNavegar.gerenteProducto(); 
                     });
                     let btnMenuGerenteLogro = document.getElementById('btnMenuGerenteLogro');
                     btnMenuGerenteLogro.addEventListener('click',()=>{
@@ -190,6 +190,12 @@ let classNavegar = {
             GlobalSelectedForm='GERENTEVENDEDORES';
             InicializarVistaGerenteVendedores();
         })
+    },
+    gerenteProducto: ()=>{
+        funciones.loadScript('../views/gerente/productos.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTEPRODUCTOS';
+            inicializarVistaGerenteProductos();
+        })
     }
-
 }

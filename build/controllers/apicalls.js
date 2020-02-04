@@ -411,8 +411,8 @@ let api = {
         container.innerHTML = GlobalLoader;
             
         let strdata = '';
-        let tblHead = `<table class="table table-responsive table-striped table-hover table-bordered'>
-                        <thead class="bg-trans-gradient">
+        let tblHead = `<table class="table table-responsive table-striped table-hover table-bordered">
+                        <thead class="bg-trans-gradient text-white">
                             <tr>
                                 <td>Vendedor</td>
                                 <td>Venta</td>
@@ -444,5 +444,90 @@ let api = {
             strdata = '';
             container.innerHTML = '';
         });
+    },
+    gerenciaMarcas: (idContenedor, idContenedorProductos)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+            
+        let strdata = '';
+        
+        axios.post('/productos/marcas')
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-10">
+                                <h3 class="text-info">${rows.DESMARCA}</h3>    
+                            </div>
+                            <div class="col-1 text-right">
+                                <button class="btn btn-info btn-circle btn-md" onclick="getProductosMarca('${rows.CODMARCA}','${idContenedorProductos}');">
+                                    +
+                                </button>    
+                            </div>
+                        </div>
+                    </div>
+                    `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    gerenciaProductos: (filtro, idContenedor)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+            
+        let strdata = '';
+        
+        axios.post('/productos/listado',{filtro:filtro})
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                let classHabilitado = '';
+                if(rows.NOHABILITADO==0){classHabilitado=''}else{classHabilitado='bg-warning'}
+                    strdata = strdata + `
+                    <tr class='${classHabilitado}'>
+                        <td>${rows.DESPROD}
+                            <br>
+                            <small>Cod:<b>${rows.CODPROD}</b> - uxc:${rows.EQUIVALEINV}</small>
+                            <br>
+                            <small>Costo:<b>${funciones.setMoneda(rows.COSTO,'Q')}</b> - UF:<b>${rows.LASTUPDATE.replace('T00:00:00.000Z','')}</b></small>
+                        </td>
+                        <td>
+                            <button class="btn btn-info btn-sm btn-circle" onclick="getOpcionesProducto('${rows.CODPROD}','${rows.DESPROD}',${rows.NOHABILITADO});">
+                                +
+                            </button>
+                        </td>
+                    </tr>
+                    `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    productosSetStatus: (codprod,st)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/productos/status',{codprod:codprod,status:st})
+            .then((response) => {
+                console.log(response);
+               resolve();             
+            }, (error) => {
+                reject();
+            });
+
+
+        })
+        
     }
 }
