@@ -44,9 +44,9 @@ let classTipoDocumentos = {
         });
     },
     getSucursales: async(idContainer)=>{
-
+        let container = document.getElementById(idContainer);
         return new Promise((resolve, reject) => {
-            let container = document.getElementById(idContainer);
+            
             let str = '';
             axios.get('/tipodocumentos/sucursales')
             .then((response) => {

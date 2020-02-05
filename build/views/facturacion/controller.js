@@ -607,7 +607,7 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
 }
 async function fcnFinalizarPedido(){
     
-    let codcliente = GlobalSelectedCodClfiente;
+    let codcliente = GlobalSelectedCodCliente;
     let ClienteNombre = document.getElementById('txtNombre').value;
     let dirclie = document.getElementById('txtDireccion').value; // CAMPO DIR_ENTREGA
     let obs = document.getElementById('txtEntregaObs').value; 
