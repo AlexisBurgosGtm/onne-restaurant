@@ -60,17 +60,41 @@ function getView(){
                         <h5 id="lbDesprod" class="text-center">Nombre del Producto</h5>
                     </div>                    
                     <div class="modal-body">
-                        <div class="row">
-                            
-                            <button class="btn btn-success btn-lg" id="btnProductoVentas">Ventas</button>
-                            <button class="btn btn-info btn-lg" id="btnProductoCompras">Compras</button>
-                            
+                        <div class="row" id="rootProductoResumen">
+                            <div class="col-6">
+                                <label>Total Ventas Mes </label>
+                                <h3 class="text-danger">Q0.00 - 10 cajas</h3>
+                            </div>
+                            <div class="col-6">
+                                <label>Total Compras </label>
+                                <h3 class="text-info">Q0.00</h3>
+                            </div>
                         </div>
                         <div class="row">
-                            <button class="btn btn-secondary" data-dismiss="modal">Salir</button>
-                            <button class="btn btn-success" id="btnEditDetalles">Detalles</button>
-                            <button class="btn btn-info" id="btnEditPrecios">Precios</button>
-                            <button class="btn btn-danger" id="btnEditStatus">Act/Des</button>
+                            <div class="col-3">
+                                <button class="btn btn-secondary" data-dismiss="modal">
+                                    <i class="fal fa-times"></i>
+                                    Salir
+                                </button>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-success" id="btnEditDetalles">
+                                    <i class="fal fa-globe"></i>    
+                                    Detalles
+                                </button>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-info" id="btnEditPrecios">
+                                    <i class="fal fa-tag"></i>
+                                    Precios
+                                </button>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-danger" id="btnEditStatus">
+                                    <i class="fal fa-bell"></i>
+                                    Act/Des
+                                </button>
+                            </div>
                         </div>
                         
                     </div>
@@ -85,6 +109,94 @@ function getView(){
     };
 
     root.innerHTML = view.listaProductos() + view.btnNuevo() + view.modalOpciones();
+    
+};
+
+function getViewEdicion(menu){
+    
+    let view ={
+        edicionDetalle : ()=>{
+            return `
+                <div class="card col-12">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea rows="2" class="form-control" id="txtEditDescripcion"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Unidades por caja</label>
+                            <input type="number" class="form-control col-4" id="txtEditUxc">
+                        </div>
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <select class="form-control" id="cmbEditMarcas"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Clasificación Uno</label>
+                            <select class="form-control" id="cmbEditClaseuno"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Clasificación Dos</label>
+                            <select class="form-control" id="cmbEditClasedos"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Clasificación Tres</label>
+                            <select class="form-control" id="cmbEditClasetres"></select>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-secondary btn-lg" data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-success btn-lg" id="btnEditGuardarDetalle">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+        },
+        edicionPrecios : ()=>{
+            return `
+            <div class="card col-12">
+                    <div class="card-body">
+                        
+                        
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-secondary btn-lg" data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-success btn-lg" id="btnEditPreciosGuardar">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
+    };
+
+       
+    switch (menu) {
+        case 'DETALLE':
+            return view.edicionDetalle();
+            break;
+        case 'PRECIOS':
+            return view.edicionPrecios();
+            break;
+        default:
+            break;
+    };
 
 };
 
@@ -98,16 +210,22 @@ function addListeners(){
 
     let btnNuevoProducto = document.getElementById('btnNuevoProducto');
     btnNuevoProducto.addEventListener('click',()=>{
-        
+        funciones.hablar('aqui podré crear un producto nuevo')
     });
 
     let btnEditDetalles = document.getElementById('btnEditDetalles');
     btnEditDetalles.addEventListener('click',()=>{
+        lbMenuTitulo.innerText = 'Edición del Producto';
+        rootMenuLateral.innerHTML = getViewEdicion('DETALLE');
+        editDetalles(GlobalSelectedCodprod);
+
         $('#modalMenu').modal('show');
     });
 
     let btnEditPrecios = document.getElementById('btnEditPrecios');
     btnEditPrecios.addEventListener('click',()=>{
+        lbMenuTitulo.innerText = 'Edición de Precios';
+        rootMenuLateral.innerHTML = getViewEdicion('PRECIOS');
         $('#modalMenu').modal('show');
     });
 
@@ -130,7 +248,6 @@ function addListeners(){
     });
 };
 
-
 function getOpcionesProducto(codprod,desprod,st){
     let lbDesprod = document.getElementById('lbDesprod')
     lbDesprod.innerText = desprod;
@@ -143,16 +260,67 @@ function getOpcionesProducto(codprod,desprod,st){
 
 };
 
-function editDetalles(codprod){};
+async function editDetalles(codprod){
 
-function editPrecios(codprod){};
+    let txtEditDescripcion = document.getElementById('txtEditDescripcion');
+    let txtEditUxc = document.getElementById('txtEditUxc');
+    let cmbEditMarcas = document.getElementById('cmbEditMarcas');
+    let cmbEditClaseuno = document.getElementById('cmbEditClaseuno');
+    let cmbEditClasedos = document.getElementById('cmbEditClasedos');
+    let cmbEditClasetres = document.getElementById('cmbEditClasetres');
 
-function editStatusProducto(codprod){};
+    api.productosComboMarcas('cmbEditMarcas');
+    api.productosComboClaseUno('cmbEditClaseuno');
+    api.productosComboClaseDos('cmbEditClasedos');
+    api.productosComboClaseTres('cmbEditClasetres');
+    
+    txtEditDescripcion.value = '';
+    txtEditUxc.value = 1;
+
+    await api.productosGetDetalle(codprod,'txtEditDescripcion','txtEditUxc','cmbEditMarcas','cmbEditClaseuno','cmbEditClasedos','cmbEditClasetres');
+
+    let btnEditGuardarDetalle = document.getElementById('btnEditGuardarDetalle');
+    btnEditGuardarDetalle.addEventListener('click',()=>{
+        funciones.Confirmacion('¿Está seguro que desea guardar estos cambios?')
+        .then(()=>{
+
+            let data = {
+                codprod:codprod,
+                desprod:txtEditDescripcion.value,
+                uxc:txtEditUxc.value,
+                codmarca:cmbEditMarcas.value,
+                codclaseuno:cmbEditClaseuno.value,
+                codclasedos:cmbEditClasedos.value,
+                codclasetres:cmbEditClasetres.value,
+                lastupdate:funciones.getFecha()
+            };
+        
+            api.productosEditDetalle(data)
+            .then(()=>{
+                funciones.Aviso('Producto editado con éxito!!');
+                $('#modalOpciones').modal('hide');
+                $('#modalMenu').modal('hide');
+                document.getElementById('btnBuscarProducto').click();
+            })
+            .catch((error)=>{
+                funciones.AvisoError('Error al Actualizar');
+                console.log(error);
+            });
+
+        })    
+    });
+
+};
+
+function editPrecios(codprod){
+
+
+};
 
 
 function inicializarVistaGerenteProductos(){
+
     getView();
     addListeners();
-
 
 };

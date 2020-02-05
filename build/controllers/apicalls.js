@@ -529,5 +529,111 @@ let api = {
 
         })
         
+    },
+    productosEditDetalle : (data)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/productos/detalles',data)
+            .then((response) => {
+                console.log(response);
+               resolve();             
+            }, (error) => {
+                reject();
+            });
+
+
+        })
+    },
+    productosGetDetalle: (codprod,idDesprod,idUxc,idMarca,idClaseUno,idClaseDos,idClaseTres)=>{
+        axios.post('/productos/detalles',{codprod:codprod})
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                document.getElementById(idDesprod).value = rows.DESPROD;
+                document.getElementById(idUxc).value = rows.EQUIVALEINV;
+                document.getElementById(idMarca).value = rows.CODMARCA;
+                document.getElementById(idClaseUno).value = rows.CODCLAUNO;
+                document.getElementById(idClaseDos).value = rows.CODCLADOS;
+                document.getElementById(idClaseTres).value = rows.CODCLATRES;
+            })
+                        
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+        });
+    },
+    productosComboMarcas: (idContainer)=>{
+        let container = document.getElementById(idContainer);
+        let strdata = '';
+        axios.post('/productos/marcas')
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <option value="${rows.CODMARCA}">${rows.DESMARCA}</option>
+                    `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    productosComboClaseUno: (idContainer)=>{
+        let container = document.getElementById(idContainer);
+        let strdata = '';
+        axios.post('/productos/claseuno')
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <option value="${rows.COD}">${rows.DES}</option>
+                    `
+            })
+            container.innerHTML =  strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    productosComboClaseDos: (idContainer)=>{
+        let container = document.getElementById(idContainer);
+        let strdata = '';
+        axios.post('/productos/clasedos')
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <option value="${rows.COD}">${rows.DES}</option>
+                    `
+            })
+            container.innerHTML =  strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    productosComboClaseTres: (idContainer)=>{
+        let container = document.getElementById(idContainer);
+        let strdata = '';
+        axios.post('/productos/clasetres')
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                    <option value="${rows.COD}">${rows.DES}</option>
+                    `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = strdata;
+        });
     }
 }

@@ -11,6 +11,30 @@ router.post('/marcas', async(req,res)=>{
     execute.Query(res,qry);
 });
 
+//LISTADO CLASE UNO
+router.post('/claseuno', async(req,res)=>{
+    
+    let qry = `SELECT CODCLAUNO AS COD, DESCLAUNO AS DES FROM ME_CLASEUNO ORDER BY DESCLAUNO`;
+
+    execute.Query(res,qry);
+});
+
+//LISTADO CLASE DOS
+router.post('/clasedos', async(req,res)=>{
+    
+    let qry = `SELECT CODCLADOS AS COD, DESCLADOS AS DES FROM ME_CLASEDOS ORDER BY DESCLADOS`;
+
+    execute.Query(res,qry);
+});
+
+//LISTADO CLASE TRES
+router.post('/clasetres', async(req,res)=>{
+    
+    let qry = `SELECT CODCLATRES AS COD, DESCLATRES AS DES FROM ME_CLASETRES ORDER BY DESCLATRES`;
+
+    execute.Query(res,qry);
+});
+
 //LISTADO PRODUCTOS
 router.post('/listado', async(req,res)=>{
     
@@ -24,6 +48,31 @@ router.post('/listado', async(req,res)=>{
     
     execute.Query(res,qry);
 });
+
+// ACTUALIZA DETALLE DEL PRODUCTO
+router.put('/detalles',async(req,res)=>{
+    const {codprod,desprod,uxc,codmarca,codclaseuno,codclasedos,codclasetres,lastupdate} = req.body;
+    
+    let qry = `
+    UPDATE ME_PRODUCTOS SET 
+    DESPROD='${desprod}', EQUIVALEINV=${uxc},CODCLAUNO='${codclaseuno}',CODCLADOS='${codclasedos}',CODCLATRES='${codclasetres}',CODMARCA='${codmarca}',LASTUPDATE='${lastupdate}' 
+    WHERE CODPROD='${codprod}'`;
+
+    execute.Query(res,qry);
+    
+}); 
+
+// OBTIENE EL DETALLE DEL PRODUCTO
+router.post('/detalles',async(req,res)=>{
+    const {codprod} = req.body;
+    
+    let qry = `
+    SELECT DESPROD, EQUIVALEINV,CODMARCA,CODCLAUNO,CODCLADOS,CODCLATRES FROM ME_PRODUCTOS
+    WHERE CODPROD='${codprod}'`;
+
+    execute.Query(res,qry);
+    
+}); 
 
 router.put('/status',async(req,res)=>{
     const {codprod,status} = req.body;

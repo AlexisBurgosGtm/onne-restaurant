@@ -12,7 +12,6 @@ router.get("/buscarproducto", async(req,res)=>{
     let app = req.query.app;
 
     let qry ='';
-
     
             qry = `SELECT ME_PRODUCTOS.CODPROD, ME_PRODUCTOS.DESPROD, ME_PRECIOS.CODMEDIDA, ME_PRECIOS.EQUIVALE, ME_PRECIOS.COSTO, ME_PRECIOS.PRECIO, ME_MARCAS.DESMARCA, 0 as EXENTO
             FROM ME_PRODUCTOS LEFT OUTER JOIN
@@ -20,7 +19,12 @@ router.get("/buscarproducto", async(req,res)=>{
             ME_PRODUCTOS.EMP_NIT = ME_PRECIOS.EMP_NIT LEFT OUTER JOIN
             ME_MARCAS ON ME_PRODUCTOS.CODMARCA = ME_MARCAS.CODMARCA AND 
             ME_PRODUCTOS.EMP_NIT = ME_MARCAS.EMP_NIT
-            WHERE (ME_PRODUCTOS.EMP_NIT = '${empnit}') AND (ME_PRODUCTOS.DESPROD LIKE '%${filtro}%') OR (ME_PRODUCTOS.EMP_NIT = '${empnit}') AND (ME_PRODUCTOS.CODPROD='${filtro}')` 
+            WHERE (ME_PRODUCTOS.EMP_NIT = '${empnit}') 
+            AND (ME_PRODUCTOS.DESPROD LIKE '%${filtro}%') 
+            AND (ME_PRODUCTOS.NOHABILITADO=0)
+            OR (ME_PRODUCTOS.EMP_NIT = '${empnit}') 
+            AND (ME_PRODUCTOS.CODPROD='${filtro}') 
+            AND (ME_PRODUCTOS.NOHABILITADO=0)` 
     
     execute.Query(res,qry);
 

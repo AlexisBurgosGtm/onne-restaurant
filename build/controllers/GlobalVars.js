@@ -1,5 +1,8 @@
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
+let rootMenuLateral = document.getElementById('rootMenuLateral');
+let lbMenuTitulo = document.getElementById('lbMenuTitulo');
+
 let divUsuario = document.getElementById('divUsuario');
 let lbTipo = document.getElementById('lbTipo');
 
