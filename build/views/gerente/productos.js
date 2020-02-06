@@ -163,9 +163,29 @@ function getViewEdicion(menu){
         edicionPrecios : ()=>{
             return `
             <div class="card col-12">
+                    <div class="card-header">
+                        <label id="txtDesprodPrecios">Producto seleccionado</label>
+                    </div>
                     <div class="card-body">
-                        
-                        
+                        <div class="table-responsive">
+                            <table class="table table-responsive table-hover table-striped table-bordered">
+                                <thead class="bg-trans-gradient text-white">
+                                    <tr>
+                                        <td>Medida</td>
+                                        <td>Equivale</td>
+                                        <td>Costo</td>
+                                        <td>Público</td>
+                                        <td>MayoreoC</td>
+                                        <td>MayoreoB</td>
+                                        <td>MayoreoA</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblListaPrecios">
+                                
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -181,7 +201,8 @@ function getViewEdicion(menu){
                             </div>
                         </div>
                     </div>
-                </div>
+                
+            </div>
             `
         }
     };
@@ -226,6 +247,7 @@ function addListeners(){
     btnEditPrecios.addEventListener('click',()=>{
         lbMenuTitulo.innerText = 'Edición de Precios';
         rootMenuLateral.innerHTML = getViewEdicion('PRECIOS');
+        editPrecios(GlobalSelectedCodprod);
         $('#modalMenu').modal('show');
     });
 
@@ -313,7 +335,8 @@ async function editDetalles(codprod){
 };
 
 function editPrecios(codprod){
-
+    document.getElementById('txtDesprodPrecios').innerText = GlobalSelectedDesprod;
+    api.productosGetPrecios(codprod,'tblListaPrecios');
 
 };
 

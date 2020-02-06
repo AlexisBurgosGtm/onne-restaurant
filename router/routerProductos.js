@@ -2,11 +2,49 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+// PPUBLICO= PRECIO, PMAYOREOA=OFERTA,PMAYOREOB=ESCALA, PMAYOREOC=ESCALA
+
+// OBTIENE LOS PRECIOS DE UN PRODUCTO
+router.post('/preciosproducto',async(req,res)=>{
+
+    const {codprod} = req.body;
+
+    let qry = `SELECT CODPROD, CODMEDIDA, EQUIVALE, COSTO, PRECIO AS PPUBLICO, MAYORISTA AS PMAYOREOC, ESCALA AS PMAYOREOB, OFERTA AS PMAYOREOA, LASTUPDATE FROM ME_PRECIOS WHERE CODPROD='${codprod}' AND CODSUCURSAL='GENERAL'`;
+    execute.Query(res,qry);
+
+});
+
+// ACTUALIZA UN PRECIO
+router.put('/precio', async(req,res)=>{
+
+    const { codprod,codmedida,equivale,costo,ppublico,pmayoreoa,pmayoreob,pmayoreoc} = req.body;
+
+    let qry = `UPDATE ME_PRECIOS SET 
+    EQUIVALE=${equivale},COSTO=${costo},
+    PRECIO=${ppublico},MAYORISTA=${pmayoreoc},
+    ESCALA=${pmayoreob},OFERTA=${pmayoreoa},
+    ESPECIAL=${ppublico},PRECIOFIN=${ppublico} 
+    WHERE CODPROD='${codprod}' AND CODMEDIDA='${codmedida}' AND CODSUCURSAL='GENERAL'`
+
+    execute.Query(res,qry);
+});
+
+
+// QUITA UN PRECIO
+router.delete('/precio', async(req,res)=>{
+    
+    const { codprod,codmedida} = req.body;
+
+    let qry = `DELETE FROM ME_PRECIOS 
+    WHERE CODPROD='${codprod}' AND CODMEDIDA='${codmedida}' AND CODSUCURSAL='GENERAL'`
+
+    execute.Query(res,qry);
+});
 
 //LISTADO MARCAS
 router.post('/marcas', async(req,res)=>{
     
-    let qry = `SELECT CODMARCA, DESMARCA FROM ME_MARCAS ORDER BY DESMARCA`;
+    let qry = `SELECT CODMARCA, DESMARCA FROM ME_MARCAS WHERE CODSUCURSAL='GENERAL' ORDER BY DESMARCA`;
 
     execute.Query(res,qry);
 });
@@ -74,6 +112,7 @@ router.post('/detalles',async(req,res)=>{
     
 }); 
 
+// HABILITA O DESHABILITA EL PRODUCTO
 router.put('/status',async(req,res)=>{
     const {codprod,status} = req.body;
     let st;

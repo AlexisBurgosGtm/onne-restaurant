@@ -635,5 +635,37 @@ let api = {
             strdata = '';
             container.innerHTML = strdata;
         });
+    },
+    productosGetPrecios: (codprod,idContainer)=>{
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        let str = '';
+
+        axios.post('/productos/preciosproducto',{codprod:codprod})
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                str = str + `
+                    <tr>
+                        <td>${rows.CODMEDIDA}</td>
+                        <td>${rows.EQUIVALE}</td>
+                        <td>${rows.COSTO}</td>
+                        <td>${rows.PPUBLICO}</td>
+                        <td>${rows.PMAYOREOC}</td>
+                        <td>${rows.PMAYOREOB}</td>
+                        <td>${rows.PMAYOREOA}</td>
+                        <td>
+                            <button class="btn btn-warning btn-circle">
+                                <i class="fa fa-flag"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `
+            })
+            container.innerHTML = str;  
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+        });
     }
 }
