@@ -407,7 +407,7 @@ function getPrecioEditar(codprod,codmedida,costo,equivale,ppublico,pmayoreoc,pma
             funciones.Aviso('Precio actualizado exitosamente')
             $('#ModalEdicionPrecio').modal('hide');
             api.productosGetPrecios(codprod,'tblListaPrecios');
-            socket.emit('productos precio',`Precio actualizado. ${GlobalSelectedDesprod}, ${NCodmedida - funciones.setMoneda(NPublico,'Q')}`)
+            socket.emit('productos precio', `Precio actualizado. ${GlobalSelectedDesprod}, ${NCodmedida - funciones.setMoneda(NPublico,'Q')}`,GlobalUsuario);
         })
         .catch(()=>{
             funciones.AvisoError('No se pudo actualizar el precio')

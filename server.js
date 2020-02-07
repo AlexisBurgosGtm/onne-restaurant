@@ -74,17 +74,12 @@ io.on('connection', function(socket){
   
   socket.on('noticias nueva', (msg,usuario)=>{
     io.emit('noticias nueva', msg,usuario);
-
   });
 
-  socket.on('ordenes nueva', function(msg,form){
-	  io.emit('ordenes nueva', msg, form);
+  socket.on('productos precio', function(msg,usuario){
+	  io.emit('productos precio', msg, usuario);
   });
 
-   
-  socket.on('ordenes finalizada', function(cliente,monto){
-	  io.emit('ordenes finalizada', cliente, monto);
-  });
 
   socket.on('chat msn', function(msg,user){
 	  io.emit('chat msn', msg, user);
