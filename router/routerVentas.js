@@ -142,8 +142,7 @@ router.post("/tempVentastodos", async(req,res)=>{
     let qry = "";
    
     qry = `DELETE FROM ME_TEMP_VENTAS WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}'`
-    //qry = `DELETE FROM ME_TEMP_VENTAS WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}' AND CODDOC='${coddoc}'`
-        console.log(qry)
+
     execute.Query(res,qry);
 
 });

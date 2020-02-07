@@ -82,7 +82,7 @@ router.post('/listado', async(req,res)=>{
                 FROM ME_Productos LEFT OUTER JOIN ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT
                 WHERE (ME_Productos.DESPROD LIKE '%${filtro}%')`;
 
-    console.log(qry);
+
     
     execute.Query(res,qry);
 });

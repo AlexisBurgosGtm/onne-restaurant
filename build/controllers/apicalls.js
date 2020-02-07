@@ -655,8 +655,9 @@ let api = {
                         <td>${rows.PMAYOREOB}</td>
                         <td>${rows.PMAYOREOA}</td>
                         <td>
-                            <button class="btn btn-warning btn-circle">
-                                <i class="fa fa-flag"></i>
+                            <button class="btn btn-warning btn-circle" 
+                            onclick="getPrecioEditar('${rows.CODPROD}','${rows.CODMEDIDA}',${rows.COSTO},${rows.EQUIVALE},${rows.PPUBLICO},${rows.PMAYOREOC},${rows.PMAYOREOB},${rows.PMAYOREOA});">
+                                <i class="fa fa-check"></i>
                             </button>
                         </td>
                     </tr>
@@ -667,5 +668,28 @@ let api = {
             funciones.AvisoError('Error en la solicitud');
             container.innerHTML = '';
         });
+    },
+    productosSetPrecio: (codprod,codmedida,costo,equivale,ppublico,pmayoreoc,pmayoreob,pmayoreoa)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/productos/precio',{
+                codprod:codprod,
+                codmedida:codmedida,
+                costo:costo,
+                equivale:equivale,
+                ppublico:ppublico,
+                pmayoreoc: pmayoreoc,
+                pmayoreob:pmayoreob,
+                pmayoreoa:pmayoreoa
+            })
+            .then((response) => {
+                console.log(response);
+               resolve();             
+            }, (error) => {
+                reject();
+            });
+
+
+        })
+        
     }
 }

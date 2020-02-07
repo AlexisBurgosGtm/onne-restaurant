@@ -309,7 +309,8 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                         await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
 
                         let txbusqueda = document.getElementById('txtBusqueda');
-                        txbusqueda.value = '';txbusqueda.focus();
+                        txbusqueda.value = '';
+                        //txbusqueda.focus();
                     }
                   })
                   .catch(

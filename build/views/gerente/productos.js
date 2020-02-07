@@ -16,14 +16,15 @@ function getView(){
                         <div class="panel-content">
                             <div class="row">
                                 <div class="col-8">
-                                    <input type="text" class="form-control" id="txtFiltro" placerholder="Escriba para buscar...">
+                                    <input type="text" class="form-control" id="txtFiltro" placeholder="Escriba para buscar...">
                                 </div>
                                 <div class="col-3">
                                     <button class="btn btn-success" id="btnBuscarProducto">Buscar</button>
                                 </div>
                             </div>
+                            <br>
                             <div class="row">
-                                <div class="table-responsive">
+                                <div class="table-responsive col-12">
                                     <table class="table table-responsive table-striped table-hover table-bordered">
                                         <thead class="bg-trans-gradient text-white">
                                             <tr>
@@ -167,41 +168,145 @@ function getViewEdicion(menu){
                         <label id="txtDesprodPrecios">Producto seleccionado</label>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-responsive table-hover table-striped table-bordered">
-                                <thead class="bg-trans-gradient text-white">
-                                    <tr>
-                                        <td>Medida</td>
-                                        <td>Equivale</td>
-                                        <td>Costo</td>
-                                        <td>Público</td>
-                                        <td>MayoreoC</td>
-                                        <td>MayoreoB</td>
-                                        <td>MayoreoA</td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody id="tblListaPrecios">
-                                
-                                </tbody>
-                            </table>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-hover table-striped table-bordered">
+                                    <thead class="bg-trans-gradient text-white">
+                                        <tr>
+                                            <td>Medida</td>
+                                            <td>Equivale</td>
+                                            <td>Costo</td>
+                                            <td>Público</td>
+                                            <td>MayoreoC</td>
+                                            <td>MayoreoB</td>
+                                            <td>MayoreoA</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblListaPrecios">
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form">
+                                <div class="form-group"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <div class="row">
+                        
                             <div class="col-6">
                                 <button class="btn btn-secondary btn-lg" data-dismiss="modal">
-                                    Cancelar
+                                    << Cancelar
                                 </button>
                             </div>
-                            <div class="col-6">
-                                <button class="btn btn-success btn-lg" id="btnEditPreciosGuardar">
-                                    Guardar
-                                </button>
+                        
+                        
+                    </div>
+            </div>
+            `
+        },
+        modalEdicionPrecios : ()=>{
+            return `
+            <div class="modal fade" id="ModalEdicionPrecio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-right" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label class="modal-title text-danger h3" id="">Edición de Precios</label>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <h2 id="lbEdicionCodmedida">UNIDAD</h2>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Costo:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control" id="txtEdicionCosto">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Equivale:</label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="number" class="form-control" id="txtEdicionEquivale">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Precio Público:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control" id="txtEdicionPublico">    
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Precio Mayoreo C:</label>   
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control" id="txtEdicionMayoreoC">   
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Precio Mayoreo B:</label>    
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control" id="txtEdicionMayoreoB">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-5">    
+                                        <label>Precio Mayoreo A:</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control" id="txtEdicionMayoreoA">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-secondary btn-lg" id="btnCancelarEdicionPrecioProducto">
+                                        
+                                        Cancelar
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-success btn-lg" id="btnEditPrecioGuardar">
+                                        Guardar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                
+                </div>
             </div>
             `
         }
@@ -213,7 +318,7 @@ function getViewEdicion(menu){
             return view.edicionDetalle();
             break;
         case 'PRECIOS':
-            return view.edicionPrecios();
+            return view.edicionPrecios() + view.modalEdicionPrecios();
             break;
         default:
             break;
@@ -239,8 +344,10 @@ function addListeners(){
         lbMenuTitulo.innerText = 'Edición del Producto';
         rootMenuLateral.innerHTML = getViewEdicion('DETALLE');
         editDetalles(GlobalSelectedCodprod);
-
+        
         $('#modalMenu').modal('show');
+
+     
     });
 
     let btnEditPrecios = document.getElementById('btnEditPrecios');
@@ -248,6 +355,7 @@ function addListeners(){
         lbMenuTitulo.innerText = 'Edición de Precios';
         rootMenuLateral.innerHTML = getViewEdicion('PRECIOS');
         editPrecios(GlobalSelectedCodprod);
+
         $('#modalMenu').modal('show');
     });
 
@@ -268,6 +376,45 @@ function addListeners(){
             }
         })
     });
+};
+
+function getPrecioEditar(codprod,codmedida,costo,equivale,ppublico,pmayoreoc,pmayoreob,pmayoreoa){
+    // DETERMINO LOS VALORES
+    let NCodmedida = document.getElementById('lbEdicionCodmedida')
+    NCodmedida.innerText = codmedida;
+    let NCosto = document.getElementById('txtEdicionCosto')
+    NCosto.value = costo;
+    let NEquivale = document.getElementById('txtEdicionEquivale')
+    NEquivale.value = equivale;
+    let NPublico = document.getElementById('txtEdicionPublico')
+    NPublico.value = ppublico;
+    let NMayoreoc = document.getElementById('txtEdicionMayoreoC')
+    NMayoreoc.value = pmayoreoc;
+    let NMayoreob = document.getElementById('txtEdicionMayoreoB')
+    NMayoreob.value = pmayoreob;
+    let NMayoreoa = document.getElementById('txtEdicionMayoreoA')
+    NMayoreoa.value = pmayoreoa;
+
+    // BOTON CANCELAR EDICION DEL PRECIO
+    document.getElementById('btnCancelarEdicionPrecioProducto').addEventListener('click',()=>{
+        $('#ModalEdicionPrecio').modal('hide');
+    });
+
+    // BOTON GUARDAR EDICION DEL PRECIO
+    document.getElementById('btnEditPrecioGuardar').addEventListener('click',()=>{
+        api.productosSetPrecio(codprod,NCodmedida.innerText,NCosto.value,NEquivale.value,NPublico.value,NMayoreoc.value,NMayoreob.value,NMayoreoa.value)
+        .then(()=>{
+            funciones.Aviso('Precio actualizado exitosamente')
+            $('#ModalEdicionPrecio').modal('hide');
+            api.productosGetPrecios(codprod,'tblListaPrecios');
+            socket.emit('productos precio',`Precio actualizado. ${GlobalSelectedDesprod}, ${NCodmedida - funciones.setMoneda(NPublico,'Q')}`)
+        })
+        .catch(()=>{
+            funciones.AvisoError('No se pudo actualizar el precio')
+        })
+    });
+
+    $('#ModalEdicionPrecio').modal('show');
 };
 
 function getOpcionesProducto(codprod,desprod,st){
@@ -335,11 +482,11 @@ async function editDetalles(codprod){
 };
 
 function editPrecios(codprod){
+
     document.getElementById('txtDesprodPrecios').innerText = GlobalSelectedDesprod;
     api.productosGetPrecios(codprod,'tblListaPrecios');
 
 };
-
 
 function inicializarVistaGerenteProductos(){
 
