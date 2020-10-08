@@ -4,37 +4,33 @@ const router = express.Router();
 
 router.post("/login",async(req,res)=>{
 
-    const {app,codsucursal,user,pass} = req.body;
+    const {sucursal,user,pass} = req.body;
 
     
     let qry ='';
-    qry = `SELECT CODUSUARIO AS CODIGO, NOMBRE AS USUARIO, TIPO, CODDOC, CODSUCURSAL 
-            FROM ME_USUARIOS 
-            WHERE CODSUCURSAL='${codsucursal}' AND NOMBRE='${user}' AND PASS='${pass}' 
-            OR CODSUCURSAL='TODOS' AND NOMBRE='${user}' AND PASS='${pass}'`;
-    
+    qry = `SELECT CODTIPOEMPLEADO AS TIPO FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND NOMEMPLEADO='${user}' AND CLAVE='${pass}' AND ACTIVO='SI';`
+              
     execute.Query(res,qry);
 });
 
 // OBTIENE LA LISTA DE VENDEDORES DISPONIBLES DE LA LISTA DE USUARIOS
-router.get("/vendedores", async(req,res)=>{
-    
-    const {sucursal} = req.query;
-        
-    let qry =''; 
-    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
-    console.log(qry);
-    
-    execute.Query(res,qry);
-
-});
-
 router.post("/vendedores", async(req,res)=>{
     
     const {sucursal} = req.body;
         
     let qry =''; 
-    qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
+    qry = `SELECT EMPNIT, CODEMPLEADO AS CODIGO, NOMEMPLEADO AS NOMBRE, CLAVE FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND ACTIVO='SI' AND CODTIPOEMPLEADO=3`;     
+        
+    execute.Query(res,qry);
+
+});
+
+// OBTIENE LA LISTA DE EMPRESAS
+router.post("/empresas", async(req,res)=>{
+    
+           
+    let qry =''; 
+    qry = `SELECT EMPNIT, EMPNOMBRE AS NOMBRE FROM EMPRESAS`;     
     console.log(qry);
     
     execute.Query(res,qry);

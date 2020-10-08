@@ -4,17 +4,13 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 
 const execute = require('./router/connection');
-var routerNoticias = require('./router/routerNoticias');
-var routerVentas = require('./router/routerVentas');
-var routerTipoDocs = require('./router/routerTipoDocs');
+var routerComandas = require('./router/routerComandas');
 var routerEmpleados = require('./router/routerEmpleados');
-var routerClientes = require('./router/routerClientes');
-var routerProductos = require('./router/routerProductos');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const PORT = process.env.PORT || 777;
+const PORT = process.env.PORT || 444;
 
 app.use(bodyParser.json());
 
@@ -24,7 +20,7 @@ var path = __dirname + '/'
 
 //manejador de rutas
 router.use(function (req,res,next) {
-  /*
+/*  
       // Website you wish to allow to connect
       res.setHeader('Access-Control-Allow-Origin', '*');
       // Request methods you wish to allow
@@ -43,48 +39,52 @@ app.get("/",function(req,res){
 	res.sendFile(path + 'index.html');
 }); 
 
-//Router para app NOTICIAS
-app.use('/noticias', routerNoticias);
+app.get("/odoo",function(req,res){
+  var Odoo = require('node-odoo');
+ 
+  var odoo = new Odoo({
+    host: '167.114.152.65',
+    port: 80,
+    database: 'Prueva_innovar',
+    username: 'user.user@gmail.com',
+    password: '1234'
+  });
+   console.log('conectando odoo...')
+  // Connect to Odoo
+  odoo.connect(function (err) {
+    if (err) { return console.log(err); }
+   
+    // Get a partner
+    console.log('conectado')
+  });
 
-//Router para app VENTAS
-app.use('/ventas', routerVentas);
+}); 
 
-// Router para Tipodocumentos
-app.use('/tipodocumentos', routerTipoDocs);
+//Router para app COMANDAS
+app.use('/comandas', routerComandas);
 
-// Router para empleados o vendedores
+//Router para app EMPLEADOS
 app.use('/empleados', routerEmpleados);
-
-// Router para clientes
-app.use('/clientes', routerClientes);
-
-// Router para productos
-app.use('/productos', routerProductos);
 
 
 app.use("/",router);
 
 app.use("*",function(req,res){
-  res.send('<h1 class="text-danger">NO DISPONIBLE</h1>');
+  //res.sendFile(path + 'build/404.html');
+  res.send('<h1>No permitido</h1>')
 });
 
 
 // SOCKET HANDLER
 io.on('connection', function(socket){
   
-  socket.on('noticias nueva', (msg,usuario)=>{
-    io.emit('noticias nueva', msg,usuario);
+  socket.on('comandas nueva', (msg,usuario)=>{
+    io.emit('comandas nueva', msg,usuario);
   });
-
-  socket.on('productos precio', function(msg,usuario){
-	  io.emit('productos precio', msg, usuario);
+ 
+  socket.on('comandas finalizada', (msg,usuario)=>{
+    io.emit('comandas finalizada', msg,usuario);
   });
-
-
-  socket.on('chat msn', function(msg,user){
-	  io.emit('chat msn', msg, user);
-  });
-  
   
 });
 

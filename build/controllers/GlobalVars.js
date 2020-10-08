@@ -1,64 +1,37 @@
-let root = document.getElementById('root');
-let rootMenu = document.getElementById('rootMenu');
-let rootMenuLateral = document.getElementById('rootMenuLateral');
+let root = document.getElementById('contenedor');
 let lbMenuTitulo = document.getElementById('lbMenuTitulo');
+let rootMenuLateral = document.getElementById('rootMenuLateral');
+let GlobalSelectedForm = 'LOGIN';
 
-let divUsuario = document.getElementById('divUsuario');
-let lbTipo = document.getElementById('lbTipo');
+function getMenuLateral(){
+    $('#modalMenuLateral').modal('show');
+};
 
-divUsuario.innerText = "DESCONECTADO";
-lbTipo.innerText = "Inicie sesión";
+function closeMenuLateral(){
+    $('#modalMenuLateral').modal('hide');
+};
 
-let GlobalToken = 'MERCADOSEFECTIVOS';
-let GlobalCodSucursal = '';
+let GlobalSucursal;
+let GlobalUser;
+let GlobalCoddoc;
+let GlobalTotalVenta;
+let GlobalTotalCosto;
 
-let GlobalCodUsuario = 99999;
-let GlobalUsuario = 'MERCADOSEFECTIVOS';
-let GlobalNivelUser = 0;
-let GlobalTipoUsuario ='';
-let GlobalSelectedDia ='';
+let GlobalSelectedId =0;
+let GlobalSelectedCosto = 0;
+let GlobalSelectedPrecio = 0;
+let GlobalSelectedEquivale = 0;
 
-let GlobalEmpnit = '1034261-3';
-let GlobalEmpNombre = 'MERCADOS EFECTIVOS';
-let GlobalSelectedForm = '';
-
-let map;
-let GlobalSelectedId ;
-let GlobalCoddoc = 'PED01';
-let GlobalTotalDocumento = 0;
-let GlobalTotalCostoDocumento = 0;
-let GlobalCodBodega = '01';
-let GlobalTipoCobro = 'TERMINAR';
-
-let GlobalSelectedCodCliente;
-let GlobalSelectedNomCliente;
-let GlobalSelectedDirCliente;
-
-let GlobalSelectedCodprod;
-let GlobalSelectedDesprod;
-let GlobalSelectedStatus=0;
-
-
-let GlobalSelectedApp = '';
-
-let GlobalSistema = 'ISC';
+let GlobalSelectedCoddoc;
+let GlobalSelectedCorrelativo;
+let GlobalSelectedIdMesa = 0;
 
 
 
 let GlobalLoader = `
-                <div>
-                    <div class="spinner-grow text-info" role="status"><span class="sr-only">Loading...</span></div>
-                    <div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-                    <div class="spinner-grow text-warning" role="status"><span class="sr-only">Loading...</span></div>
-                    <div class="spinner-grow text-info" role="status"><span class="sr-only">Loading...</span></div>
-                    <div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-                </div>
-                `
-
-//'<div class="spinner-grow text-info" role="status"><span class="sr-only">Loading...</span></div>'
-
-
-//'<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
-
-
+                <div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`;
 

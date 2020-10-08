@@ -4822,9 +4822,9 @@ a.close.disabled {
   padding: 0.75rem; }
 
 .modal-open {
-  overflow: hidden; }
+  overflow: scroll; }
   .modal-open .modal {
-    overflow-x: hidden;
+    overflow-x: scroll;
     overflow-y: auto; }
 
 .modal {

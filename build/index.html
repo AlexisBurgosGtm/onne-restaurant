@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-           MERCADOS-EFECTIVOS
+           ONNE RESTAURANT
         </title>
         <meta name="description" content="Blank">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,12 +22,11 @@
         <link rel="stylesheet" media="screen, print" href="css/.../styles.css">
         <link rel="stylesheet" media="screen, print" href="./css/btn.css">
 
-        <link rel="stylesheet" href="./libs/leaflet/leaflet.css">
-        <link rel="stylesheet" href="./libs/noty/noty.min.css">
+        <!--<link rel="stylesheet" href="./onlineLibrary/leaflet/leaflet.css">-->
 
         
 	<!-- service worker -->
-	<meta name="application-name" content="MERCADOS-EFECTIVOS" />
+	<meta name="application-name" content="ONNE RESTAURANT" />
 	<meta name="theme-color" content="#ffffff">
     <link rel="manifest" href="manifest.json">
     
@@ -35,23 +34,12 @@
     <body class="mod-bg-2 nav-function-top header-function-fixed nav-function-fixed">
         <!-- DOC: script to save and load page settings -->
         <script>
-            /**
-             *	This script should be placed right after the body tag for fast execution 
-             *	Note: the script is written in pure javascript and does not depend on thirdparty library
-             **/
             'use strict';
-
             var classHolder = document.getElementsByTagName("BODY")[0],
-                /** 
-                 * Load from localstorage
-                 **/
                 themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
                 {},
                 themeURL = themeSettings.themeURL || '',
                 themeOptions = themeSettings.themeOptions || '';
-            /** 
-             * Load theme options
-             **/
             if (themeSettings.themeOptions)
             {
                 classHolder.className = themeSettings.themeOptions;
@@ -69,9 +57,6 @@
                 cssfile.href = themeURL;
                 document.getElementsByTagName('head')[0].appendChild(cssfile);
             }
-            /** 
-             * Save to localstorage 
-             **/
             var saveSettings = function()
             {
                 themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item)
@@ -84,14 +69,10 @@
                 };
                 localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
             }
-            /** 
-             * Reset settings
-             **/
             var resetSettings = function()
             {
                 localStorage.setItem("themeSettings", "");
             }
-
         </script>
         <!-- BEGIN Page Wrapper -->
         <div class="page-wrapper">
@@ -105,83 +86,30 @@
                         <!-- we need this logo when user switches to nav-function-top -->
                         <div class="page-logo">
                             <a href="#" class="page-logo-link press-scale-down d-flex align-items-center">
-                                <span class="page-logo-text mr-1" id="txtNomEmpresa"></span>                          
+                                <span class="page-logo-text mr-1">RESTAURANTE</span>                          
                             </a>
                         </div>
-                                                      
-                        <div class="ml-auto d-flex">
-                            
-                            <div class="hidden-md-down">
-                                <a href="#" class="header-icon" onclick="document.body.requestFullscreen();">
-                                    <i class="fal fa-expand"></i>
-                                </a>
-                            </div>                           
+                              
+                        
+                        <div class="ml-auto d-flex" id="rootMenu">
+                               
 
-                            <!-- app settings hidden-md-down-->
-                            <div class="hidden">
-                                <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-settings">
-                                    <i class="fal fa-cog"></i>
-                                </a>
-                            </div>
-
-                            
-                            <div>
-                                <a href="#" data-toggle="dropdown" title="" class="header-icon d-flex align-items-center justify-content-center ml-2">
-                                    <img src="img/logo.png" class="profile-image rounded-circle" alt="Menú">
-                                    <!-- you can also add username next to the avatar with the codes below:
-									<span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
-									<i class="ni ni-chevron-down hidden-xs-down"></i> -->
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
-                                    <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
-                                        <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
-                                            <span class="mr-2">
-                                                <img src="img/logo.png" class="rounded-circle profile-image" alt="Usuario">
-                                            </span>
-                                            <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg" id="divUsuario">Usuario</div>
-                                                <span class="text-truncate text-truncate-md opacity-80" id="lbTipo">correo@mercadosefectivos.com</span>                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider m-0"></div>
-                                    
-                                    <div id="rootMenu">
-                                                                           
-                                    
-                                    </div>
-                                    
-                                    <div class="dropdown-divider m-0"></div>
-
-                                    <a class="dropdown-item fw-500 pt-3 pb-3" data-toggle="dropdown" href="#" id="btnMenuInicioSalir">
-                                        <span>Salir (x)</span>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </header>
                     <!-- END Page Header -->
                     <!-- BEGIN Page Content -->
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
                     <main id="js-page-content" role="main" class="page-content">
-                        
-                      <div id="root">
+                      <div id="contenedor">
 
                       </div>
                     </main>
-
-                    <div id="" class="shortcut-menu align-left">
-                         <button class="btn btn-danger btn-circle btn-xl" id="btnInstalarApp">
-                             <i class="fal fa-bolt"></i>
-                         </button>
-                    </div>
-                    
                     <!-- this overlay is activated only when mobile menu is triggered -->
                     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
                     <!-- BEGIN Page Footer -->
                     <footer class="page-footer" role="contentinfo">
                         <div class="d-flex align-items-center flex-1 text-muted">
-                            <span class="hidden-md-down fw-700">por Alexis Burgos</a></span>
+                            <span class="hidden-md-down fw-700">por <a href="#">Alexis Burgos</a></span>
                         </div>
                     </footer>
                     <!-- END Page Footer -->
@@ -191,17 +119,27 @@
                 
             </div>
         </div>
+
+        <!-- botón nuevo -->
+        <div id="fixed-btn2">
+            <button class="btn btn-danger btn-circle btn-xl" id="btnInstalarApp">
+                <i class="fal fa-bolt"></i>
+            </button>
+        </div>
         <!-- END Page Wrapper -->
 
+        
         <!-- MENU LATERAL DERECHO -->
-        <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalMenu">
-            <div class="modal-dialog modal-dialog-right modal-md">
+        <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalMenuLateral">
+            <div class="modal-dialog modal-dialog-right modal-lg">
                 <div class="modal-content">
                     <div class="dropdown-header bg-danger d-flex justify-content-center align-items-center w-100">
                         <h4 class="m-0 text-center color-white" id="lbMenuTitulo">
                             Opciones
+                            <small class="mb-0 opacity-80">Opciones</small>
                         </h4>
-                        <br>
+                        
+                        
                         <button type="button" class="close text-white position-absolute pos-top pos-right p-2 m-1 mr-2" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"><i class="fal fa-times"></i></span>
                         </button>
@@ -214,10 +152,14 @@
                         </div>
                         <span id="saving"></span>
                     </div>
+                    <div class="modal-footer">
+
+                        <button class="btn btn-sm btn-danger position-absolute pos-bottom pos-right " id="btnCerrarModalMenuLateral" data-dismiss="modal"><<- Regresar</button>
+                    </div>
                 </div>
             </div>
         </div>
-      
+
         <!-- BEGIN Page Settings -->
         <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-right modal-md">
@@ -404,38 +346,26 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- END Page Settings -->
+        </div> 
+        <!-- END Page Settings -->
       
         <script src="js/vendors.bundle.js"></script>
         <script src="js/app.bundle.js"></script>
         <script src="js/../script.js"></script>
         
-        
-        <!-- jspdf 
-        <script src="./libs/html2canvas.js"></script>
-        <script type="text/javascript" src="./libs/jspdf.min.js"></script>
-        -->
-        <script src="./libs/noty/noty.min.js"></script>
-        <script src="./libs/chartjs.bundle.js"></script>
-        <script src="./libs/socket.io.js"></script>
-        <script src="./libs/sweetalert.min.js"></script>
-        <script src="./libs/axios.min.js"></script>
-        <script src="./libs/leaflet/leaflet.js"></script>
-        
-        
-        <script src="./libs/funciones.js"></script>
-        <script src="./controllers/classNavegar.js"></script>
-        <script src="./controllers/GlobalVars.js"></script>
-        <script src="./models/classEmpleados.js"></script>
-        <script src="./models/classTipoDocumentos.js"></script>
-        
-        <script src="./controllers/apicalls.js"></script>
-        
-        
-        <script src="./index.js"></script>
-        <script src="./controllers/socketHandler.js"></script>
-     
+
     </body>
 
+    <script src="./controllers/GlobalVars.js"></script>
+
+<script src="./onlineLibrary/socket.io.js"></script>
+<script src="./onlineLibrary/axios.min.js"></script>
+<script src="./assets/js/sweetalert.min.js"></script> <!--alertas varias-->
+<script src="./controllers/funciones.js"></script>
+
+<!-- controladores -->
+<script async src="./controllers/classApi.js"></script>
+<script src="./controllers/classNavegar.js"></script>
+<script src="./index.js"></script>
 
 </html>

@@ -1,11 +1,15 @@
+let GlobalSelectedForm = 'viewLogin';
+let GlobalBool = 0;
 
-var CACHE = 'community-pos';
+var CACHE = 'onneventas';
 const staticAssets = [
   './',
   './manifest.json',
   './favicon.png',
-  './index.html',
-   './sw.js'
+  './assets/img/usuario.png',
+  './assets/img/favicon.png',
+   './index.html',
+  './sw.js'
 ];
 
 self.addEventListener('install', function(evt) {
@@ -16,22 +20,26 @@ self.addEventListener('install', function(evt) {
 });
 
 self.addEventListener('fetch', function(evt) {
-  /*
   var req = evt.request.clone();
+  
+  //evt.respondWith(fromCache(evt.request));
+  //evt.waitUntil(update(evt.request));
+  
+  /* 
   if (navigator.onLine){
+    var req = evt.request.clone();
     if (req.clone().method == "GET") {
-      //evt.respondWith(fromCache(evt.request));
       evt.waitUntil(update(evt.request));
     }
   }else{
+    var req = evt.request.clone();
     if (req.clone().method == "GET") {
       evt.respondWith(fromCache(evt.request));
-      //evt.waitUntil(update(evt.request));
     }
   }
   */
-});
 
+});
 
 
 function fromCache(request) {
