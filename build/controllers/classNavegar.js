@@ -1,61 +1,28 @@
 const classNavegar ={
     login: ()=>{
-        let rootMenu = document.getElementById('rootMenu');
-        rootMenu.innerHTML = '';
+      
         funciones.loadScript('../logic/viewLogin.js','contenedor')
         .then(()=>{
+            GlobalLogged =0;
             GlobalSelectedForm='LOGIN';
             iniciarLogin();
+            document.getElementById('lbUsuario').innerText = '--';
         })             
     },
-    configuracionesInicio: ()=>{
-        let rootMenu = document.getElementById('rootMenu');
-        rootMenu.innerHTML = `
-    <div class="">
-        <a href="#" class="header-icon" id="btnMenuMesas">
-            <i class="fal fa-shield-alt"></i>Mesas .
-        </a>
-    </div>
-    
-    <div class="">
-        <a href="#" class="header-icon" id="btnDespachos">
-           <i class="fal fa-chart-pie"></i>Despacho .
-        </a>
-    </div>     
-    <div class="hidden-md-down">
-        <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-settings">
-            <i class="fal fa-cog"></i>
-        </a>
-    </div>
-    <div class="">
-        <a href="" class="header-icon" id="btnSalir">
-            <i class="fal fa-sign-out"></i>
-        </a>
-    </div>`;
-        let btnMenuMesas = document.getElementById('btnMenuMesas');
-        btnMenuMesas.addEventListener('click',()=>{
-            classNavegar.inicioMesas();
-        });
-        let btnDespachos = document.getElementById('btnDespachos');
-        btnDespachos.addEventListener('click',()=>{
-            classNavegar.inicioDespacho();
-        });
-
-        let btnSalir = document.getElementById('btnSalir');
-        btnSalir.addEventListener('click',()=>{
-            classNavegar.login();
-        })
-    },
     inicioMesas: ()=>{
-        classNavegar.configuracionesInicio();
+        
+        if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
+
         funciones.loadScript('../logic/viewMesas.js','contenedor')
         .then(()=>{
             GlobalSelectedForm ='MESAS';
             iniciarMesas();
+            document.getElementById('lbUsuario').innerText = GlobalUser;
         })             
         
     },
     inicioComanda: (idMesa,DesMesa)=>{
+
         funciones.loadScript('../logic/viewComanda.js','contenedor')
         .then(()=>{
             GlobalSelectedForm ='COMANDA';
@@ -63,11 +30,27 @@ const classNavegar ={
         })             
     },
     inicioDespacho: ()=>{
-        classNavegar.configuracionesInicio();
+
+        //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
+
+
         funciones.loadScript('../logic/viewDespacho.js','contenedor')
         .then(()=>{
             GlobalSelectedForm='DESPACHO';
             iniciarVistaDespachos();
+            document.getElementById('lbUsuario').innerText = 'Cocina // Despacho';
+        })             
+        
+    },
+    reportes: ()=>{
+
+        //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
+
+        funciones.loadScript('../logic/viewReportes.js','contenedor')
+        .then(()=>{
+            GlobalSelectedForm='REPORTES';
+            initView();
+            document.getElementById('lbUsuario').innerText = 'Reportes';
         })             
         
     }

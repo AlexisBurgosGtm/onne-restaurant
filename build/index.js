@@ -22,7 +22,7 @@ socket.on('comandas nueva', function(msg){
 socket.on('comandas finalizada', function(msg){
     if(GlobalSelectedForm=='MESAS'){
         try {
-            api.getMesas('tblMesas');
+            getMesas('tblMesas');
         } catch (error) {
             console.log('no estás en mesas')
         }
@@ -30,3 +30,29 @@ socket.on('comandas finalizada', function(msg){
 });
 
 classNavegar.login();
+
+
+
+document.getElementById('btnMenInicio').addEventListener('click',()=>{
+
+    classNavegar.login();
+
+});
+
+document.getElementById('btnMenMesas').addEventListener('click',()=>{
+
+    classNavegar.inicioMesas();
+    
+});
+
+document.getElementById('btnMenDespacho').addEventListener('click',()=>{
+
+    classNavegar.inicioDespacho();
+    
+});
+
+document.getElementById('btnMenReportes').addEventListener('click',()=>{
+
+    classNavegar.reportes();
+    
+});

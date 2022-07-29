@@ -23,7 +23,7 @@ let api = {
             });  
         })
     },
-    getMeseros: async(idContainer)=>{
+    x_getMeseros: async(idContainer)=>{
         let container = document.getElementById(idContainer);
         container.innerHTML = GlobalLoader;
             
@@ -56,7 +56,7 @@ let api = {
 
         });  
     },
-    getMesas: async(idContainer)=>{
+    x_getMesas: async(idContainer)=>{
         let container = document.getElementById(idContainer);
         container.innerHTML = GlobalLoader;
             
@@ -71,15 +71,17 @@ let api = {
                 let color = ''; if(rows.OCUPADA=='NO'){color='success'}else{color='danger'}
                     strdata = strdata + `
                 <div class="col-sm-6 col-xl-3 col-md-3 col-lg-3">
-                    <div class="p-3 bg-${color}-300 rounded overflow-hidden position-relative text-white mb-g" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
-                        <div class="">
-                            <h3 class="display-6 d-block l-h-n m-0 fw-500">
-                                ${rows.NOMBRE}
-                                <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
-                            </h3>
+                    <div class="card card-rounded shadow  bg-${color}-300 hand"><div class="card-body">
+                        <div class="p-3 rounded overflow-hidden position-relative text-white mb-g" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
+                            <div class="">
+                                <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                                    ${rows.NOMBRE}
+                                    <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
+                                </h3>
+                            </div>
+                            <i class="fal fa-comment position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
                         </div>
-                        <i class="fal fa-comment position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                    </div>
+                    </div></div>
                 </div>
                     `
             })

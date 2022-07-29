@@ -20,8 +20,8 @@ function getView(idMesa,DesMesa){
                             <option value=9>Cuenta 9</option>
                             <option value=10>Cuenta 10</option>
                         </select>
-                        <div class="hidden input-group-append">
-                            <button class="btn btn-info waves-effect waves-themed" type="button" id="btnSolicitarProducto">
+                        <div class="input-group-append">
+                            <button class="btn btn-info" id="btnSolicitarProducto">
                                 Enviar
                                 <i class="fal fa-check"></i>
                             </button>

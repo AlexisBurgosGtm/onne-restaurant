@@ -31,7 +31,7 @@ router.post("/empresas", async(req,res)=>{
            
     let qry =''; 
     qry = `SELECT EMPNIT, EMPNOMBRE AS NOMBRE FROM EMPRESAS`;     
-    console.log(qry);
+    //console.log(qry);
     
     execute.Query(res,qry);
 

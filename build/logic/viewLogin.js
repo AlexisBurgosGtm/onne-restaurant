@@ -5,14 +5,14 @@ function getView(){
         <div class="row">
             <div class="col-12">
 
-                <div class="card card-user">    
+                <div class="card card-user card-rounded shadow">    
                     <div class="card-body">
                         <div class="text-center">
                             <img class="avatar border-gray" width="100" height="100" src="./logoempresa.png" alt="...">
                         </div>
                         <div class="form-group" id="">
-                            <label>Empresa:</label>
-                            <select class="form-control" id="cmbEmpresas">
+                          
+                            <select class="form-control border-info border-top-0 border-left-0 negrita text-info" id="cmbEmpresas">
                             </select>
                         </div>
                     </div>
@@ -24,9 +24,12 @@ function getView(){
         },
         listado: ()=>{
             return `
+        <hr class="solid">
+        
         <div class="row" id='tblListaEmpleados'>
             
         </div>
+        
             `
         },
         modalClave:()=>{
@@ -85,12 +88,17 @@ async function addListeners(){
 };
 
 function cargarGrid(){
-    api.getMeseros('tblListaEmpleados');
+    getMeseros('tblListaEmpleados');
 };
 
 function getClaveMesero(usuario,clave){
+    
+    GlobalLogged = 1;
+
     GlobalUser = usuario;
-    funciones.Aviso(`Bienvenido ${usuario}`);
+   
+
+    //funciones.Aviso(`Bienvenido ${usuario}`);
     classNavegar.inicioMesas();
 
     /*
@@ -110,3 +118,41 @@ function iniciarLogin(){
     getView();
     addListeners();
 };
+
+
+
+
+
+function getMeseros(idContainer){
+    let container = document.getElementById(idContainer);
+    container.innerHTML = GlobalLoader;
+        
+    let strdata = '';
+
+    axios.post('/empleados/vendedores', {  
+        sucursal: GlobalSucursal
+    })
+    .then((response) => {
+        const data = response.data.recordset;
+        data.map((rows)=>{
+                strdata = strdata + `
+            <div class="col-6 p-2">
+                <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClaveMesero('${rows.NOMBRE}','${rows.CLAVE}');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            ${rows.NOMBRE}
+                            <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+                </div>
+            </div>
+                `
+        })
+        container.innerHTML = strdata;
+
+    }, (error) => {
+        funciones.AvisoError('Error en la solicitud');
+
+    });  
+}

@@ -30,7 +30,7 @@ router.use(function (req,res,next) {
         // Set to true if you need the website to include cookies in the requests sent
       res.setHeader('Access-Control-Allow-Credentials', true);
 */
-  console.log("/" + req.toString());
+  //console.log("/" + req.toString());
   next();
 });
 
@@ -39,26 +39,7 @@ app.get("/",function(req,res){
 	res.sendFile(path + 'index.html');
 }); 
 
-app.get("/odoo",function(req,res){
-  var Odoo = require('node-odoo');
- 
-  var odoo = new Odoo({
-    host: '167.114.152.65',
-    port: 80,
-    database: 'Prueva_innovar',
-    username: 'user.user@gmail.com',
-    password: '1234'
-  });
-   console.log('conectando odoo...')
-  // Connect to Odoo
-  odoo.connect(function (err) {
-    if (err) { return console.log(err); }
-   
-    // Get a partner
-    console.log('conectado')
-  });
 
-}); 
 
 //Router para app COMANDAS
 app.use('/comandas', routerComandas);

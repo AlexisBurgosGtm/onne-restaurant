@@ -5,7 +5,7 @@ const router = express.Router();
 //obtiene las mesas
 router.post('/mesas',async(req,res)=>{
     const sucursal = req.body.sucursal;
-    let qry = `SELECT ID, CODMESA AS CODIGO, DESMESA AS NOMBRE, OCUPADA FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}'`
+    let qry = `SELECT ID, CODMESA AS CODIGO, DESMESA AS NOMBRE, OCUPADA FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}' ORDER BY DESMESA`
     execute.Query(res,qry);
 
 })
@@ -107,7 +107,7 @@ router.post("/agregarproducto", async(req,res)=>{
             qry = `INSERT INTO TEMP_COMANDA 
             (EMPNIT,CODDOC,IDMESA,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,EXENTO,OBS,DESPACHADO,CUENTA) 
     VALUES ('${empnit}','${coddoc}',${idmesa},'${codprod}','${desprod}','${codmedida}',${cantidad},${equivale},${totalunidades},${costo},${precio},${totalcosto},${totalprecio},${exento},'${obs}','AN',${cuenta})`    
-    console.log(qry);
+    //console.log(qry);
    execute.Query(res,qry);
 
 });

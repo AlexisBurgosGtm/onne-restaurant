@@ -3,6 +3,8 @@ let lbMenuTitulo = document.getElementById('lbMenuTitulo');
 let rootMenuLateral = document.getElementById('rootMenuLateral');
 let GlobalSelectedForm = 'LOGIN';
 
+let GlobalLogged = 0;
+
 function getMenuLateral(){
     $('#modalMenuLateral').modal('show');
 };
