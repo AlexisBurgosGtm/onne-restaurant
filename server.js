@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 const execute = require('./router/connection');
 var routerComandas = require('./router/routerComandas');
 var routerEmpleados = require('./router/routerEmpleados');
+var routerProductos = require('./router/routerProductos');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -46,6 +47,10 @@ app.use('/comandas', routerComandas);
 
 //Router para app EMPLEADOS
 app.use('/empleados', routerEmpleados);
+
+
+//Router para app PRODUCTOS
+app.use('/productos', routerProductos);
 
 
 app.use("/",router);

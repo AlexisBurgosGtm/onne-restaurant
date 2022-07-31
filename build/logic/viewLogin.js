@@ -1,5 +1,66 @@
 function getView(){
     let view = {
+        body:()=>{
+            return `
+            <div class="col-12 p-0 shadow bg-white card-rounded">
+                    <div class="tab-content" id="myTabHomeContent">
+                        <div class="tab-pane fade show active" id="espera" role="tabpanel" aria-labelledby="receta-tab">    
+                            ${view.login()}
+                        </div>
+                        <div class="tab-pane fade" id="preconsultas" role="tabpanel" aria-labelledby="home-tab">
+                           
+                        </div>
+                        <div class="tab-pane fade" id="pacientes" role="tabpanel" aria-labelledby="home-tab">  
+                            
+                        </div>
+                        <div class="tab-pane fade" id="reportes" role="tabpanel" aria-labelledby="tab-reportes">
+                            
+                        </div>
+                    </div>
+            
+                    <ul class="nav nav-tabs hidden" id="myTabHome" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active negrita text-success" id="tab-espera" data-toggle="tab" href="#espera" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-list"></i>Turnos Espera</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-danger" id="tab-preconsultas" data-toggle="tab" href="#preconsultas" role="tab" aria-controls="home" aria-selected="true">
+                                <i class="fal fa-comments"></i>Pre-Consultas</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-info" id="tab-pacientes" data-toggle="tab" href="#pacientes" role="tab" aria-controls="home" aria-selected="true">
+                                <i class="fal fa-edit"></i>Pacientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-warning" id="tab-reportes" data-toggle="tab" href="#reportes" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-chart-pie"></i>Reportes</a>
+                        </li> 
+                                
+                    </ul>
+            </div>
+            `
+        },
+        login: ()=>{
+            return `
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card card-user card-rounded shadow">    
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img class="avatar border-gray" width="100" height="100" src="./logoempresa.png" alt="...">
+                        </div>
+                        <div class="form-group" id="">
+                            <label>Indique el Token de su Empresa</label>
+                            <input type="text" class="form-control border-info negrita">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+            `
+        },
         inicio: ()=>{
             return `
         <div class="row">

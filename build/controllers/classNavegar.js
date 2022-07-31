@@ -42,6 +42,17 @@ const classNavegar ={
         })             
         
     },
+    productos: ()=>{
+        //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
+
+        funciones.loadScript('../logic/viewProductos.js','contenedor')
+        .then(()=>{
+            GlobalSelectedForm='PRODUCTOS';
+            initView();
+            document.getElementById('lbUsuario').innerText = 'Productos y Precios';
+        })             
+        
+    },
     reportes: ()=>{
 
         //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};

@@ -51,6 +51,13 @@ document.getElementById('btnMenDespacho').addEventListener('click',()=>{
     
 });
 
+document.getElementById('btnMenProductos').addEventListener('click',()=>{
+
+    classNavegar.productos();
+    
+});
+
+
 document.getElementById('btnMenReportes').addEventListener('click',()=>{
 
     classNavegar.reportes();
