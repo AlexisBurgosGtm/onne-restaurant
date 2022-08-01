@@ -23,112 +23,6 @@ let api = {
             });  
         })
     },
-    x_getMeseros: async(idContainer)=>{
-        let container = document.getElementById(idContainer);
-        container.innerHTML = GlobalLoader;
-            
-        let strdata = '';
-
-        axios.post('/empleados/vendedores', {  
-            sucursal: GlobalSucursal
-        })
-        .then((response) => {
-            const data = response.data.recordset;
-            data.map((rows)=>{
-                    strdata = strdata + `
-                <div class="col-sm-6 col-xl-3">
-                    <div class="p-3 bg-info-300 rounded overflow-hidden position-relative text-white mb-g"  onclick="getClaveMesero('${rows.NOMBRE}','${rows.CLAVE}');">
-                        <div class="">
-                            <h3 class="display-6 d-block l-h-n m-0 fw-500">
-                                ${rows.NOMBRE}
-                                <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
-                            </h3>
-                        </div>
-                        <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                    </div>
-                </div>
-                    `
-            })
-            container.innerHTML = strdata;
-
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-
-        });  
-    },
-    x_getMesas: async(idContainer)=>{
-        let container = document.getElementById(idContainer);
-        container.innerHTML = GlobalLoader;
-            
-        let strdata = '';
-
-        axios.post('/comandas/mesas', {  
-            sucursal: GlobalSucursal
-        })
-        .then((response) => {
-            const data = response.data.recordset;
-            data.map((rows)=>{
-                let color = ''; if(rows.OCUPADA=='NO'){color='success'}else{color='danger'}
-                    strdata = strdata + `
-                <div class="col-sm-6 col-xl-3 col-md-3 col-lg-3">
-                    <div class="card card-rounded shadow  bg-${color}-300 hand"><div class="card-body">
-                        <div class="p-3 rounded overflow-hidden position-relative text-white mb-g" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
-                            <div class="">
-                                <h3 class="display-6 d-block l-h-n m-0 fw-500">
-                                    ${rows.NOMBRE}
-                                    <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
-                                </h3>
-                            </div>
-                            <i class="fal fa-comment position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                        </div>
-                    </div></div>
-                </div>
-                    `
-            })
-            container.innerHTML = strdata;
-
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-
-        });  
-    },
-    getComandaProductos: async(idContainer)=>{
-        let container = document.getElementById(idContainer);
-        container.innerHTML = GlobalLoader;
-            
-        let strdata = '';
-
-        axios.post('/comandas/productos', {  
-            sucursal: GlobalSucursal
-        })
-        .then((response) => {
-            const data = response.data.recordset;
-            data.map((rows)=>{
-                strdata = strdata + `
-                    <tr>
-                        <td>${rows.DESPROD}<br>
-                            <small class="text-info">${rows.DESPROD2}</small>
-                        </td>
-                        <td class="">
-                            <b>${funciones.setMoneda(rows.PRECIO,'Q')}</b>
-                            <br>
-                            <small class="text-danger"><b>${rows.CODMEDIDA}</b></small>
-                        </td>
-                        <td>
-                            <button class="btn btn-md btn-info btn-circle" onclick="addProduct('${rows.CODPROD}','${rows.DESPROD}','${rows.CODMEDIDA}',${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO})">
-                                +
-                            </button>
-                        </td>
-                    </tr>
-                    `
-            })
-            container.innerHTML = strdata;
-
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-
-        });  
-    },
     insertTempComanda: async(idmesa,codprod,desprod,codmedida,cantidad,equivale,costo,precio,exento,obs,cuenta)=>{
         let totalunidades = Number(cantidad) * Number(equivale);
         return new Promise((resolve,reject)=>{
@@ -188,7 +82,9 @@ let api = {
                 switch (rows.DESPACHADO) {
                     case 'AN':
                         st = 'Pendiente de enviar'; classST ='text-info';
-                        btnOpciones = `<button class="btn btn-sm btn-circle btn-warning" onclick="getProductoPedidoOpciones(${rows.ID},${rows.COSTO},${rows.PRECIO},${rows.CANTIDAD},${rows.EQUIVALE})">+</button>`;
+                        btnOpciones = `<button class="btn btn-md btn-circle btn-warning hand shadow" onclick="getProductoPedidoOpciones(${rows.ID},${rows.COSTO},${rows.PRECIO},${rows.CANTIDAD},${rows.EQUIVALE})">
+                                            <i class="fal fa-edit"></i>
+                                        </button>`;
                         break;
                     case 'NO':
                         st = 'Solicitado'; classST ='text-danger';
@@ -208,7 +104,9 @@ let api = {
                                 <td>
                                     ${rows.DESPROD}
                                     <br>
-                                    <small><b class="${classST}">${st}<b></small>
+                                    <small><b class="${classST}">${st}</b></small>
+                                    <br>
+                                    <small class="negrita">${rows.OBS}</small>
                                 </td>
                                 <td>
                                     ${funciones.setMoneda(rows.TOTALPRECIO,'Q')}

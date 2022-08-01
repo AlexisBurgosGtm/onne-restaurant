@@ -59,7 +59,7 @@ function getView(){
         
         <div class="btn-bottom-left">
             <button class="btn btn-info btn-circle hand shadow btn-xl" id="btnAtrasMeseros">
-                <i class="fal fa-arrow-left"></i>
+                <i class="fal fa-home"></i>
             </button>
         </div>
             `
@@ -121,34 +121,18 @@ function getView(){
             <div class="row navbar-fixed">
                 <div class="col-6 text-left">
                     <h3 id="lbNomMesa"><h3>
-                    <div class="input-group">
-                        <select id="cmbCuenta" class="form-control">
-                            <option value=0>General</option>
-                            <option value=1>Cuenta 1</option>
-                            <option value=2>Cuenta 2</option>
-                            <option value=3>Cuenta 3</option>
-                            <option value=4>Cuenta 4</option>
-                            <option value=5>Cuenta 5</option>
-                            <option value=6>Cuenta 6</option>
-                            <option value=7>Cuenta 7</option>
-                            <option value=8>Cuenta 8</option>
-                            <option value=9>Cuenta 9</option>
-                            <option value=10>Cuenta 10</option>
-                        </select>
-                        <div class="input-group-append">
-                            <button class="btn btn-info" id="btnSolicitarProducto">
-                                Enviar
-                                <i class="fal fa-check"></i>
+                  
+                            <button class="btn btn-info btn-lg hand shadow" id="btnSolicitarProducto">
+                                Solicitar a Cocina
+                                <i class="fal fa-paper-plane"></i>
                             </button>
-                        </div>
-                    </div>
-                    
+                       
                 </div>
                 <div class="col-6 text-right">
                     <h1 class="text-danger text-right" id="lbTotalVenta">Q 0.00</h1>
-                    <button class="btn btn-warning waves-effect waves-themed" type="button" id="btnSolicitarCuenta">
-                                Pedir cuenta
-                                <i class="fal fa-check"></i>
+
+                    <button class="btn btn-lg btn-danger waves-effect waves-themed shadow" type="button" id="btnSolicitarCuenta">
+                        <i class="fal fa-dollar-sign"></i> Finalizar Cuenta
                     </button>
                 </div>
                 
@@ -182,7 +166,9 @@ function getView(){
         comanda_btnNuevo:()=>{
             return `
             <div id="fixed-btn2">
-              <button class="btn btn-success btn-circle btn-xl" id="btnNuevoProducto">+</button>
+                <button class="btn btn-success btn-circle btn-xl shadow hand" id="btnNuevoProducto">
+                    <i class="fal fa-utensils"></i>
+                </button>
             </div>
             `
         },
@@ -250,24 +236,34 @@ async function addListeners(){
         getMenuLateral();
     });
 
-    let cmbCuenta = document.getElementById('cmbCuenta');
-    cmbCuenta.addEventListener('change',()=>{
-        cargarGridPedido(GlobalSelectedIdMesa);
-    })
-
+ 
     let btnSolicitarProducto = document.getElementById('btnSolicitarProducto');
     btnSolicitarProducto.addEventListener('click',()=>{
         funciones.Confirmacion('¿Está seguro que desea Enviar este Pedido?')
         .then((value)=>{
             if(value==true){
+               
+                btnSolicitarProducto.disabled = true;
+                btnSolicitarProducto.innerHTML = `<i class="fal fa-paper-plane fa-spin"></i>`;
+
                 api.solicitarComanda(GlobalSelectedIdMesa)
                 .then(()=>{
                     funciones.Aviso('Pedido solicitado exitosamente !! ')
                     cargarGridPedido(GlobalSelectedIdMesa);
                     socket.emit('comandas nueva','solicitar comanda');
+
+                    btnSolicitarProducto.disabled = false;
+                    btnSolicitarProducto.innerHTML = `Solicitar a Cocina
+                                                        <i class="fal fa-paper-plane"></i>`;
+
                 })
                 .catch(()=>{
-                    funciones.AvisoError('Error al enviar el pedido, inténtelo de nuevo')
+                    funciones.AvisoError('Error al enviar el pedido, inténtelo de nuevo');
+
+                    btnSolicitarProducto.disabled = false;
+                    btnSolicitarProducto.innerHTML = `Solicitar a Cocina
+                                                        <i class="fal fa-paper-plane"></i>`;
+
                 })
             }
         });
@@ -417,18 +413,60 @@ function selectMesa(idMesa,nombreMesa){
 
 //tab comanda
 function cargarGridProductos(){
-    api.getComandaProductos('tblListaProductos')
+    getComandaProductos('tblListaProductos')
 };
 
 async function cargarGridPedido(idMesa){
-    let cmbCuenta = document.getElementById('cmbCuenta');
+    let cmbCuenta =0;
 
-    await api.getTotalCuenta(idMesa,'lbTotalVenta','tblPedido',cmbCuenta.value);
+    await api.getTotalCuenta(idMesa,'lbTotalVenta','tblPedido',cmbCuenta);
 };
 
+function getComandaProductos(idContainer){
+    let container = document.getElementById(idContainer);
+    container.innerHTML = GlobalLoader;
+        
+    let strdata = '';
+
+    axios.post('/comandas/productos', {  
+        sucursal: GlobalSucursal
+    })
+    .then((response) => {
+        const data = response.data.recordset;
+        data.map((rows)=>{
+            strdata = strdata + `
+                <tr>
+                    <td>${rows.DESPROD}<br>
+                        <small class="text-info">${rows.DESPROD2}</small>
+                    </td>
+                    <td class="">
+                        <b>${funciones.setMoneda(rows.PRECIO,'Q')}</b>
+                        <br>
+                        <small class="text-danger"><b>${rows.CODMEDIDA}</b></small>
+                    </td>
+                    <td>
+                        <button class="btn btn-md btn-info btn-circle" onclick="addProduct('${rows.CODPROD}','${rows.DESPROD}','${rows.CODMEDIDA}',${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO})">
+                            +
+                        </button>
+                    </td>
+                </tr>
+                `
+        })
+        container.innerHTML = strdata;
+
+    }, (error) => {
+        funciones.AvisoError('Error en la solicitud');
+    });  
+
+};
+
+
 function addProduct(codprod,desprod,codmedida,equivale,costo,precio){
-    let cmbCuenta = document.getElementById('cmbCuenta');
-    api.insertTempComanda(GlobalSelectedIdMesa,codprod,desprod,codmedida,1,equivale,costo,precio,0,'',cmbCuenta.value)
+
+    let obs = prompt("Observaciones de la orden", "");
+
+    
+    api.insertTempComanda(GlobalSelectedIdMesa,codprod,desprod,codmedida,1,equivale,costo,precio,0,obs,0)
     .then(()=>{
         closeMenuLateral();
         cargarGridPedido(GlobalSelectedIdMesa);

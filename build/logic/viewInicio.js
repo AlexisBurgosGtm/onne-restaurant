@@ -97,7 +97,7 @@ function getView(){
                             <small class="m-0 l-h-n"></small>
                         </h3>
                     </div>
-                    <i class="fal fa-utensils position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                    <i class="fal fa-utensils position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
                 </div>
             </div>    
 
@@ -109,7 +109,7 @@ function getView(){
                             <small class="m-0 l-h-n"></small>
                         </h3>
                     </div>
-                    <i class="fal fa-list position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                    <i class="fal fa-list position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
                 </div>
             </div>    
 
@@ -121,7 +121,7 @@ function getView(){
                             <small class="m-0 l-h-n"></small>
                         </h3>
                     </div>
-                    <i class="fal fa-fog position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                    <i class="fal fa-box position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
                 </div>
             </div>    
             
@@ -133,7 +133,7 @@ function getView(){
                             <small class="m-0 l-h-n"></small>
                         </h3>
                     </div>
-                    <i class="fal fa-chart-pie position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                    <i class="fal fa-chart-pie position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
                 </div>
             </div>    
             
