@@ -1,35 +1,25 @@
 const classNavegar ={
-    login: ()=>{
-      
-        funciones.loadScript('../logic/viewLogin.js','contenedor')
-        .then(()=>{
-            GlobalLogged =0;
-            GlobalSelectedForm='LOGIN';
-            iniciarLogin();
-            document.getElementById('lbUsuario').innerText = '--';
-        })             
-    },
-    inicioMesas: ()=>{
+    inicio: ()=>{
         
-        if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
-
-        funciones.loadScript('../logic/viewMesas.js','contenedor')
+        funciones.loadScript('../logic/viewInicio.js','contenedor')
         .then(()=>{
-            GlobalSelectedForm ='MESAS';
-            iniciarMesas();
-            document.getElementById('lbUsuario').innerText = GlobalUser;
+            GlobalSelectedForm ='INICIO';
+            initView();
+            document.getElementById('lbUsuario').innerText = 'Inicio Onne Restaurant';
         })             
         
     },
-    inicioComanda: (idMesa,DesMesa)=>{
-
+    comanda: ()=>{
+        
         funciones.loadScript('../logic/viewComanda.js','contenedor')
         .then(()=>{
-            GlobalSelectedForm ='COMANDA';
-            iniciarComanda(idMesa,DesMesa);
+            GlobalSelectedForm ='COMANDAS';
+            initView();
+            document.getElementById('lbUsuario').innerText = 'Seleccione un Mesero';
         })             
+        
     },
-    inicioDespacho: ()=>{
+    despacho: ()=>{
 
         //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
 
@@ -42,14 +32,14 @@ const classNavegar ={
         })             
         
     },
-    productos: ()=>{
+    administracion: ()=>{
         //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
 
-        funciones.loadScript('../logic/viewProductos.js','contenedor')
+        funciones.loadScript('../logic/viewAdministracion.js','contenedor')
         .then(()=>{
-            GlobalSelectedForm='PRODUCTOS';
+            GlobalSelectedForm='ADMINISTRACION';
             initView();
-            document.getElementById('lbUsuario').innerText = 'Productos y Precios';
+            document.getElementById('lbUsuario').innerText = 'Administración';
         })             
         
     },

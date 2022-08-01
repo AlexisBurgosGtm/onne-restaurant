@@ -87,7 +87,55 @@ function getView(){
             return `
         <hr class="solid">
         
-        <div class="row" id='tblListaEmpleados'>
+        <div class="row" >
+
+            <div class="col-6 p-2">
+                <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClave('C');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            COMANDAS
+                            <small class="m-0 l-h-n"></small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-utensils position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                </div>
+            </div>    
+
+            <div class="col-6 p-2">
+                <div class="p-4 bg-primary-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"   onclick="getClave('D');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            DESPACHO
+                            <small class="m-0 l-h-n"></small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-list position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                </div>
+            </div>    
+
+            <div class="col-6 p-2">
+                <div class="p-4 bg-success-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand" onclick="getClave('A');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            ADMINISTRACIÓN
+                            <small class="m-0 l-h-n"></small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-fog position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                </div>
+            </div>    
+            
+            <div class="col-6 p-2">
+                <div class="p-4 bg-secondary-300 card-rounded shadow overflow-hidden position-relative text-secondary mb-g hand" onclick="getClave('R');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            REPORTES
+                            <small class="m-0 l-h-n"></small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-chart-pie position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:5rem"></i>
+                </div>
+            </div>    
             
         </div>
         
@@ -133,87 +181,59 @@ function getView(){
 async function addListeners(){
     
     let cmbEmpresas = document.getElementById('cmbEmpresas');
-
+    GlobalSucursal='';
     
     cmbEmpresas.addEventListener('change',async()=>{
-        GlobalSucursal = cmbEmpresas.value;
-        await cargarGrid();
+        GlobalSucursal = cmbEmpresas.value;s   
     });
+
 
     api.getEmpresas('cmbEmpresas')
     .then(async()=>{
         GlobalSucursal = cmbEmpresas.value;
-        await cargarGrid();
-    })
+   })
 
 };
 
-function cargarGrid(){
-    getMeseros('tblListaEmpleados');
-};
 
-function getClaveMesero(usuario,clave){
-    
-    GlobalLogged = 1;
-
-    GlobalUser = usuario;
+function getClave(tipo){
    
 
-    //funciones.Aviso(`Bienvenido ${usuario}`);
-    classNavegar.inicioMesas();
-
-    /*
-    let verificar = prompt('<div class="card">Escriba su clave de usuario</div>');
-    if(verificar==clave){
-        funciones.Aviso(`Bienvenido ${usuario}`);
-        classNavegar.inicioMesas();
-    }else{
-        funciones.AvisoError('Clave incorrecta');
+    if(GlobalSucursal==''){
+        funciones.AvisoError('Debe seleccionar una empresa válida');
+        return;
     }
-     */
+
+    GlobalLogged = 1;
+
+      
+    switch (tipo.toString()) {
+        case 'C':
+            classNavegar.comanda();
+            break;
+    
+        case 'D':
+            classNavegar.despacho();
+            break;
+        case 'A':
+            classNavegar.administracion();
+            break;
+        case 'R':
+            classNavegar.reportes();
+            break;
+
+        default:
+            break;
+    }
+   
+
 };
 
 
-function iniciarLogin(){
+function initView(){
     funciones.instalationHandlers('btnInstalarApp');
     getView();
     addListeners();
 };
 
 
-
-
-
-function getMeseros(idContainer){
-    let container = document.getElementById(idContainer);
-    container.innerHTML = GlobalLoader;
-        
-    let strdata = '';
-
-    axios.post('/empleados/vendedores', {  
-        sucursal: GlobalSucursal
-    })
-    .then((response) => {
-        const data = response.data.recordset;
-        data.map((rows)=>{
-                strdata = strdata + `
-            <div class="col-6 p-2">
-                <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClaveMesero('${rows.NOMBRE}','${rows.CLAVE}');">
-                    <div class="">
-                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
-                            ${rows.NOMBRE}
-                            <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                </div>
-            </div>
-                `
-        })
-        container.innerHTML = strdata;
-
-    }, (error) => {
-        funciones.AvisoError('Error en la solicitud');
-
-    });  
-}

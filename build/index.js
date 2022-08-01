@@ -29,10 +29,11 @@ socket.on('comandas finalizada', function(msg){
     }
 });
 
-classNavegar.login();
+//classNavegar.login();
+classNavegar.inicio();
 
 
-
+/* 
 document.getElementById('btnMenInicio').addEventListener('click',()=>{
 
     classNavegar.login();
@@ -63,3 +64,5 @@ document.getElementById('btnMenReportes').addEventListener('click',()=>{
     classNavegar.reportes();
     
 });
+
+*/
