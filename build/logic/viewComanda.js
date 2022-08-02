@@ -122,7 +122,7 @@ function getView(){
                 <div class="col-6 text-left">
 
                     <h3 id="lbNomMesa"><h3>
-                    <h1 class="text-danger" style="font-size:40px" id="lbTotalVenta">Q 0.00</h1>
+                    <h1 class="text-danger" style="font-size:35px" id="lbTotalVenta">Q 0.00</h1>
                                                               
                 </div>
                 <div class="col-6 text-right">
