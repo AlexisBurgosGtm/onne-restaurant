@@ -58,7 +58,7 @@ function getView(){
         </div>
         
         <div class="btn-bottom-left">
-            <button class="btn btn-info btn-circle hand shadow btn-xl" id="btnAtrasMeseros">
+            <button class="btn btn-secondary btn-circle hand shadow btn-xl" id="btnAtrasMeseros">
                 <i class="fal fa-home"></i>
             </button>
         </div>
@@ -110,7 +110,7 @@ function getView(){
                 
             </div>
             <div class="btn-bottom-left">
-                <button class="btn btn-info btn-circle hand shadow btn-xl" id="btnAtrasMesas">
+                <button class="btn btn-secondary btn-circle hand shadow btn-xl" id="btnAtrasMesas">
                     <i class="fal fa-arrow-left"></i>
                 </button>
             </div>
@@ -120,20 +120,15 @@ function getView(){
             return `
             <div class="row navbar-fixed">
                 <div class="col-6 text-left">
+
                     <h3 id="lbNomMesa"><h3>
-                  
-                            <button class="btn btn-info btn-lg hand shadow" id="btnSolicitarProducto">
-                                Solicitar a Cocina
-                                <i class="fal fa-paper-plane"></i>
-                            </button>
-                       
+                    <h1 class="text-danger" style="font-size:40px" id="lbTotalVenta">Q 0.00</h1>
+                                                              
                 </div>
                 <div class="col-6 text-right">
-                    <h1 class="text-danger text-right" id="lbTotalVenta">Q 0.00</h1>
-
-                    <button class="btn btn-lg btn-danger waves-effect waves-themed shadow" type="button" id="btnSolicitarCuenta">
-                        <i class="fal fa-dollar-sign"></i> Finalizar Cuenta
-                    </button>
+                    <button class="btn btn-danger btn-circle hand shadow btn-xl" type="button" id="btnSolicitarCuenta">
+                        <i class="fal fa-dollar-sign"></i>
+                    </button>                
                 </div>
                 
             </div>
@@ -157,10 +152,17 @@ function getView(){
                 </div>
             </div>
             <div class="btn-bottom-left">
-                <button class="btn btn-info btn-circle hand shadow btn-xl" id="btnAtrasComanda">
+                <button class="btn btn-secondary btn-circle hand shadow btn-xl" id="btnAtrasComanda">
                     <i class="fal fa-arrow-left"></i>
                 </button>
             </div>
+            <div class="btn-bottom-middle">
+                <button class="btn btn-primary btn-xl btn-circle hand shadow" id="btnSolicitarProducto">
+                    <i class="fal fa-paper-plane"></i>
+                </button>
+
+            </div>
+
             `
         },
         comanda_btnNuevo:()=>{
@@ -195,11 +197,77 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
+        comanda_modalFinalizar:()=>{
+            return `
+            <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalFinalizar">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        
+                        <div class="modal-header bg-info text-white">
+                            <h3>Datos del Cliente</h3>
+                        </div>
+                        
+                        <div class="modal-body p-4" style="font-size:80%">
+                            <div class="card card-rounded shadow  p-4">
+                              
+                                <div class="form-group">
+                                    <label class="negrita">NIT</label>
+                                    <input type="text" class="form-control border-info" value="CF" id="txtNit">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="negrita">Nombre</label>
+                                    <input type="text" class="form-control border-info" value="Consumidor Finalr" id="txtNombre">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="negrita">Dirección</label>
+                                    <input type="text" class="form-control border-info" value="Ciudad" id="txtDireccion">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control border-info negrita" id="txtMesa" disabled=true>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-control border-info" id="cmbFactura">
+                                            <option value="NO">SIN FACTURA</option>
+                                            <option value="SI">CON FACTURA</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <hr class="solid">
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn btn-xl btn-secondary btn-circle shadow hand" data-dismiss="modal">
+                                            <i class="fal fa-arrow-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-xl btn-info btn-circle shadow hand" id="btnGuardarComanda">
+                                            <i class="fal fa-save"></i>
+                                        </button>
+                                    </div>   
+                                </div>
+
+
+                            </div>
+                        
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            `
+        },
+
 
     };
 
-    root.innerHTML = view.body();
+    root.innerHTML = view.body() + view.comanda_modalFinalizar();
     rootMenuLateral.innerHTML = view.comanda_listadoProductos();
 };
 
@@ -253,16 +321,14 @@ async function addListeners(){
                     socket.emit('comandas nueva','solicitar comanda');
 
                     btnSolicitarProducto.disabled = false;
-                    btnSolicitarProducto.innerHTML = `Solicitar a Cocina
-                                                        <i class="fal fa-paper-plane"></i>`;
+                    btnSolicitarProducto.innerHTML = `<i class="fal fa-paper-plane"></i>`;
 
                 })
                 .catch(()=>{
                     funciones.AvisoError('Error al enviar el pedido, inténtelo de nuevo');
 
                     btnSolicitarProducto.disabled = false;
-                    btnSolicitarProducto.innerHTML = `Solicitar a Cocina
-                                                        <i class="fal fa-paper-plane"></i>`;
+                    btnSolicitarProducto.innerHTML = `<i class="fal fa-paper-plane"></i>`;
 
                 })
             }
@@ -271,8 +337,32 @@ async function addListeners(){
 
     let btnSolicitarCuenta = document.getElementById('btnSolicitarCuenta');
     btnSolicitarCuenta.addEventListener('click',()=>{
+
+
+
+        let txtNit = document.getElementById('txtNit');
+        let txtNombre = document.getElementById('txtNombre');
+        let txtDireccion = document.getElementById('txtDireccion');
+        let cmbFactura = document.getElementById('cmbFactura');
+        
+
+        txtNit.value = 'CF';
+        txtNombre.value = 'CONSUMIDOR FINAL';
+        txtDireccion.value = 'CIUDAD';
+        cmbFactura.value = 'NO';
+
+        $('#modalFinalizar').modal('show');
+
+
+
+        return;
+
         funciones.Confirmacion('¿Está seguro que desea Solicitar la CUENTA de esta mesa?')
         .then((value)=>{
+
+
+
+            /*
             if(value==true){
                 api.solicitarCuenta(GlobalSelectedIdMesa)
                 .then(()=>{
@@ -286,11 +376,38 @@ async function addListeners(){
                 
 
             }
+            */
         })
 
-    })
+    });
 
-   
+   let btnGuardarComanda = document.getElementById('btnGuardarComanda');
+   btnGuardarComanda.addEventListener('click',()=>{
+
+                funciones.Confirmacion('¿Está seguro que desea Solicitar la CUENTA de esta mesa?')
+                .then((value)=>{
+
+                
+                    if(value==true){
+                        api.solicitarCuenta(GlobalSelectedIdMesa)
+                        .then(()=>{
+                            funciones.Aviso('Cuenta solicitada Exitosamente!!')
+                            socket.emit('comandas finalizada','')
+                            classNavegar.inicioMesas();
+                        })
+                        .catch(()=>{
+                            funciones.AvisoError('Ocurrió un error!! inténtelo de nuevo.s')
+                        })
+                        
+
+                    }
+                
+                })
+
+
+   });
+
+
     funciones.modalCantidad('rootModalCantidad');
     
     funciones.slideAnimationTabs();
@@ -403,7 +520,11 @@ function getMesas(){
 function selectMesa(idMesa,nombreMesa){
 
     GlobalSelectedIdMesa = Number(idMesa);
+
     document.getElementById('lbNomMesa').innerText = nombreMesa;
+    document.getElementById('txtMesa').value = nombreMesa;
+    
+
     document.getElementById('tab-comanda').click();
 
     cargarGridPedido(GlobalSelectedIdMesa);
