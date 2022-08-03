@@ -395,14 +395,17 @@ async function addListeners(){
                     if(value==true){
                         solicitarCuenta(nit, nombre, direccion, cmbFactura)
                         .then(()=>{
-                                                                                   
-                            funciones.Aviso('Cuenta solicitada Exitosamente!!')
+                                      
+                            $('#modalFinalizar').modal('hide');
+
+                            funciones.Aviso('Cuenta Finalizada Exitosamente!!')
                             socket.emit('comandas finalizada','')
                             
                             getMesas();            
                             document.getElementById('tab-mesas').click();
 
-                            deleteTempComanda(GlobalSelectedIdMesa);
+                            deleteTempComanda(GlobalSelectedIdMesa);                         
+
 
                         })
                         .catch(()=>{
