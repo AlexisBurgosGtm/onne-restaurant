@@ -712,4 +712,4 @@ function deleteTempComanda(idmesa){
 
     })
 
-},
+}
