@@ -31,6 +31,11 @@ function getView(){
                     </table>
                 </div>
             </div>
+            <div class="btn-bottom-left">
+                <button class="btn btn-secondary btn-circle hand shadow btn-xl" id="btnAtrasDespacho">
+                    <i class="fal fa-arrow-left"></i>
+                </button>
+            </div>
             `
         },
         detallePedido :()=>{
@@ -61,6 +66,11 @@ function getView(){
 
 async function addListeners(){
 
+    let btnAtrasDespacho = document.getElementById('btnAtrasDespacho');
+    btnAtrasDespacho.addEventListener('click',()=>{
+            classNavegar.inicio();
+    });
+
     let cmbTipoListado = document.getElementById('cmbTipoListado');
     cmbTipoListado.addEventListener('change',async ()=>{
         await CargarGrid();
@@ -72,7 +82,7 @@ async function addListeners(){
 
 function CargarGrid(){
     let cmbTipoListado = document.getElementById('cmbTipoListado');
-    api.getPedidosPendientes('txtTotal','tblPedidosPendientes',cmbTipoListado.value);
+    getPedidosPendientes('txtTotal','tblPedidosPendientes',cmbTipoListado.value);
 };
 
 function iniciarVistaDespachos(){
@@ -86,11 +96,93 @@ function getOpcionPedido(id){
     funciones.Confirmacion('Confirme si la orden ha sido despachada')
     .then((value)=>{
         if(value==true){
-            api.confirmarDespacho(id)
+            confirmarDespacho(id)
             .then(()=>{
-                idrow.remove();
+                //idrow.remove();
+                CargarGrid();
                 socket.emit('comandas despachado',`Orden para mesa ${GlobalSelectedIdMesa}`)
             })
         }
     })
+}
+
+
+
+
+function getPedidosPendientes(idLbTotal,idContainer,status){
+       
+
+    let container = document.getElementById(idContainer);
+    container.innerHTML = GlobalLoader;
+    let lbtotal = document.getElementById(idLbTotal);
+    lbtotal.innerText = '--'
+
+    let strdata = '';
+    let st = ''; let classST = '';
+    let btnOpciones = ``;
+
+    axios.post('/comandas/pedidospendientes', {  
+        sucursal: GlobalSucursal,
+        status:status
+    })
+    .then((response)=>{
+        const data = response.data.recordset;
+        let totalp = 0; 
+        data.map((rows)=>{
+            totalp += 1;
+            if(status=='SI'){btnOpciones='-';}else{
+                btnOpciones=`<button class="btn btn-md btn-info btn-circle"
+                onclick="getOpcionPedido(${rows.ID})">
+                +
+                </button>`
+            }
+            strdata += `<tr id=${rows.ID}>
+                            <td>
+                                ${rows.DESPROD}
+                                <br>
+                                <small><b class="text-info">MESA: ${rows.DESMESA}<b></small>
+                                <hr class="solid">
+                                <small class="negrita text-danger">${rows.OBS}</small>
+                            </td>
+                            <td>
+                                <h3 class="text-danger">${rows.CANTIDAD}</h3>
+                                <small><b class="text-danger"><b>${rows.CODMEDIDA}</b></small>
+                                
+                            </td>
+                            <td>
+                                ${btnOpciones}
+                            </td>
+                        </tr>`
+        })
+
+        lbtotal.innerText = `Items ${totalp}`;
+        container.innerHTML = strdata;
+        
+    }, (error) => {
+        funciones.AvisoError('Error en la solicitud');
+        lbtotal.innerText = '0'
+    });  
+}
+
+
+function confirmarDespacho (id){
+    
+    return new Promise((resolve,reject)=>{
+        axios.post('/comandas/confirmardespacho', {
+            id:id,
+            sucursal:GlobalSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==1){
+                resolve(data);
+            }else{reject();}
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
 }

@@ -207,44 +207,6 @@ router.post("/pedidospendientes", async(req,res)=>{
     
 });
 
-// INSERTA EL DOCUMENTO
-router.post("/documento", async (req,res)=>{
-    const {app,empnit,anio,mes,dia,coddoc,fecha,fechaentrega,formaentrega,codcliente,nomclie,codbodega,totalcosto,totalprecio,nitclie,dirclie,obs,direntrega,usuario,codven} = req.body;
-    let correlativo = req.body.correlativo;
-    let ncorrelativo = correlativo;
-
-    //variables sin asignar
-    let concre = 'CON';
-    let abono = totalprecio; let saldo = 0;
-    let pagotarjeta = 0; let recargotarjeta = 0;
-    let codrep = 0;
-    let totalexento=0;
-    
-    let nuevocorrelativo = Number(ncorrelativo) + 1;
-
-
-    let qry = ''; // inserta los datos en la tabla documentos
-    let qrydoc = ''; // inserta los datos de la tabla docproductos
-    let qrycorrelativo = ''; //actualiza el correlativo del documento
-
-                
-        qry = `INSERT INTO DOCUMENTOS 
-        (EMPNIT,ANIO,MES,DIA,FECHA,HORA,MINUTO,	CODDOC,CORRELATIVO,CODCLIENTE,DOC_NIT,DOC_NOMCLIE,DOC_DIRCLIE,TOTALCOSTO,TOTALPRECIO,CODEMBARQUE,STATUS,CONCRE,USUARIO,CORTE,SERIEFAC,NOFAC,CODVEN,PAGO,VUELTO,MARCA,OBS, DOC_ABONO, DOC_SALDO,TOTALTARJETA, RECARGOTARJETA,TOTALEXENTO,DIRENTREGA) 
-            VALUES
-        ('${empnit}',${anio},${mes},${dia},'${fecha}',0,0,'${coddoc}',${ncorrelativo},${codcliente},'${nitclie}','${nomclie}','${dirclie}',${totalcosto},${totalprecio},'GENERAL','O','${concre}','${usuario}','NO','${coddoc}',${ncorrelativo},${codven},${totalprecio},0,'NO','${obs}',${abono},${saldo},${pagotarjeta},${recargotarjeta},${totalexento},'${direntrega}')`;
-        
-        qrydoc = `INSERT INTO DOCPRODUCTOS 
-        (EMPNIT,ANIO,MES,DIA,CODDOC,CORRELATIVO,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,ENTREGADOS_TOTALUNIDADES,
-            ENTREGADOS_TOTALCOSTO,ENTREGADOS_TOTALPRECIO,COSTOANTERIOR,COSTOPROMEDIO,CANTIDADBONIF,TOTALBONIF,NOSERIE,EXENTO) 
-        SELECT EMPNIT,${anio} AS ANIO, ${mes} AS MES,${dia} AS DIA, CODDOC,${ncorrelativo} AS CORRELATIVO, CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,
-            TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,TOTALUNIDADES,TOTALCOSTO,TOTALPRECIO,COSTO,COSTO,BONIF,TOTALBONIF,NOSERIE,EXENTO 
-        FROM TEMP_VENTAS WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}' AND CODDOC='${coddoc}'`;
-
-        qrycorrelativo =`UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE EMPNIT='${empnit}' AND CODDOC='${coddoc}'`
-
-    execute.Query(res,qry + qrydoc + qrycorrelativo);
-    
-});
 
 
 module.exports = router;

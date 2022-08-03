@@ -401,8 +401,9 @@ async function addListeners(){
                             funciones.Aviso('Cuenta Finalizada Exitosamente!!')
                             socket.emit('comandas finalizada','')
                             
-                            getMesas();            
+                                    
                             document.getElementById('tab-mesas').click();
+                            getMesas();  
 
                             deleteTempComanda(GlobalSelectedIdMesa);                         
 
@@ -713,3 +714,38 @@ function deleteTempComanda(idmesa){
     })
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
