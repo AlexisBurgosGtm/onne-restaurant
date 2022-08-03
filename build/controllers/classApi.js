@@ -23,7 +23,7 @@ let api = {
             });  
         })
     },
-    insertTempComanda: async(idmesa,codprod,desprod,codmedida,cantidad,equivale,costo,precio,exento,obs,cuenta)=>{
+    insertTempComanda: async(idmesa,codprod,desprod,codmedida,cantidad,equivale,costo,precio,exento,obs,cuenta,codempleado)=>{
         let totalunidades = Number(cantidad) * Number(equivale);
         return new Promise((resolve,reject)=>{
             axios.post('/comandas/agregarproducto', {
@@ -43,7 +43,8 @@ let api = {
                 totalprecio:precio,
                 exento:exento,
                 obs:obs,
-                cuenta:cuenta
+                cuenta:cuenta,
+                codempleado:codempleado
             })
             .then((response) => {
                 const data = response.data.recordset;
@@ -126,10 +127,13 @@ let api = {
             }else{
                 api.statusMesa(idmesa,'SI')
             }
-
+            GlobalTotalCosto = totalc;
+            GlobalTotalVenta = totalp;
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
-            lbtotal.innerText = 'Q 0.00'
+            lbtotal.innerText = 'Q 0.00';
+            GlobalTotalCosto = 0;
+            GlobalTotalVenta = 0;
         });  
     },
     updateTempComanda: async(id,costo,precio,cantidad,equivale,obs)=>{
@@ -278,27 +282,6 @@ let api = {
         return new Promise((resolve,reject)=>{
             axios.post('/comandas/confirmardespacho', {
                 id:id,
-                sucursal:GlobalSucursal
-            })
-            .then((response) => {
-                const data = response.data.recordset;
-                if(response.data.rowsAffected[0]==1){
-                    resolve(data);
-                }else{reject();}
-                
-            }, (error) => {
-                funciones.AvisoError('Error en la solicitud');
-                reject(error);
-            });
-
-        })
-
-    },
-    solicitarCuenta: async(idMesa)=>{
-        
-        return new Promise((resolve,reject)=>{
-            axios.post('/comandas/solicitarcuenta', {
-                id:idMesa,
                 sucursal:GlobalSucursal
             })
             .then((response) => {

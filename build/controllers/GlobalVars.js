@@ -13,6 +13,7 @@ function closeMenuLateral(){
     $('#modalMenuLateral').modal('hide');
 };
 
+let GlobalCodempleado = 0;
 let GlobalSucursal='';
 let GlobalUser;
 let GlobalCoddoc;

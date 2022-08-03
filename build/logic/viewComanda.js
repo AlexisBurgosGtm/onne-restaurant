@@ -227,10 +227,10 @@ function getView(){
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <input type="text" class="form-control border-info negrita" id="txtMesa" disabled=true>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <select class="form-control border-info" id="cmbFactura">
                                             <option value="NO">SIN FACTURA</option>
                                             <option value="SI">CON FACTURA</option>
@@ -294,7 +294,7 @@ async function addListeners(){
 
     //tab comandas
     document.getElementById('btnAtrasComanda').addEventListener('click',()=>{
-                    
+        getMesas();            
         document.getElementById('tab-mesas').click();
     });
 
@@ -387,13 +387,23 @@ async function addListeners(){
                 funciones.Confirmacion('¿Está seguro que desea Solicitar la CUENTA de esta mesa?')
                 .then((value)=>{
 
+                    let nit = document.getElementById('txtNit').value || 'CF';
+                    let nombre = document.getElementById('txtNombre').value || 'CONSUMIDOR FINAL';
+                    let direccion = document.getElementById('txtDireccion').value || 'CIUDAD';
+                    let cmbFactura = document.getElementById('cmbFactura').value;
                 
                     if(value==true){
-                        api.solicitarCuenta(GlobalSelectedIdMesa)
+                        solicitarCuenta(nit, nombre, direccion, cmbFactura)
                         .then(()=>{
+                                                                                   
                             funciones.Aviso('Cuenta solicitada Exitosamente!!')
                             socket.emit('comandas finalizada','')
-                            classNavegar.inicioMesas();
+                            
+                            getMesas();            
+                            document.getElementById('tab-mesas').click();
+
+                            deleteTempComanda(GlobalSelectedIdMesa);
+
                         })
                         .catch(()=>{
                             funciones.AvisoError('Ocurrió un error!! inténtelo de nuevo.s')
@@ -426,6 +436,9 @@ function initView(){
 //tab meseros
 
 function getMeseros(idContainer){
+
+    GlobalCodempleado = 0;
+
     let container = document.getElementById(idContainer);
     container.innerHTML = GlobalLoader;
         
@@ -439,7 +452,7 @@ function getMeseros(idContainer){
         data.map((rows)=>{
                 strdata = strdata + `
             <div class="col-6 p-2">
-                <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClaveMesero('${rows.NOMBRE}','${rows.CLAVE}');">
+                <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClaveMesero('${rows.NOMBRE}','${rows.CLAVE}','${rows.CODIGO}','${rows.CODDOC}');">
                     <div class="">
                         <h3 class="display-6 d-block l-h-n m-0 fw-500">
                             ${rows.NOMBRE}
@@ -463,13 +476,15 @@ function cargarGrid(){
     getMeseros('tblListaEmpleados');
 };
 
-function getClaveMesero(usuario,clave){
+function getClaveMesero(usuario,clave,codigo,coddoc){
     
-  
+    GlobalCodempleado = Number(codigo);
     GlobalUser = usuario;
+    GlobalCoddoc = coddoc;
+
     document.getElementById('lbUsuario').innerText = GlobalUser;
     document.getElementById('tab-mesas').click();
-
+    getMesas();
   
 };
 
@@ -492,9 +507,9 @@ function getMesas(){
                 strdata = strdata + `
             <div class="col-xs-3 col-sm-3 col-xl-3 col-md-3 col-lg-3 p-2">
 
-                <div class="card card-rounded shadow  bg-${color}-300 hand" style="font-size:60%">
+                <div class="card card-rounded shadow  bg-${color}-300 hand" style="font-size:60%" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
                     <div class="card-body">
-                        <div class="p-3 rounded overflow-hidden position-relative text-white mb-g" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
+                        <div class="p-3 rounded overflow-hidden position-relative text-white mb-g">
                             <div class="">
                                 <h3 class="display-6 d-block l-h-n m-0 fw-500">
                                     ${rows.NOMBRE}
@@ -538,6 +553,7 @@ function cargarGridProductos(){
 };
 
 async function cargarGridPedido(idMesa){
+ 
     let cmbCuenta =0;
 
     await api.getTotalCuenta(idMesa,'lbTotalVenta','tblPedido',cmbCuenta);
@@ -587,7 +603,7 @@ function addProduct(codprod,desprod,codmedida,equivale,costo,precio){
     let obs = prompt("Observaciones de la orden", "");
 
     
-    api.insertTempComanda(GlobalSelectedIdMesa,codprod,desprod,codmedida,1,equivale,costo,precio,0,obs,0)
+    api.insertTempComanda(GlobalSelectedIdMesa,codprod,desprod,codmedida,1,equivale,costo,precio,0,obs,0,GlobalCodempleado)
     .then(()=>{
         closeMenuLateral();
         cargarGridPedido(GlobalSelectedIdMesa);
@@ -624,4 +640,73 @@ function fcnDeleteRowPedido(id){
 };
 
 
+function solicitarCuenta(nit,nombre,direccion,factura){
+    
+    cargarGridPedido(GlobalSelectedIdMesa);
 
+    let fecha = funciones.getFecha();
+    let d = new Date(fecha);
+
+    let hoy = new Date();
+    let hora = hoy.getHours();
+    let minuto = hoy.getMinutes();
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/comandas/solicitarcuenta', {
+                sucursal:GlobalSucursal,
+                id:GlobalSelectedIdMesa,
+                codempleado:GlobalCodempleado,
+                nit:nit,
+                nombre:nombre,
+                direccion:direccion,
+                obs:'SN',
+                factura:factura,
+                fecha:fecha,
+                dia:d.getUTCDate(),
+                mes:d.getUTCMonth()+1,
+                anio:d.getFullYear(),
+                hora:hora,
+                minuto:minuto,
+                coddoc:GlobalCoddoc,
+                correlativo:1,
+                totalcosto:GlobalTotalCosto,
+                totalprecio:GlobalTotalVenta
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
+};
+
+
+function deleteTempComanda(idmesa){
+        
+    return new Promise((resolve,reject)=>{
+        axios.post('/comandas/eliminarcomanda', {
+            id:idmesa,
+            sucursal:GlobalSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==1){
+                resolve(data);
+            }else{reject();}
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
+},

@@ -2,6 +2,59 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+
+
+
+router.post("/solicitarcuenta", async(req,res)=>{
+    const {sucursal,id,codempleado,nit,nombre,direccion,obs,
+        factura,fecha,dia,mes,anio,hora,minuto,coddoc,correlativo,totalcosto,totalprecio} = req.body;
+
+    let qry = '';
+    qry = `
+    INSERT INTO DOCUMENTOS 
+                (EMPNIT,ANIO,MES,DIA,FECHA,HORA,MINUTO,	CODDOC,CORRELATIVO,CODCLIENTE,DOC_NIT,DOC_NOMCLIE,DOC_DIRCLIE,TOTALCOSTO,TOTALPRECIO,CODEMBARQUE,STATUS,CONCRE,USUARIO,CORTE,SERIEFAC,NOFAC,CODVEN,PAGO,VUELTO,MARCA,OBS, DOC_ABONO, DOC_SALDO,TOTALTARJETA, RECARGOTARJETA,CODREP,TOTALEXENTO,DIRENTREGA,VENCIMIENTO,DIASCREDITO,CODCAJA,TOTALIVA,TOTALSINIVA,VALORENTREGA) 
+				    VALUES
+				('${sucursal}',${anio},${mes},${dia},'${fecha}',${hora},${minuto},'${coddoc}',${correlativo},0,'${nit}','${nombre}','${direccion}',${totalcosto},${totalprecio},'COMANDA','O','CON','RESTAURANTE','NO','${coddoc}',${correlativo},${codempleado},${totalprecio},0,'NO','${obs}',${totalprecio},0,0,0,NULL,0,'SN','${fecha}',0,1,0,0,0);
+    INSERT INTO DOCPRODUCTOS 
+                (EMPNIT,ANIO,MES,DIA,CODDOC,CORRELATIVO,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,ENTREGADOS_TOTALUNIDADES,
+				    ENTREGADOS_TOTALCOSTO,ENTREGADOS_TOTALPRECIO,COSTOANTERIOR,COSTOPROMEDIO,CANTIDADBONIF,TOTALBONIF,NOSERIE,EXENTO,OBS,LASTUPDATE) 
+	    SELECT EMPNIT,${anio} AS ANIO, ${mes} AS MES,${dia} AS DIA, '${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO, 
+                    CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,
+				    TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,TOTALUNIDADES,TOTALCOSTO,TOTALPRECIO AS ENTREGADOS_TOTALPRECIO,COSTO,COSTO,0 AS BONIF,
+                    0 AS TOTALBONIF,CODEMPLEADO AS NOSERIE,0 AS EXENTO,OBS,'${fecha}' AS LASTUPDATE 
+	            FROM TEMP_COMANDA WHERE EMPNIT='${sucursal}' AND IDMESA=${id};
+    UPDATE RESTAURANTE_MESAS SET CUENTA='SI', OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}';
+    `;
+
+
+    execute.Query(res,qry);
+    
+});
+
+
+router.post("/eliminarcomanda", async(req,res)=>{
+    const {sucursal,id} = req.body;
+
+    let qry = '';
+    qry = `DELETE FROM TEMP_COMANDA WHERE EMPNIT='${sucursal}' AND IDMESA=${id}`;
+
+    execute.Query(res,qry);
+    
+});
+
+
+/*
+router.post("/solicitarcuenta", async(req,res)=>{
+    const {id,sucursal} = req.body;
+
+    let qry = '';
+    qry = `UPDATE RESTAURANTE_MESAS SET CUENTA='SI', OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}'`;
+
+    execute.Query(res,qry);
+    
+});
+*/
+
 //obtiene las mesas
 router.post('/mesas',async(req,res)=>{
     const sucursal = req.body.sucursal;
@@ -98,15 +151,15 @@ router.post("/agregarproducto", async(req,res)=>{
     let exento=Number(req.body.exento);
     let obs = req.body.obs;
     let cuenta = Number(req.body.cuenta);
-
+    let codempleado = Number(req.body.codempleado) || 0;
     
 
     let qry = '';
 
     
             qry = `INSERT INTO TEMP_COMANDA 
-            (EMPNIT,CODDOC,IDMESA,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,EXENTO,OBS,DESPACHADO,CUENTA) 
-    VALUES ('${empnit}','${coddoc}',${idmesa},'${codprod}','${desprod}','${codmedida}',${cantidad},${equivale},${totalunidades},${costo},${precio},${totalcosto},${totalprecio},${exento},'${obs}','AN',${cuenta})`    
+            (EMPNIT,CODDOC,IDMESA,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,EXENTO,OBS,DESPACHADO,CUENTA,CODEMPLEADO) 
+    VALUES ('${empnit}','${coddoc}',${idmesa},'${codprod}','${desprod}','${codmedida}',${cantidad},${equivale},${totalunidades},${costo},${precio},${totalcosto},${totalprecio},${exento},'${obs}','AN',${cuenta},${codempleado})`    
     //console.log(qry);
    execute.Query(res,qry);
 
@@ -135,15 +188,6 @@ router.post("/confirmardespacho", async(req,res)=>{
     
 });
 
-router.post("/solicitarcuenta", async(req,res)=>{
-    const {id,sucursal} = req.body;
-
-    let qry = '';
-    qry = `UPDATE RESTAURANTE_MESAS SET CUENTA='SI', OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}'`;
-
-    execute.Query(res,qry);
-    
-});
 
 // obtiene el total de temp ventas según sea el usuario
 router.post("/pedidospendientes", async(req,res)=>{

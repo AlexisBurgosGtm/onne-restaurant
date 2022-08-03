@@ -19,7 +19,7 @@ router.post("/vendedores", async(req,res)=>{
     const {sucursal} = req.body;
         
     let qry =''; 
-    qry = `SELECT EMPNIT, CODEMPLEADO AS CODIGO, NOMEMPLEADO AS NOMBRE, CLAVE FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND ACTIVO='SI' AND CODTIPOEMPLEADO=3`;     
+    qry = `SELECT EMPNIT, CODEMPLEADO AS CODIGO, NOMEMPLEADO AS NOMBRE, CLAVE, WHATSAPP AS CODDOC FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND ACTIVO='SI' AND CODTIPOEMPLEADO=3`;     
         
     execute.Query(res,qry);
 
