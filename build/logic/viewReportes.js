@@ -5,62 +5,44 @@ function getView(){
             return `
             <div class="col-12 p-0 shadow bg-white card-rounded">
                     <div class="tab-content" id="myTabHomeContent">
-                        <div class="tab-pane fade show active" id="listado" role="tabpanel" aria-labelledby="receta-tab">    
-                            ${view.listado()}
+                        <div class="tab-pane fade show active" id="dia" role="tabpanel" aria-labelledby="receta-tab">    
+                            ${view.dia()}
                         </div>
-                        <div class="tab-pane fade" id="nuevo" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade" id="mes" role="tabpanel" aria-labelledby="home-tab">
                      
                         </div>
-                        <div class="tab-pane fade" id="pacientes" role="tabpanel" aria-labelledby="home-tab">  
-                            
-                        </div>
-                        <div class="tab-pane fade" id="reportes" role="tabpanel" aria-labelledby="tab-reportes">
-                            
-                        </div>
+                      
                     </div>
             
                     <ul class="nav nav-tabs hidden" id="myTabHome" role="tablist">
+                        
                         <li class="nav-item">
-                            <a class="nav-link active negrita text-success" id="tab-listado" data-toggle="tab" href="#listado" role="tab" aria-controls="profile" aria-selected="false">
-                                <i class="fal fa-list"></i>Listado</a>
+                            <a class="nav-link active negrita text-success" id="tab-listado" data-toggle="tab" href="#dia" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-list"></i></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link negrita text-danger" id="tab-nuevo" data-toggle="tab" href="#nuevo" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-comments"></i>nuevo</a> 
+                            <a class="nav-link negrita text-danger" id="tab-nuevo" data-toggle="tab" href="#mes" role="tab" aria-controls="home" aria-selected="true">
+                                <i class="fal fa-comments"></i></a> 
                         </li> 
-                        <li class="nav-item">
-                            <a class="nav-link negrita text-info" id="tab-pacientes" data-toggle="tab" href="#pacientes" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-edit"></i>Pacientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link negrita text-warning" id="tab-reportes" data-toggle="tab" href="#reportes" role="tab" aria-controls="profile" aria-selected="false">
-                                <i class="fal fa-chart-pie"></i>Reportes</a>
-                        </li> 
-                                
+                        
                     </ul>
+
             </div>
             `
         },
-        listado : ()=>{
+        dia : ()=>{
             return `
             <div class="row">
                 <div class="card card-rounded shadow p-4">
-                    <h5>Catálogo de productos</h5>
+                    <h5>Reporte de Ventas Día</h5>
                 </div>
             </div>
 
             <div class="row">
-                <div class="card card-rounded shadow p-4">
-                    <div class="table-responsive" id="containerListado">
-
-
-
-                    </div>
+                <div class="card card-rounded shadow p-4" id=">
+                    
                 </div>
-            </div>
-
-            <
-            <button class="btn btn-xl btn-circle btn-success btn-bottom-right hand shadow" id="btnNuevoProducto">+</button>
+            </div>           
             `
         },
         btnAtras:()=>{
@@ -81,7 +63,9 @@ function getView(){
 function addEventListeners(){
 
 
- 
+    document.getElementById('btnAtrasInicio').addEventListener('click',()=>{
+        classNavegar.inicio();
+    })
 
 
     funciones.slideAnimationTabs();
