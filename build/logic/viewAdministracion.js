@@ -58,9 +58,17 @@ function getView(){
                     </div>
                 </div>
             </div>
+            
+            <div class="btn-bottom-left">
+                <button class="btn btn-xl btn-circle btn-secondary hand shadow" id="btnAtrasAdmin">
+                    <i class="fal fa-home"></i>
+                </button>
+            </div>
 
-            <
-            <button class="btn btn-xl btn-circle btn-success btn-bottom-right hand shadow" id="btnNuevoProducto">+</button>
+            <div class="btn-bottom-right">
+                <button class="btn btn-xl btn-circle btn-success hand shadow" id="btnNuevoProducto">+</button>
+            </div>
+            
             `
         },
         nuevo : ()=>{
@@ -117,6 +125,10 @@ function getView(){
 
 function addEventListeners(){
 
+    let btnAtrasAdmin = document.getElementById('btnAtrasAdmin');
+    btnAtrasAdmin.addEventListener('click',()=>{
+        classNavegar.inicio();
+    });
 
     let btnNuevoProducto = document.getElementById('btnNuevoProducto');
     btnNuevoProducto.addEventListener('click',()=>{
