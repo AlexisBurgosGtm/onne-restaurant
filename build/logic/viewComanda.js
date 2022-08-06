@@ -183,7 +183,11 @@ function getView(){
                 
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table class="table table-responsive table-striped table-hover table-bordered">
+                        <div class="form-group">
+                            <label>Buscar</label>
+                            <input type="text" class="form-control" placeholder="Escriba para filtrar" id="txtBuscarProd">
+                        </div>
+                        <table class="table table-responsive table-striped table-hover table-bordered" id="tablaProductos">
                             <thead class="bg-success text-white">
                                 <tr>
                                     <td>Producto</td>
@@ -273,6 +277,13 @@ function getView(){
 
 async function addListeners(){
     
+
+    document.getElementById('txtBuscarProd').addEventListener('keydown',()=>{
+        if(document.getElementById('txtBuscarProd').value==''){return}
+
+        funciones.FiltrarTabla('tablaProductos','txtBuscarProd');
+    })
+
     //tab meseros
     document.getElementById('btnAtrasMeseros').addEventListener('click',()=>{
         classNavegar.inicio();
