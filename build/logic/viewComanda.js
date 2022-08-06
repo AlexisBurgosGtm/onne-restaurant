@@ -185,7 +185,7 @@ function getView(){
                     <div class="table-responsive">
                         <div class="form-group">
                             <label>Buscar</label>
-                            <input type="text" class="form-control" placeholder="Escriba para filtrar" id="txtBuscarProd">
+                            <input type="text" class="form-control border-info negrita" placeholder="Escriba para filtrar" id="txtBuscarProd">
                         </div>
                         <table class="table table-responsive table-striped table-hover table-bordered" id="tablaProductos">
                             <thead class="bg-success text-white">
