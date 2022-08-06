@@ -8,6 +8,8 @@ const router = express.Router();
 router.post("/solicitarcuenta", async(req,res)=>{
     const {sucursal,id,codempleado,nit,nombre,direccion,obs,
         factura,fecha,dia,mes,anio,hora,minuto,coddoc,correlativo,totalcosto,totalprecio} = req.body;
+    
+        let nuevocorrelativo = Number(correlativo)+1;
 
     let qry = '';
     qry = `
@@ -17,13 +19,14 @@ router.post("/solicitarcuenta", async(req,res)=>{
 				('${sucursal}',${anio},${mes},${dia},'${fecha}',${hora},${minuto},'${coddoc}',${correlativo},0,'${nit}','${nombre}','${direccion}',${totalcosto},${totalprecio},'COMANDA','O','CON','RESTAURANTE','NO','${coddoc}',${correlativo},${codempleado},${totalprecio},0,'NO','${obs}',${totalprecio},0,0,0,NULL,0,'SN','${fecha}',0,1,0,0,0);
     INSERT INTO DOCPRODUCTOS 
                 (EMPNIT,ANIO,MES,DIA,CODDOC,CORRELATIVO,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,ENTREGADOS_TOTALUNIDADES,
-				    ENTREGADOS_TOTALCOSTO,ENTREGADOS_TOTALPRECIO,COSTOANTERIOR,COSTOPROMEDIO,CANTIDADBONIF,TOTALBONIF,NOSERIE,EXENTO,OBS,LASTUPDATE) 
+				    ENTREGADOS_TOTALCOSTO,ENTREGADOS_TOTALPRECIO,COSTOANTERIOR,COSTOPROMEDIO,CANTIDADBONIF,TOTALBONIF,NOSERIE,EXENTO,OBS,LASTUPDATE,TIPOPROD, TIPOPRECIO) 
 	    SELECT EMPNIT,${anio} AS ANIO, ${mes} AS MES,${dia} AS DIA, '${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO, 
                     CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,
 				    TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,TOTALUNIDADES,TOTALCOSTO,TOTALPRECIO AS ENTREGADOS_TOTALPRECIO,COSTO,COSTO,0 AS BONIF,
-                    0 AS TOTALBONIF,CODEMPLEADO AS NOSERIE,0 AS EXENTO,OBS,'${fecha}' AS LASTUPDATE 
+                    0 AS TOTALBONIF,CODEMPLEADO AS NOSERIE,0 AS EXENTO,OBS,'${fecha}' AS LASTUPDATE, 'P' AS TIPOPROD, 'P' AS TIPOPRECIO 
 	            FROM TEMP_COMANDA WHERE EMPNIT='${sucursal}' AND IDMESA=${id};
     UPDATE RESTAURANTE_MESAS SET CUENTA='SI', OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}';
+    UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}'
     `;
 
 

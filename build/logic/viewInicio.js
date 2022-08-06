@@ -184,7 +184,7 @@ async function addListeners(){
     GlobalSucursal='';
     
     cmbEmpresas.addEventListener('change',async()=>{
-        GlobalSucursal = cmbEmpresas.value;s   
+        GlobalSucursal = cmbEmpresas.value; 
     });
 
 

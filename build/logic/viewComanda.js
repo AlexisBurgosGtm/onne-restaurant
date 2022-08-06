@@ -393,26 +393,43 @@ async function addListeners(){
                     let cmbFactura = document.getElementById('cmbFactura').value;
                 
                     if(value==true){
-                        solicitarCuenta(nit, nombre, direccion, cmbFactura)
-                        .then(()=>{
-                                      
-                            $('#modalFinalizar').modal('hide');
 
-                            funciones.Aviso('Cuenta Finalizada Exitosamente!!')
-                            socket.emit('comandas finalizada','')
-                            
-                                    
-                            document.getElementById('tab-mesas').click();
-                            getMesas();  
+                        btnGuardarComanda.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+                        btnGuardarComanda.disabled = true;
 
-                            deleteTempComanda(GlobalSelectedIdMesa);                         
+                        api.getCorrelativo(GlobalCoddoc)
+                        .then((correlativo)=>{
+                            solicitarCuenta(nit, nombre, direccion, cmbFactura,correlativo)
+                            .then(()=>{
+
+                                btnGuardarComanda.innerHTML = '<i class="fal fa-save"></i>';
+                                btnGuardarComanda.disabled = false;
+                                        
+                                $('#modalFinalizar').modal('hide');
+
+                                funciones.Aviso('Cuenta Finalizada Exitosamente!!')
+                                socket.emit('comandas finalizada','')
+                                
+                                        
+                                document.getElementById('tab-mesas').click();
+                                getMesas();  
+
+                                deleteTempComanda(GlobalSelectedIdMesa);                         
 
 
+                            })
+                            .catch(()=>{
+                                funciones.AvisoError('Ocurrió un error!! inténtelo de nuevos');
+                                btnGuardarComanda.innerHTML = '<i class="fal fa-save"></i>';
+                                btnGuardarComanda.disabled = false;
+                            })
                         })
                         .catch(()=>{
-                            funciones.AvisoError('Ocurrió un error!! inténtelo de nuevo.s')
+                            funciones.AvisoError('No se pudo obtener el correlativo');
+
                         })
-                        
+                                
+                                
 
                     }
                 
@@ -644,7 +661,7 @@ function fcnDeleteRowPedido(id){
 };
 
 
-function solicitarCuenta(nit,nombre,direccion,factura){
+function solicitarCuenta(nit,nombre,direccion,factura,correlativo){
     
     cargarGridPedido(GlobalSelectedIdMesa);
 
@@ -672,7 +689,7 @@ function solicitarCuenta(nit,nombre,direccion,factura){
                 hora:hora,
                 minuto:minuto,
                 coddoc:GlobalCoddoc,
-                correlativo:1,
+                correlativo:correlativo,
                 totalcosto:GlobalTotalCosto,
                 totalprecio:GlobalTotalVenta
         })

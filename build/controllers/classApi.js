@@ -226,5 +226,31 @@ let api = {
 
         })
 
+    },
+    getCorrelativo: (coddoc)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/tipodocumentos/correlativo', {
+                sucursal:GlobalSucursal,
+                coddoc:coddoc
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                if(response.data.rowsAffected[0]==1){
+                    let correlativo =0;
+                    data.map((r)=>{
+                        correlativo = Number(r.CORRELATIVO);
+                    })
+                        resolve(correlativo);
+                }else{reject(0);}
+
+                
+            }, (error) => {
+                funciones.AvisoError('Error en la solicitud');
+                reject(0);
+            });
+
+        })
+
     }
 }

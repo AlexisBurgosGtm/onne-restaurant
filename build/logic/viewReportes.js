@@ -33,13 +33,20 @@ function getView(){
         dia : ()=>{
             return `
             <div class="row">
-                <div class="card card-rounded shadow p-4">
+                <div class="card card-rounded shadow p-4 col-12">
                     <h5>Reporte de Ventas Día</h5>
+                    <div class="form-group">
+                        <label>Seleccione una Fecha</label>
+                        <input type="date" class="form-control" id="txtFecha">
+                        <button class="btn btn-info shadow hand" id="btnCargar">
+                            <i class="fal fa-download"></i>Cargar
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="card card-rounded shadow p-4" id=">
+                <div class="card card-rounded shadow p-4 col-12" id="containerReportes">
                     
                 </div>
             </div>           
@@ -63,12 +70,20 @@ function getView(){
 function addEventListeners(){
 
 
+    document.getElementById('txtFecha').value = funciones.getFecha();
+
     document.getElementById('btnAtrasInicio').addEventListener('click',()=>{
         classNavegar.inicio();
     })
 
 
     funciones.slideAnimationTabs();
+
+
+    let btnCargar = document.getElementById('btnCargar');
+    btnCargar.addEventListener('click',()=>{
+        getReporteProductos();
+    });
 
 };
 
@@ -79,5 +94,55 @@ function initView(){
 
 };
 
+
+function getReporteProductos(){
+
+
+    let container = document.getElementById('containerReportes');
+    container.innerHTML = GlobalLoader;
+
+    let fecha = funciones.devuelveFecha('txtFecha');
+
+    let strdata = '';
+    let total = 0;    
+
+    axios.post('/admin/rptproductos', {  
+        sucursal: GlobalSucursal,
+        fecha:fecha
+    })
+    .then((response) => {
+        const data = response.data.recordset;
+        data.map((rows)=>{
+            total += Number(rows.TOTALPRECIO);
+                strdata = strdata + `
+                                    <tr>
+                                        <td>${rows.DESPROD}</td>
+                                        <td>${rows.TOTALUNIDADES}</td>
+                                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                                    </tr>
+                `
+        })
+        let tbl = ` <div class="row p-4 text-right">
+                        <label class="negrita">Total Importe:</label>
+                        <h3 class="text-danger">${funciones.setMoneda(total,'Q')}</h3>
+                    </div>
+                    <table class="table table-responsive table-bordered table-striped col-12">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Producto</td>
+                                <td>Cantidad</td>
+                                <td>Importe</td>
+                            </tr>
+                        </thead>
+                        <tbody>${strdata}</tbody>
+                    </table>`
+        container.innerHTML = tbl;
+
+    }, (error) => {
+        container.innerHTML = 'No hay datos...';
+        funciones.AvisoError('Error en la solicitud');
+    });  
+
+}
 
 

@@ -7,6 +7,8 @@ const execute = require('./router/connection');
 var routerComandas = require('./router/routerComandas');
 var routerEmpleados = require('./router/routerEmpleados');
 var routerProductos = require('./router/routerProductos');
+var routerTipodoc = require('./router/routerTipoDocs');
+var routerAdmin = require('./router/routerAdmin');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -51,6 +53,10 @@ app.use('/empleados', routerEmpleados);
 
 //Router para app PRODUCTOS
 app.use('/productos', routerProductos);
+
+app.use('/tipodocumentos', routerTipodoc)
+
+app.use('/admin', routerAdmin)
 
 
 app.use("/",router);
