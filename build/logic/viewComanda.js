@@ -278,7 +278,7 @@ function getView(){
 async function addListeners(){
     
 
-    document.getElementById('txtBuscarProd').addEventListener('keydown',()=>{
+    document.getElementById('txtBuscarProd').addEventListener('keyup',()=>{
         if(document.getElementById('txtBuscarProd').value==''){return}
 
         funciones.FiltrarTabla('tablaProductos','txtBuscarProd');
