@@ -149,7 +149,7 @@ function addEventListeners(){
         
         LimpiarDatos();
 
-        document.getElementById('tab-nuevo').click();
+        $("#modalNuevoProducto").modal('show');
 
     })
 
