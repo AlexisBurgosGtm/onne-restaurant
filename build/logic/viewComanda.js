@@ -41,9 +41,23 @@ function getView(){
 
                 <div class="card card-user card-rounded shadow">    
                     <div class="card-body">
-                        <div class="text-center">
-                            <img class="avatar border-gray" width="100" height="100" src="./logoempresa.png" alt="...">
+                        
+                        <div class="row">
+                        
+                                <div class="col-6">
+                                    <div class="text-left">
+                                        <img class="avatar border-gray" width="70" height="70" src="./logoempresa.png" alt="...">
+                                    </div>
+                                </div>
+ 
+                                <div class="col-6">
+
+                                    <h4 class="text-info">Seleccione su mesero</h4>
+                        
+                                </div>
                         </div>
+
+                        
                     
                     </div>
                 </div>
