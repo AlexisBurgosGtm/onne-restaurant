@@ -98,29 +98,29 @@ function getView(){
                                 <div class="card card-rounded shadow p-4 col-12">           
                                     <div class="form-group">
                                         <label>Código</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="txtPCodprod">
                                     </div>
                                     <div class="form-group">
                                         <label>Descripción</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="txtPDesprod">
                                     </div>
                                     <div class="form-group">
                                         <label>Descripción 2</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="txtPDesprod2">
                                     </div>
                                     <div class="form-group">
                                         <label>Marca/Clasificación</label>
-                                        <select class="form-control">
+                                        <select class="form-control" id="cmbPMarcas">
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Costo Unitario</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" id="txtPCosto">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Precio</label>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control"  id="txtPPrecio">
                                     </div>                
                                     
                                 </div>
@@ -128,9 +128,18 @@ function getView(){
                            
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-xl btn-secondary btn-circle hand shadow" id="" data-dismiss="modal">
-                                <i class="fal fa-arrow-left"></i>
-                            </button>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-secondary btn-circle hand shadow" id="" data-dismiss="modal">
+                                        <i class="fal fa-arrow-left"></i>
+                                    </button>    
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-danger btn-circle hand shadow" id="btnPGuardar">
+                                        <i class="fal fa-save"></i>
+                                    </button>
+                                </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -165,6 +174,53 @@ function addEventListeners(){
 
 
     getListadoProductos();
+
+
+
+    let btnPGuardar = document.getElementById('btnPGuardar');
+    btnPGuardar.addEventListener('click',()=>{
+
+        funciones.Confirmacion('¿Está seguro que desea Crear este nuevo producto?')
+        .then((value)=>{
+            if(value==true){
+
+                let codprod = document.getElementById('txtPCodprod').value || 'SN';
+                let desprod = document.getElementById('txtPDesprod').value || 'SN';
+                let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
+                let codmarca = document.getElementById('cmbPMarcas').value;
+                let costo = Number(document.getElementById('txtPCosto').value) || 0;
+                let precio = Number(document.getElementById('txtPPrecio').value) || 0;
+
+                if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
+                if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
+                if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
+                if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
+                if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
+
+                btnPGuardar.disabled = true;
+                btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+
+                    insert_producto(codprod,desprod,desprod2,codmarca,costo,precio)
+                    .then(()=>{
+                        LimpiarDatos();
+                        $("#modalNuevoProducto").modal('hide');
+                        funciones.Aviso('Producto creado exitosamente!!');
+                      
+                        getListadoProductos();
+
+                        btnPGuardar.disabled = false;
+                        btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No pude guardar este producto');
+                        btnPGuardar.disabled = false;
+                        btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
+
+            }
+        })
+    });
 
 
     //Meseros
@@ -250,6 +306,36 @@ function getListadoProductos(){
             });
 
      
+
+
+};
+
+function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/productos/insert_producto', {
+            sucursal:GlobalSucursal,
+            codprod:codprod,
+            desprod:desprod,
+            desprod2:desprod2,
+            codmarca:codmarca,
+            costoun:costo,
+            precio:precio,
+            fecha:funciones.getFecha()
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==1){
+                console.log('mesa ocupada ' + ocupada)
+                resolve(data);
+            }else{reject();}
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
 
 
 };
