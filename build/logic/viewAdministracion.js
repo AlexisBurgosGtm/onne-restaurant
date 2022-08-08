@@ -89,7 +89,7 @@ function getView(){
                       
                         <div class="modal-body p-2">
                             <div class="row">
-                                <div class="card card-rounded shadow p-4 col-12">
+                                <div class="card card-rounded shadow p-4 col-12 bg-success text-white">
                                     <h5>Datos del producto</h5>
                                 </div>
                             </div>
@@ -366,18 +366,18 @@ function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
 
 function getDataMarcas(){
 
-    
+
     return new Promise((resolve,reject)=>{
         axios.post('/productos/getmarcas', {
            sucursal:GlobalSucursal
         })
         .then((response) => {
             const data = response.data.recordset;
-            if(response.data.rowsAffected[0]==1){
-                
+            if(response.data.rowsAffected[0]==0){
+                reject();  
+            }else{
                 resolve(data);
-            }else{reject();}
-            
+            }
         }, (error) => {
             reject(error);
         });
