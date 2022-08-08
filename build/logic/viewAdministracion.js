@@ -347,11 +347,11 @@ function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
         })
         .then((response) => {
             const data = response.data.recordset;
-            if(response.data.rowsAffected[0]==1){
-                console.log('mesa ocupada ' + ocupada)
+            if(response.data.rowsAffected[0]==0){
+                reject();    
+            }else{
                 resolve(data);
-            }else{reject();}
-            
+            }
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             reject(error);
