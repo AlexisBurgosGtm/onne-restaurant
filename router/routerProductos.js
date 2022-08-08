@@ -4,6 +4,9 @@ const router = express.Router();
 
 
 
+
+
+
 router.post("/insert_producto", async(req,res)=>{
    
     const {sucursal,codprod,desprod,desprod2,costoun,precio,codmarca,fecha} = req.body;
@@ -25,6 +28,9 @@ router.post("/insert_producto", async(req,res)=>{
 });
 
 
+
+
+
 router.post("/listadoproductos", async(req,res)=>{
    
     const {sucursal} = req.body;
@@ -43,6 +49,24 @@ router.post("/listadoproductos", async(req,res)=>{
 });
 
 
+
+
+
+router.post("/getmarcas", async(req,res)=>{
+   
+    const {sucursal} = req.body;
+        
+    let qry ='';
+
+    qry = `SELECT CODMARCA, DESMARCA WHERE EMPNIT = '${sucursal}'; `     
+  
+    execute.Query(res,qry);
+
+});
+
+
+
+
 router.post("/delete_producto", async(req,res)=>{
    
     const {sucursal,codprod} = req.body;
@@ -50,7 +74,8 @@ router.post("/delete_producto", async(req,res)=>{
     let qry ='';
 
     qry = `DELETE FROM PRODUCTOS WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';
-            DELETE FROM PRECIOS WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';`     
+            DELETE FROM PRECIOS WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';
+            DELETE FROM INVSALDO WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';`     
   
     execute.Query(res,qry);
 

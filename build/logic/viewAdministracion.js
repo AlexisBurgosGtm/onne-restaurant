@@ -223,7 +223,29 @@ function addEventListeners(){
     });
 
 
+    getDataMarcas()
+    .then((data)=>{
+        let str = '';
+        data.map((r)=>{
+            str +=  `<option value="${r.CODMARCA}">${r.DESMARCA}</option>`
+        });
+
+        document.getElementById('cmbPMarcas').innerHTML = str;
+
+    })
+    .catch(()=>{
+        funciones.AvisoError('No se cargaron las marcas');
+    })
+
+
+
+
     //Meseros
+
+
+
+
+
 
 
     //Mesas
@@ -336,6 +358,31 @@ function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
         });
 
     })
+
+
+};
+
+
+
+function getDataMarcas(){
+
+    
+    return new Promise((resolve,reject)=>{
+        axios.post('/productos/getmarcas', {
+           sucursal:GlobalSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==1){
+                
+                resolve(data);
+            }else{reject();}
+            
+        }, (error) => {
+            reject(error);
+        });
+
+    });
 
 
 };
