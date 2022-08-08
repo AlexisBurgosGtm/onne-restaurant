@@ -58,7 +58,7 @@ router.post("/getmarcas", async(req,res)=>{
         
     let qry ='';
 
-    qry = `SELECT CODMARCA, DESMARCA WHERE EMPNIT = '${sucursal}'; `     
+    qry = `SELECT CODMARCA, DESMARCA FROM MARCAS WHERE EMPNIT = '${sucursal}'; `     
   
     execute.Query(res,qry);
 
