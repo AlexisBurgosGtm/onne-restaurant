@@ -26,7 +26,7 @@ function getView(){
                     </ul>
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="productos" role="tabpanel" aria-labelledby="receta-tab">    
-                            ${view.productos() + view.modalNuevoProducto()}
+                            ${view.productos()}
                         </div>
                         <div class="tab-pane fade" id="meseros" role="tabpanel" aria-labelledby="home-tab">
                             ${view.meseros()}
@@ -39,38 +39,45 @@ function getView(){
                         </div>
                     </div>
                     
-                    <div class="btn-bottom-left">
-                        <button class="btn btn-xl btn-circle btn-secondary hand shadow" id="btnAtrasAdmin">
-                            <i class="fal fa-home"></i>
-                        </button>
-                    </div>
+              
             
                     
+            </div>
+            <div class="btn-bottom-left">
+                <button class="btn btn-xl btn-circle btn-secondary hand shadow" id="btnAtrasAdmin">
+                    <i class="fal fa-home"></i>
+                </button>
             </div>
             `
         },
         productos : ()=>{
             return `
             <div class="row">
-                <div class="card card-rounded shadow p-4">
+                <div class="card card-rounded shadow p-4 col-12 bg-success text-white">
                     <h5>Catálogo de productos</h5>
                 </div>
             </div>
 
             <div class="row">
-                <div class="card card-rounded shadow p-4">
+
+                <div class="card card-rounded shadow p-4 col-12">
                     <div class="table-responsive" id="containerProductos">
 
 
 
                     </div>
                 </div>
-            </div>
-            
 
-            <div class="btn-bottom-right">
-                <button class="btn btn-xl btn-circle btn-success hand shadow" id="btnNuevoProducto">+</button>
+                <div class="btn-bottom-right" id="fixed-btn2">
+                    <button class="btn btn-xl btn-circle btn-success hand shadow" id="btnNuevoProducto">
+                        +
+                    </button>
+                </div>
+
             </div>
+
+                      
+            ${view.modalNuevoProducto()}      
             
             `
         },
@@ -82,13 +89,13 @@ function getView(){
                       
                         <div class="modal-body p-2">
                             <div class="row">
-                                <div class="card card-rounded shadow p-4">
+                                <div class="card card-rounded shadow p-4 col-12">
                                     <h5>Datos del producto</h5>
                                 </div>
                             </div>
         
                             <div class="row">
-                                <div class="card card-rounded shadow p-4">           
+                                <div class="card card-rounded shadow p-4 col-12">           
                                     <div class="form-group">
                                         <label>Código</label>
                                         <input type="text" class="form-control">
@@ -130,7 +137,11 @@ function getView(){
             </div>
             `
         },
-        meseros: ()=>{}
+        meseros: ()=>{
+            return `
+            
+            `
+        }
     }
 
     root.innerHTML = view.menu();
@@ -144,14 +155,24 @@ function addEventListeners(){
         classNavegar.inicio();
     });
 
+
+    //productos
     let btnNuevoProducto = document.getElementById('btnNuevoProducto');
     btnNuevoProducto.addEventListener('click',()=>{
-        
         LimpiarDatos();
-
         $("#modalNuevoProducto").modal('show');
+    });
 
-    })
+
+    getListadoProductos();
+
+
+    //Meseros
+
+
+    //Mesas
+
+
 
     funciones.slideAnimationTabs();
 
@@ -171,6 +192,64 @@ function LimpiarDatos(){
 
 function getListadoProductos(){
 
+            let container = document.getElementById('containerProductos');
+            container.innerHTML = GlobalLoader;
+      
+            let str = '';
+
+            axios.post('/productos/listadoproductos', {
+                sucursal:GlobalSucursal
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                data.map((r)=>{
+                    str += `
+                        <tr class="col-12 border-info border-left-0 border-right-0 border-top-0">
+                            <td>${r.DESPROD}
+                                
+                                <br>
+                                
+                                <small class="negrita">Código:${r.CODPROD}</small>
+                                
+                                <br>
+
+                                <small class="negrita text-info">${r.DESPROD2}</small>
+                                <br>
+
+                                <small class="negrita">${r.DESMARCA}</small>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn btn-md btn-danger shadow hand" onclick="">
+                                            <i class="fal fa-trash"></i>Eliminar
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-md btn-info shadow hand" onclick="">
+                                            <i class="fal fa-edit"></i>Editar
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    `
+                })
+                let tbl = ` <table class="table table-responsive table-bordered table-striped">
+                                <thead class="bg-info text-white text-center">
+                                    <tr>
+                                        <td>Producto</td>
+                                    </tr>
+                                </thead>
+                                <tbody>${str}</tbody>
+                            </table>`;
+                container.innerHTML = tbl;
+            }, (error) => {
+                funciones.AvisoError('Error en la solicitud');
+                container.innerHTML = 'No se pudo cargar...';
+            });
+
+     
 
 
 };

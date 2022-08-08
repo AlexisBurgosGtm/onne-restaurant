@@ -31,10 +31,16 @@ let GlobalSelectedIdMesa = 0;
 
 
 
-let GlobalLoader = `
+let GlobalLoaderX = `
                 <div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>
-                <div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>
-                <div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>
-                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
-                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`;
+                <div class="spinner-grow" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-grow" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-grow" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-grow" role="status"><span class="sr-only">Loading...</span></div>
+                `;
 
+let GlobalLoader = `
+                <div id="preloader">
+                    <div id="loader"></div>
+                </div>
+                `;

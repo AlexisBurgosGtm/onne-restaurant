@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/listadoproductos", async(req,res)=>{
    
-    const {empnit} = req.body;
+    const {sucursal} = req.body;
         
     let qry ='';
 
@@ -13,7 +13,7 @@ router.post("/listadoproductos", async(req,res)=>{
     PRODUCTOS.HABILITADO, PRODUCTOS.LASTUPDATE, MARCAS.DESMARCA
         FROM PRODUCTOS LEFT OUTER JOIN
     MARCAS ON PRODUCTOS.EMPNIT = MARCAS.EMPNIT AND PRODUCTOS.CODMARCA = MARCAS.CODMARCA
-        WHERE (PRODUCTOS.EMPNIT = '${empnit}')`     
+        WHERE (PRODUCTOS.EMPNIT = '${sucursal}')`     
   
     execute.Query(res,qry);
 
