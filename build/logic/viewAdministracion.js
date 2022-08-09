@@ -266,6 +266,12 @@ function initView(){
 
 function LimpiarDatos(){
 
+    document.getElementById('txtPCodprod').value ='';
+    document.getElementById('txtPDesprod').value ='';
+    document.getElementById('txtPDesprod2').value ='';
+    document.getElementById('txtPCosto').value  ='0';
+    document.getElementById('txtPPrecio').value  ='0';
+
 };
 
 function getListadoProductos(){
@@ -274,6 +280,7 @@ function getListadoProductos(){
             container.innerHTML = GlobalLoader;
       
             let str = '';
+            let id = 0;
 
             axios.post('/productos/listadoproductos', {
                 sucursal:GlobalSucursal
@@ -281,6 +288,8 @@ function getListadoProductos(){
             .then((response) => {
                 const data = response.data.recordset;
                 data.map((r)=>{
+                    id =+ 1;
+                    let idbtn = r.CODPROD.toString() + id.toString();
                     str += `
                         <tr class="col-12 border-info border-left-0 border-right-0 border-top-0">
                             <td>${r.DESPROD}
@@ -295,10 +304,20 @@ function getListadoProductos(){
                                 <br>
 
                                 <small class="negrita">${r.DESMARCA}</small>
+                                
+                                <div class="row">
+                                    <div class="col-6">Costo:
+                                        <b class="text-danger">${funciones.setMoneda(r.COSTO,'Q')}</b>
+                                    </div>
+                                    <div class="col-6">Precio:
+                                        <b class="text-info">${funciones.setMoneda(r.PRECIO,'Q')}</b>
+                                    </div>
+                                </div>
+                                
 
                                 <div class="row">
                                     <div class="col-6">
-                                        <button class="btn btn-md btn-danger shadow hand" onclick="">
+                                        <button class="btn btn-md btn-danger shadow hand" id="${idbtn.toString()}" onclick="deleteProducto('${r.CODPROD}','${r.DESPROD}','${idbtn.toString()}')">
                                             <i class="fal fa-trash"></i>Eliminar
                                         </button>
                                     </div>
@@ -310,6 +329,7 @@ function getListadoProductos(){
                                 </div>
 
                             </td>
+                            
                         </tr>
                     `
                 })
@@ -362,6 +382,62 @@ function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
 
 };
 
+function deleteProducto(codprod,desprod, idbtn){
+
+    let btn = document.getElementById(idbtn);
+
+    funciones.Confirmacion('¿Está seguro que desea ELIMINAR ESTE PRODUCTO ' + desprod + '?')
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
+
+            delete_producto(codprod)
+            .then(()=>{
+                funciones.Aviso('Producto eliminado exitosamente!!');
+                getListadoProductos();
+
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+
+            })
+            .catch(()=>{
+                funciones.AvisoError('No se pudo eliminar');
+
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+            })
+
+        }
+    })
+
+};
+
+
+function delete_producto(codprod){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/productos/delete_producto', {
+            sucursal:GlobalSucursal,
+            codprod:codprod
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
+};
+
 
 
 function getDataMarcas(){
@@ -386,3 +462,4 @@ function getDataMarcas(){
 
 
 };
+

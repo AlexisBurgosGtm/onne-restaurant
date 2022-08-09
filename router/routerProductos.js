@@ -3,7 +3,17 @@ const express = require('express');
 const router = express.Router();
 
 
+router.post("/verify_codprod", async(req,res)=>{
+   
+    const {sucursal,codprod} = req.body;
+        
+    let qry ='';
 
+    qry = `SELECT CODPROD FROM PRODUCTOS WHERE EMPNIT = '${sucursal}' AND CODPROD='${codprod}'; `     
+  
+    execute.Query(res,qry);
+
+});
 
 
 

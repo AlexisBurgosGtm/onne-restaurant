@@ -252,5 +252,26 @@ let api = {
 
         })
 
+    },
+    verify_coprod: (codprod)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/productos/verify_codprod', {
+                sucursal:GlobalSucursal,
+                codprod:codprod
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                if(response.data.rowsAffected[0]==0){                  
+                    reject();
+                }else{
+                    resolve();
+                }
+            }, (error) => {
+                reject();
+            });
+
+        })
+
     }
 }
