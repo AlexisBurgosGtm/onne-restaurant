@@ -280,9 +280,7 @@ function getView(){
                 </div>
             </div>
             `
-        },
-
-
+        }
     };
 
     root.innerHTML = view.body() + view.comanda_modalFinalizar();

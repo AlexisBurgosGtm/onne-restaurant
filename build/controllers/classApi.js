@@ -263,9 +263,9 @@ let api = {
             .then((response) => {
                 const data = response.data.recordset;
                 if(response.data.rowsAffected[0]==0){                  
-                    reject();
-                }else{
                     resolve();
+                }else{
+                    reject();
                 }
             }, (error) => {
                 reject();
