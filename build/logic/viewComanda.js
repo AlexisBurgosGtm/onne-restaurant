@@ -603,6 +603,7 @@ async function cargarGridPedido(idMesa){
     let cmbCuenta =0;
 
     await api.getTotalCuenta(idMesa,'lbTotalVenta','tblPedido',cmbCuenta);
+    
 };
 
 function getComandaProductos(idContainer){
@@ -651,7 +652,9 @@ function addProduct(codprod,desprod,codmedida,equivale,costo,precio){
     
     api.insertTempComanda(GlobalSelectedIdMesa,codprod,desprod,codmedida,1,equivale,costo,precio,0,obs,0,GlobalCodempleado)
     .then(()=>{
-        closeMenuLateral();
+        //closeMenuLateral();
+        funciones.showToast('Producto agregado a la Orden');
+
         cargarGridPedido(GlobalSelectedIdMesa);
     })
     

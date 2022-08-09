@@ -184,39 +184,51 @@ function addEventListeners(){
         .then((value)=>{
             if(value==true){
 
-                let codprod = document.getElementById('txtPCodprod').value || 'SN';
-                let desprod = document.getElementById('txtPDesprod').value || 'SN';
-                let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
-                let codmarca = document.getElementById('cmbPMarcas').value;
-                let costo = Number(document.getElementById('txtPCosto').value) || 0;
-                let precio = Number(document.getElementById('txtPPrecio').value) || 0;
+                    let codprod = document.getElementById('txtPCodprod').value || 'SN';
+                    let desprod = document.getElementById('txtPDesprod').value || 'SN';
+                    let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
+                    let codmarca = document.getElementById('cmbPMarcas').value;
+                    let costo = Number(document.getElementById('txtPCosto').value) || 0;
+                    let precio = Number(document.getElementById('txtPPrecio').value) || 0;
 
-                if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
-                if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
-                if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
-                if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
-                if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
+                    if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
+                    if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
+                    if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
+                    if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
+                    if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
 
-                btnPGuardar.disabled = true;
-                btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
 
-                    insert_producto(codprod,desprod,desprod2,codmarca,costo,precio)
+
+                    api.verify_coprod(codprod)
                     .then(()=>{
-                        LimpiarDatos();
-                        $("#modalNuevoProducto").modal('hide');
-                        funciones.Aviso('Producto creado exitosamente!!');
-                      
-                        getListadoProductos();
 
-                        btnPGuardar.disabled = false;
-                        btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
-
+                            btnPGuardar.disabled = true;
+                            btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+        
+        
+                            insert_producto(codprod,desprod,desprod2,codmarca,costo,precio)
+                            .then(()=>{
+                                LimpiarDatos();
+                                $("#modalNuevoProducto").modal('hide');
+                                funciones.Aviso('Producto creado exitosamente!!');
+                            
+                                getListadoProductos();
+        
+                                btnPGuardar.disabled = false;
+                                btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+        
+                            })
+                            .catch(()=>{
+                                funciones.AvisoError('No pude guardar este producto');
+                                btnPGuardar.disabled = false;
+                                btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                            })
                     })
                     .catch(()=>{
-                        funciones.AvisoError('No pude guardar este producto');
-                        btnPGuardar.disabled = false;
-                        btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                            funciones.AvisoError('Este código de producto ya existe, por favor utilice otro');
                     })
+
+            
 
             }
         })
@@ -386,28 +398,40 @@ function deleteProducto(codprod,desprod, idbtn){
 
     let btn = document.getElementById(idbtn);
 
+
+
     funciones.Confirmacion('¿Está seguro que desea ELIMINAR ESTE PRODUCTO ' + desprod + '?')
     .then((value)=>{
         if(value==true){
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
 
-            delete_producto(codprod)
-            .then(()=>{
-                funciones.Aviso('Producto eliminado exitosamente!!');
-                getListadoProductos();
 
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+            funciones.solicitarClave()
+            .then((name)=>{
+                if(name==GlobalConfigClave){
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
+                
+                            delete_producto(codprod)
+                            .then(()=>{
+                                funciones.Aviso('Producto eliminado exitosamente!!');
+                                getListadoProductos();
+                
+                                btn.disabled = false;
+                                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+                
+                            })
+                            .catch(()=>{
+                                funciones.AvisoError('No se pudo eliminar');
+                
+                                btn.disabled = false;
+                                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+                            })
 
+                }
             })
-            .catch(()=>{
-                funciones.AvisoError('No se pudo eliminar');
 
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
-            })
+       
 
         }
     })

@@ -709,6 +709,16 @@ let funciones = {
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
           // your code on active tab shown
       });
+  },
+  showToast: (text)=>{
+    new Noty({
+      type: 'info',
+      layout: 'topRight',
+      timeout: '500',
+      theme: 'metroui',
+      progressBar: false,
+      text,
+    }).show();
   }
 };
 
