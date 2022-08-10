@@ -29,7 +29,7 @@ function getView(){
                             ${view.productos()}
                         </div>
                         <div class="tab-pane fade" id="meseros" role="tabpanel" aria-labelledby="tab-meseros">
-                                <h1>meseros</h1>
+                            ${view.meseros()}
                         </div>
                         <div class="tab-pane fade" id="mesas" role="tabpanel" aria-labelledby="tab-mesas">  
                             <h1>mesas</h1>
@@ -124,10 +124,14 @@ function getView(){
                                     </div>                
                                     
                                 </div>
+
                             </div>
+
                            
                         </div>
+
                         <div class="modal-footer">
+
                             <div class="row">
                                 <div class="col-6">
                                     <button class="btn btn-xl btn-secondary btn-circle hand shadow" id="" data-dismiss="modal">
@@ -139,8 +143,10 @@ function getView(){
                                         <i class="fal fa-save"></i>
                                     </button>
                                 </div>
-                            
+                            </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -171,7 +177,7 @@ function getView(){
                 <div class="modal-dialog modal-dialog-right modal-lg">
                     <div class="modal-content">
                       
-                        <div class="modal-body p-2">
+                        <div class="modal-body p-2 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="row">
                                 <div class="card card-rounded shadow p-4 col-12 bg-danger text-white">
                                     <h5>Datos del Mesero</h5>
@@ -298,6 +304,24 @@ function addEventListeners(){
     });
 
 
+
+    //Meseros
+    let btnNuevoMesero = document.getElementById('btnNuevoMesero');
+    btnNuevoMesero.addEventListener('click',()=>{
+
+        $("#modalNuevoMesero").modal('show');
+
+    });
+
+    let btnMeseroGuardar = document.getElementById('btnMeseroGuardar');
+    btnMeseroGuardar.addEventListener('click',()=>{
+
+
+
+    });
+
+
+
     getDataMarcas()
     .then((data)=>{
         let str = '';
@@ -312,10 +336,6 @@ function addEventListeners(){
         funciones.AvisoError('No se cargaron las marcas');
     })
 
-
-
-
-    //Meseros
 
 
 
@@ -367,15 +387,12 @@ function getListadoProductos(){
                     let idbtn = r.CODPROD.toString() + id.toString();
                     str += `
                         <tr class="col-12 border-info border-left-0 border-right-0 border-top-0">
-                            <td>${r.DESPROD}
-                                
-                                <br>
-                                
-                                <small class="negrita">Código:${r.CODPROD}</small>
+                            <td>${r.DESPROD} (C:${r.CODPROD})
                                 
                                 <br>
 
                                 <small class="negrita text-info">${r.DESPROD2}</small>
+                                
                                 <br>
 
                                 <small class="negrita">${r.DESMARCA}</small>
@@ -389,6 +406,7 @@ function getListadoProductos(){
                                     </div>
                                 </div>
                                 
+                                <hr class="solid">
 
                                 <div class="row">
                                     <div class="col-6">
@@ -408,7 +426,7 @@ function getListadoProductos(){
                         </tr>
                     `
                 })
-                let tbl = ` <table class="table table-responsive table-bordered table-striped">
+                let tbl = ` <table class="table table-responsive">
                                 <thead class="bg-info text-white text-center">
                                     <tr>
                                         <td>Producto</td>

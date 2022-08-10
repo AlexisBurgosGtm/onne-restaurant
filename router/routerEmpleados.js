@@ -37,4 +37,26 @@ router.post("/empresas", async(req,res)=>{
 
 });
 
+
+
+
+
+router.post("/insert_mesero", async(req,res)=>{
+   
+    const {sucursal,nombre,clave} = req.body;
+        
+    let qry ='';
+
+    qry = `INSERT INTO EMPLEADOS
+            () VALUES ()`     
+  
+    execute.Query(res,qry);
+
+});
+
+
+
+
+
+
 module.exports = router;
