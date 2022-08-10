@@ -7,35 +7,35 @@ function getView(){
 
                     <ul class="nav nav-tabs" id="myTabHome" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active negrita text-success" id="tab-productos" data-toggle="tab" href="#productos" role="tab" aria-controls="profile" aria-selected="false">
-                                <i class="fal fa-list"></i>Productos</a>
+                            <a class="nav-link active negrita text-success" id="tab-productos" data-toggle="tab" href="#productos" role="tab" aria-controls="productos" aria-selected="true">
+                                <i class="fal fa-list"></i>Producto</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link negrita text-danger" id="tab-meseros" data-toggle="tab" href="#meseros" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-comments"></i>Meseros</a> 
+                            <a class="nav-link negrita text-danger" id="tab-meseros" data-toggle="tab" href="#meseros" role="tab" aria-controls="meseros" aria-selected="true">
+                                <i class="fal fa-comments"></i>Mesero</a> 
                         </li> 
                         <li class="nav-item">
-                            <a class="nav-link negrita text-info" id="tab-mesas" data-toggle="tab" href="#mesas" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-edit"></i>Mesas</a>
+                            <a class="nav-link negrita text-info" id="tab-mesas" data-toggle="tab" href="#mesas" role="tab" aria-controls="mesas" aria-selected="true">
+                                <i class="fal fa-edit"></i>Mesa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link negrita text-warning" id="tab-marcas" data-toggle="tab" href="#marcas" role="tab" aria-controls="profile" aria-selected="false">
-                                <i class="fal fa-chart-pie"></i>Marcas</a>
+                            <a class="nav-link negrita text-warning" id="tab-marcas" data-toggle="tab" href="#marcas" role="tab" aria-controls="marcas" aria-selected="true">
+                                <i class="fal fa-chart-pie"></i>Marca</a>
                         </li> 
                                 
                     </ul>
                     <div class="tab-content" id="myTabHomeContent">
-                        <div class="tab-pane fade show active" id="productos" role="tabpanel" aria-labelledby="receta-tab">    
+                        <div class="tab-pane fade show active" id="productos" role="tabpanel" aria-labelledby="tab-productos">    
                             ${view.productos()}
                         </div>
-                        <div class="tab-pane fade" id="meseros" role="tabpanel" aria-labelledby="home-tab">
-                            ${view.meseros()}
+                        <div class="tab-pane fade" id="meseros" role="tabpanel" aria-labelledby="tab-meseros">
+                                <h1>meseros</h1>
                         </div>
-                        <div class="tab-pane fade" id="mesas" role="tabpanel" aria-labelledby="home-tab">  
-                            
+                        <div class="tab-pane fade" id="mesas" role="tabpanel" aria-labelledby="tab-mesas">  
+                            <h1>mesas</h1>
                         </div>
-                        <div class="tab-pane fade" id="marcas" role="tabpanel" aria-labelledby="tab-reportes">
-                            
+                        <div class="tab-pane fade" id="marcas" role="tabpanel" aria-labelledby="tab-NARCAS">
+                            <h1>marcas</h1>
                         </div>
                     </div>
                     
@@ -148,9 +148,72 @@ function getView(){
         },
         meseros: ()=>{
             return `
-            
+                <div class="card card-rounded shadow p-4 col-12 bg-danger text-white">
+                    <h5>Listado de Meseros</h5>
+                </div>
+                <div class="card card-rounded shadow p-4 col-12" id="containerMeseros">
+                    
+                </div>
+
+                <div class="btn-bottom-right" id="fixed-btn2">
+                    <button class="btn btn-xl btn-circle btn-success hand shadow" id="btnNuevoMesero">
+                        +
+                    </button>
+                </div>
+
+                ${view.modalNuevoMesero()}
+
             `
-        }
+        },
+        modalNuevoMesero : ()=>{
+            return `
+            <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalNuevoMesero">
+                <div class="modal-dialog modal-dialog-right modal-lg">
+                    <div class="modal-content">
+                      
+                        <div class="modal-body p-2">
+                            <div class="row">
+                                <div class="card card-rounded shadow p-4 col-12 bg-danger text-white">
+                                    <h5>Datos del Mesero</h5>
+                                </div>
+                            </div>
+        
+                            <div class="row">
+                                <div class="card card-rounded shadow p-4 col-12">           
+                                   
+                                    <div class="form-group">
+                                        <label>Nombre</label>
+                                        <input type="text" class="form-control" id="txtMeseroNombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Clave</label>
+                                        <input type="text" class="form-control" id="txtMeseroClave">
+                                    </div>
+                                                   
+                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-secondary btn-circle hand shadow" id="" data-dismiss="modal">
+                                        <i class="fal fa-arrow-left"></i>
+                                    </button>    
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-danger btn-circle hand shadow" id="btnMeseroGuardar">
+                                        <i class="fal fa-save"></i>
+                                    </button>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.menu();
