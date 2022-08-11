@@ -333,60 +333,117 @@ function addEventListeners(){
     let btnPGuardar = document.getElementById('btnPGuardar');
     btnPGuardar.addEventListener('click',()=>{
 
-        funciones.Confirmacion('¿Está seguro que desea Crear este nuevo producto?')
-        .then((value)=>{
-            if(value==true){
-
-                    let codprod = document.getElementById('txtPCodprod').value || 'SN';
-                    let desprod = document.getElementById('txtPDesprod').value || 'SN';
-                    let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
-                    let codmarca = document.getElementById('cmbPMarcas').value;
-                    let costo = Number(document.getElementById('txtPCosto').value) || 0;
-                    let precio = Number(document.getElementById('txtPPrecio').value) || 0;
-
-                    if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
-                    if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
-                    if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
-                    if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
-                    if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
-
-
-
-                    api.verify_coprod(codprod)
-                    .then(()=>{
-
-                            btnPGuardar.disabled = true;
-                            btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
-        
-        
-                            insert_producto(codprod,desprod,desprod2,codmarca,costo,precio)
-                            .then(()=>{
-                                LimpiarDatos();
-                                $("#modalNuevoProducto").modal('hide');
-                                funciones.Aviso('Producto creado exitosamente!!');
-                            
-                                getListadoProductos();
-        
-                                btnPGuardar.disabled = false;
-                                btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
-                                
-                            
-
-                            })
-                            .catch(()=>{
-                                funciones.AvisoError('No pude guardar este producto');
-                                btnPGuardar.disabled = false;
-                                btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
-                            })
-                    })
-                    .catch(()=>{
-                            funciones.AvisoError('Este código de producto ya existe, por favor utilice otro');
-                    })
-
+        if(GlobalSelectedCodprod==''){
+            //nuevo
+            funciones.Confirmacion('¿Está seguro que desea Crear este nuevo producto?')
+            .then((value)=>{
+                if(value==true){
+    
+                        let codprod = document.getElementById('txtPCodprod').value || 'SN';
+                        let desprod = document.getElementById('txtPDesprod').value || 'SN';
+                        let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
+                        let codmarca = document.getElementById('cmbPMarcas').value;
+                        let costo = Number(document.getElementById('txtPCosto').value) || 0;
+                        let precio = Number(document.getElementById('txtPPrecio').value) || 0;
+    
+                        if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
+                        if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
+                        if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
+                        if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
+                        if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
+    
+    
+    
+                        api.verify_coprod(codprod)
+                        .then(()=>{
+    
+                                btnPGuardar.disabled = true;
+                                btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
             
+            
+                                insert_producto(codprod,desprod,desprod2,codmarca,costo,precio)
+                                .then(()=>{
+                                    LimpiarDatos();
+                                    $("#modalNuevoProducto").modal('hide');
+                                    funciones.Aviso('Producto creado exitosamente!!');
+                                
+                                    getListadoProductos();
+            
+                                    btnPGuardar.disabled = false;
+                                    btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                                    
+                                
+    
+                                })
+                                .catch(()=>{
+                                    funciones.AvisoError('No pude guardar este producto');
+                                    btnPGuardar.disabled = false;
+                                    btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                                })
+                        })
+                        .catch(()=>{
+                                funciones.AvisoError('Este código de producto ya existe, por favor utilice otro');
+                        })
+    
+                
+    
+                }
+            })
 
-            }
-        })
+        }else{
+            //edi
+            funciones.Confirmacion('¿Está seguro que desea EDITAR este producto?')
+            .then((value)=>{
+                if(value==true){
+    
+                        let codprod = document.getElementById('txtPCodprod').value || 'SN';
+                        let desprod = document.getElementById('txtPDesprod').value || 'SN';
+                        let desprod2 = document.getElementById('txtPDesprod2').value || 'SN';
+                        let codmarca = document.getElementById('cmbPMarcas').value;
+                        let costo = Number(document.getElementById('txtPCosto').value) || 0;
+                        let precio = Number(document.getElementById('txtPPrecio').value) || 0;
+    
+                        //if(codprod=='SN'){funciones.AvisoError('Indique un código de producto válido');return;};
+                        if(desprod=='SN'){funciones.AvisoError('Indique una descripción válida');return;};
+                        if(desprod2=='SN'){document.getElementById('txtPDesprod2').value=desprod;};
+                        if(costo==0){funciones.AvisoError('Indique un costo válido');return;};
+                        if(precio==0){funciones.AvisoError('Indique un precio válido');return;};
+    
+    
+    
+                        
+                                btnPGuardar.disabled = true;
+                                btnPGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+            
+            
+                                edit_producto(codprod,desprod,desprod2,codmarca,costo,precio)
+                                .then(()=>{
+                                    LimpiarDatos();
+                                    $("#modalNuevoProducto").modal('hide');
+                                    funciones.Aviso('Producto actualizado exitosamente!!');
+                                
+                                    getListadoProductos();
+            
+                                    btnPGuardar.disabled = false;
+                                    btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                                    
+                                
+    
+                                })
+                                .catch(()=>{
+                                    funciones.AvisoError('No pude editar este producto');
+                                    btnPGuardar.disabled = false;
+                                    btnPGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                                })
+                      
+    
+                
+    
+                }
+            })
+
+        }
+     
     });
 
 
@@ -520,6 +577,10 @@ function initView(){
 
 function LimpiarDatos(){
 
+
+    GlobalSelectedCodprod = '';
+
+    document.getElementById('txtPCodprod').disabled = false;
     document.getElementById('txtPCodprod').value ='';
     document.getElementById('txtPDesprod').value ='';
     document.getElementById('txtPDesprod2').value ='';
@@ -545,11 +606,11 @@ function getListadoProductos(){
                     id =+ 1;
                     let idbtn = r.CODPROD.toString() + id.toString();
                     str += `
-                        <div class="card card-rounded shadow hand">
+                        <div class="card card-rounded shadow">
                             <div class="card-body p-2">
                                 <b>${r.DESPROD}</b>
                                 <br>
-                                <small class="negrita text-info">Código: ${r.CODPROD}</small>
+                                <small class="negrita text-danger">Código: ${r.CODPROD}</small>
                                 <br>
                                 <small class="negrita text-info">${r.DESPROD2}</small>
                                 <br>
@@ -557,10 +618,10 @@ function getListadoProductos(){
 
                                 <div class="row">
                                     <div class="col-6">Costo:
-                                        <b class="text-danger">${funciones.setMoneda(r.COSTO,'Q')}</b>
+                                        <h3><b class="text-danger">${funciones.setMoneda(r.COSTO,'Q')}</b></h3>
                                     </div>
                                     <div class="col-6">Precio:
-                                        <b class="text-info">${funciones.setMoneda(r.PRECIO,'Q')}</b>
+                                    <h3><b class="text-info">${funciones.setMoneda(r.PRECIO,'Q')}</b></h3>
                                     </div>
                                 </div>
                                 
@@ -573,7 +634,8 @@ function getListadoProductos(){
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <button class="btn btn-md btn-info shadow hand" onclick="editProducto()">
+                                        <button class="btn btn-md btn-info shadow hand"
+                                         onclick="editProducto('${r.CODPROD}','${r.DESPROD}','${r.DESPROD2}','${r.CODMARCA}','${r.COSTO}','${r.PRECIO}')">
                                             <i class="fal fa-edit"></i>Editar
                                         </button>
                                     </div>
@@ -581,6 +643,7 @@ function getListadoProductos(){
 
                             </div>
                         </div>
+                        <hr class="solid">
                     `
                 })
             
@@ -669,7 +732,54 @@ function insert_producto(codprod,desprod,desprod2,codmarca,costo,precio){
 
 };
 
-function editProducto(){
+function editProducto(codprod, desprod, desprod2, codmarca,costo,precio){
+
+    console.log('A1');
+
+    GlobalSelectedCodprod = codprod;
+
+    document.getElementById('txtPCodprod').disabled = true;
+    document.getElementById('txtPCodprod').value = codprod;
+    document.getElementById('txtPDesprod').value = desprod;
+    document.getElementById('txtPDesprod2').value = desprod2;
+    document.getElementById('cmbPMarcas').value = codmarca;
+    document.getElementById('txtPCosto').value  = costo;
+    document.getElementById('txtPPrecio').value  = precio;
+
+    console.log('A2');
+
+    $("#modalNuevoProducto").modal('show');
+
+    console.log('A3');
+
+};
+
+function edit_producto(codprod,desprod,desprod2,codmarca,costo,precio){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/productos/edit_producto', {
+            sucursal:GlobalSucursal,
+            codprod:codprod,
+            desprod:desprod,
+            desprod2:desprod2,
+            codmarca:codmarca,
+            costoun:costo,
+            precio:precio,
+            fecha:funciones.getFecha()
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();    
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
 
 
 };

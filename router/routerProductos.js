@@ -38,6 +38,34 @@ router.post("/insert_producto", async(req,res)=>{
 });
 
 
+router.post("/edit_producto", async(req,res)=>{
+   
+    const {sucursal,codprod,desprod,desprod2,costoun,precio,codmarca,fecha} = req.body;
+        
+    let qryprod =''; let qrypre = ''; 
+
+    qryprod = `UPDATE PRODUCTOS SET 
+                    DESPROD='${desprod}',
+                    DESPROD2='${desprod2}',
+                    COSTO=${costoun},
+                    CODMARCA=${codmarca},
+                    LASTUPDATE='${fecha}'
+                WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';`     
+    
+    qrypre = `UPDATE PRECIOS SET
+                    COSTO=${costoun}, 
+                    PRECIO=${precio}, 
+                    MAYOREOA=${precio}, 
+                    MAYOREOB=${precio}, 
+                    MAYOREOC=${precio},
+                    LASTUPDATE='${fecha}'
+                WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}' AND CODMEDIDA='UNIDAD';`
+
+    
+    execute.Query(res, qryprod + qrypre);
+
+
+});
 
 
 

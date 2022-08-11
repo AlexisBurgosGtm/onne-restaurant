@@ -22,6 +22,7 @@ let GlobalCoddoc;
 let GlobalTotalVenta;
 let GlobalTotalCosto;
 
+let GlobalSelectedCodprod = '';
 let GlobalSelectedId =0;
 let GlobalSelectedCosto = 0;
 let GlobalSelectedPrecio = 0;
