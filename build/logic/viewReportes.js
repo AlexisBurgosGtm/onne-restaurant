@@ -41,12 +41,12 @@ function getView(){
                         
                         <div class="row">
                             <div class="col-4">
-                                <button class="btn btn-info shadow hand" id="btnCargar">
+                                <button class="btn btn-sm btn-info shadow hand" id="btnCargar">
                                     <i class="fal fa-download"></i>Productos
                                 </button>
                             </div>
                             <div class="col-4">
-                                <button class="btn btn-info shadow hand" id="btnCargarOrdenes">
+                                <button class="btn btn-sm btn-info shadow hand" id="btnCargarOrdenes">
                                     <i class="fal fa-list"></i>Ordenes
                                 </button>
                             </div>
