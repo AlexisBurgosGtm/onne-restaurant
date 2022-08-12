@@ -206,7 +206,6 @@ function getView(){
                                 <tr>
                                     <td>Producto</td>
                                     <td>Precio</td>
-                                    <td></td>
                                 </tr>
                             </thead>
                             <tbody id="tblListaProductos"></tbody>
@@ -618,7 +617,7 @@ function getComandaProductos(idContainer){
         const data = response.data.recordset;
         data.map((rows)=>{
             strdata = strdata + `
-                <tr>
+                <tr class="border-info hand" onclick="addProduct('${rows.CODPROD}','${rows.DESPROD}','${rows.CODMEDIDA}',${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO})">
                     <td>${rows.DESPROD}<br>
                         <small class="text-info">${rows.DESPROD2}</small>
                     </td>
@@ -627,11 +626,7 @@ function getComandaProductos(idContainer){
                         <br>
                         <small class="text-danger"><b>${rows.CODMEDIDA}</b></small>
                     </td>
-                    <td>
-                        <button class="btn btn-md btn-info btn-circle" onclick="addProduct('${rows.CODPROD}','${rows.DESPROD}','${rows.CODMEDIDA}',${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO})">
-                            +
-                        </button>
-                    </td>
+                   
                 </tr>
                 `
         })

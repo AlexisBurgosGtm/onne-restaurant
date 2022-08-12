@@ -38,9 +38,23 @@ function getView(){
                     <div class="form-group">
                         <label>Seleccione una Fecha</label>
                         <input type="date" class="form-control" id="txtFecha">
-                        <button class="btn btn-info shadow hand" id="btnCargar">
-                            <i class="fal fa-download"></i>Cargar
-                        </button>
+                        
+                        <div class="row">
+                            <div class="col-4">
+                                <button class="btn btn-info shadow hand" id="btnCargar">
+                                    <i class="fal fa-download"></i>Productos
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-info shadow hand" id="btnCargarOrdenes">
+                                    <i class="fal fa-list"></i>Ordenes
+                                </button>
+                            </div>
+                            <div class="col-4">
+                            
+                            </div>
+                        </div>
+                       
                     </div>
                 </div>
             </div>
