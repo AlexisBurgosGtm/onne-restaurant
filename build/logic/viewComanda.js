@@ -489,7 +489,8 @@ function getMeseros(idContainer){
     let strdata = '';
 
     axios.post('/empleados/vendedores', {  
-        sucursal: GlobalSucursal
+        sucursal: GlobalSucursal,
+        tipo:3
     })
     .then((response) => {
         const data = response.data.recordset;
