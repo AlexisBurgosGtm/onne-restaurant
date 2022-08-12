@@ -89,7 +89,7 @@ function getView(){
         },
         modalClave:()=>{
             return `
-            <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalClave">
+        <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalClave">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="dropdown-header bg-danger d-flex justify-content-center align-items-center w-100">
@@ -197,9 +197,9 @@ function getView(){
                 
                 <div class="col-12">
                     <div class="table-responsive">
-                        <div class="form-group">
+                        <div class="form-group p-4">
                             <label>Buscar</label>
-                            <input type="text" class="form-control border-info negrita" placeholder="Escriba para filtrar" id="txtBuscarProd">
+                            <input type="text" class="form-control bg-amarillo border-info negrita" placeholder="Escriba para filtrar" id="txtBuscarProd">
                         </div>
                         <table class="table table-responsive table-striped table-hover table-bordered" id="tablaProductos">
                             <thead class="bg-success text-white">
@@ -212,6 +212,7 @@ function getView(){
                         </table>
                     </div>
                 </div>
+                
             </div>
             `
         },
@@ -340,6 +341,7 @@ async function addListeners(){
                 .then(()=>{
                     funciones.Aviso('Pedido solicitado exitosamente !! ')
                     cargarGridPedido(GlobalSelectedIdMesa);
+                    
                     socket.emit('comandas nueva','solicitar comanda');
 
                     btnSolicitarProducto.disabled = false;

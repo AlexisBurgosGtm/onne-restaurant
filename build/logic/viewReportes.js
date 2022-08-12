@@ -99,6 +99,11 @@ function addEventListeners(){
         getReporteProductos();
     });
 
+    let btnCargarOrdenes = document.getElementById('btnCargarOrdenes');
+    btnCargarOrdenes.addEventListener('click',()=>{
+        getReporteOrdenes();
+    })
+
 };
 
 function initView(){
@@ -159,4 +164,61 @@ function getReporteProductos(){
 
 }
 
+
+
+
+function getReporteOrdenes(){
+
+
+    let container = document.getElementById('containerReportes');
+    container.innerHTML = GlobalLoader;
+
+    let fecha = funciones.devuelveFecha('txtFecha');
+
+    let strdata = '';
+    let total = 0;    
+
+    axios.post('/admin/rptordenes', {  
+        sucursal: GlobalSucursal,
+        fecha:fecha
+    })
+    .then((response) => {
+        const data = response.data.recordset;
+        data.map((rows)=>{
+            total += Number(rows.TOTALPRECIO);
+                strdata = strdata + `
+                                    <tr>
+                                        <td>${rows.CODDOC}-${rows.CORRELATIVO}//HORA:${rows.HORA}:${rows.MINUTO} // ${rows.DESMESA}
+                                            <br>
+                                            <small class="negrita text-info">${rows.NIT}-${rows.NOMCLIE}</small>
+                                            <br>
+                                            <small class="negrita">Prod:${rows.DESPROD}</small>
+                                        </td>
+                                        <td>${rows.TOTALUNIDADES}</td>
+                                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                                    </tr>
+                `
+        })
+        let tbl = ` <div class="row p-4 text-right">
+                        <label class="negrita">Total Importe:</label>
+                        <h3 class="text-danger">${funciones.setMoneda(total,'Q')}</h3>
+                    </div>
+                    <table class="table table-responsive table-bordered table-striped col-12">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Orden</td>
+                                <td>Cantidad</td>
+                                <td>Importe</td>
+                            </tr>
+                        </thead>
+                        <tbody>${strdata}</tbody>
+                    </table>`
+        container.innerHTML = tbl;
+
+    }, (error) => {
+        container.innerHTML = 'No hay datos...';
+        funciones.AvisoError('Error en la solicitud');
+    });  
+
+}
 

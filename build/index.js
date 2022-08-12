@@ -14,8 +14,10 @@ if ('serviceWorker' in navigator) {
 socket.on('comandas nueva', function(msg){
     if(GlobalSelectedForm=='DESPACHO'){
         try {
+            //let cmbTipoListado = document.getElementById('cmbTipoListado');
+            //api.getPedidosPendientes('txtTotal','tblPedidosPendientes',cmbTipoListado.value);
             let cmbTipoListado = document.getElementById('cmbTipoListado');
-            api.getPedidosPendientes('txtTotal','tblPedidosPendientes',cmbTipoListado.value);
+            getPedidosPendientes('txtTotal','tblPedidosPendientes',cmbTipoListado.value);
         } catch (error) {
             console.log('no estás en despacho')
         }
@@ -25,7 +27,7 @@ socket.on('comandas nueva', function(msg){
 socket.on('comandas finalizada', function(msg){
     if(GlobalSelectedForm=='MESAS'){
         try {
-            getMesas('tblMesas');
+            getMesas();
         } catch (error) {
             console.log('no estás en mesas')
         }

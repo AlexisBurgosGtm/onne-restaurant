@@ -9,12 +9,19 @@ let GlobalConfigClave = 'admin';
 let GlobalNivelUsuario = 0;
 
 function getMenuLateral(){
+    //document.getElementById('btnCerrarModalMenuLateral').style = "visibility:visible";
     $('#modalMenuLateral').modal('show');
 };
 
 function closeMenuLateral(){
+   // document.getElementById('btnCerrarModalMenuLateral').style = "visibility:hidden";
     $('#modalMenuLateral').modal('hide');
 };
+
+//document.getElementById('btnCerrarModalMenuLateral').style = "visibility:hidden";
+//document.getElementById('btnCerrarModalMenuLateral').addEventListener('click',()=>{
+    //closeMenuLateral();
+//})
 
 let GlobalCodempleado = 0;
 let GlobalSucursal='';
