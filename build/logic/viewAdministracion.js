@@ -18,10 +18,15 @@ function getView(){
                             <a class="nav-link negrita text-info" id="tab-mesas" data-toggle="tab" href="#mesas" role="tab" aria-controls="mesas" aria-selected="true">
                                 <i class="fal fa-edit"></i>Mesa</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-warning" id="tab-admin" data-toggle="tab" href="#admin" role="tab" aria-controls="admin" aria-selected="true">
+                                <i class="fal fa-chart-pie"></i>Admins</a>
+                        </li>  
                         <li class="nav-item hidden">
                             <a class="nav-link negrita text-warning" id="tab-marcas" data-toggle="tab" href="#marcas" role="tab" aria-controls="marcas" aria-selected="true">
                                 <i class="fal fa-chart-pie"></i>Marca</a>
-                        </li> 
+                        </li>
+                      
                                 
                     </ul>
                     <div class="tab-content" id="myTabHomeContent">
@@ -33,6 +38,9 @@ function getView(){
                         </div>
                         <div class="tab-pane fade" id="mesas" role="tabpanel" aria-labelledby="tab-mesas">  
                             ${view.mesas()}
+                        </div>
+                        <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="tab-NARCAS">
+                            ${view.admins()}
                         </div>
                         <div class="tab-pane fade" id="marcas" role="tabpanel" aria-labelledby="tab-NARCAS">
                             <h1>marcas</h1>
@@ -304,6 +312,89 @@ function getView(){
             </div>
             `
         },
+        admins: ()=>{
+            return `
+                <div class="card card-rounded shadow p-4 col-12 bg-secondary text-white">
+                    <h5>Listado de Administradores</h5>
+                </div>
+                <div class="card card-rounded shadow p-4 col-12" id="containerAdmin">
+                    
+                </div>
+
+                <div class="btn-bottom-right" id="fixed-btn2">
+                    <button class="btn btn-xl btn-circle btn-success hand shadow" id="btnNuevoAdmin">
+                        +
+                    </button>
+                </div>
+
+                ${view.modalNuevoAdmin()}
+
+            `
+        },
+        modalNuevoAdmin : ()=>{
+            return `
+            <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true" id="modalNuevoAdmin">
+                <div class="modal-dialog modal-dialog-right modal-lg">
+                    <div class="modal-content">
+                      
+                        <div class="modal-body p-2 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="row">
+                                <div class="card card-rounded shadow p-4 col-12 bg-secondary text-white">
+                                    <h5>Datos del Administrador</h5>
+                                </div>
+                            </div>
+        
+                            <div class="row">
+                                <div class="card card-rounded shadow p-4 col-12">           
+                                   
+                                    <div class="form-group">
+                                        <label>Nombre</label>
+                                        <input type="text" class="form-control" id="txtANombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Clave</label>
+                                        <input type="text" class="form-control" id="txtAClave">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Serie</label>
+                                        <select class="form-control" id="cmbASerie">
+                                            <option value="ENVIOS01">ENVIOS01</option>
+                                            <option value="ENVIOS02">ENVIOS02</option>
+                                            <option value="ENVIOS03">ENVIOS03</option>
+                                            <option value="ENVIOS04">ENVIOS04</option>
+                                            <option value="ENVIOS05">ENVIOS05</option>
+                                            <option value="ENVIOS06">ENVIOS06</option>
+                                            <option value="ENVIOS07">ENVIOS07</option>
+                                            <option value="ENVIOS08">ENVIOS08</option>
+                                            <option value="ENVIOS09">ENVIOS09</option>
+                                            <option value="ENVIOS10">ENVIOS10</option>
+                                        </select>
+                                    </div>
+                                                                                       
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-secondary btn-circle hand shadow" id="" data-dismiss="modal">
+                                        <i class="fal fa-arrow-left"></i>
+                                    </button>    
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-xl btn-danger btn-circle hand shadow" id="btnAGuardar">
+                                        <i class="fal fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.menu();
@@ -473,25 +564,36 @@ function addEventListeners(){
                 if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesero');return;};
                 if(clave=='SN'){funciones.AvisoError('Debe indicar una clave de mesero');return;};
                 
-                insert_mesero(nombre,clave,coddoc)
+
+                api.verify_clave(clave)
                 .then(()=>{
-                    funciones.Aviso('Mesero creado exitosamente!!');
-                   
-                   
-
-                    getTblMeseros();
-                    
-                    btnMeseroGuardar.disabled = false;
-                    btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
-
-                    $("#modalNuevoMesero").modal('hide');
-                    LimpiarDatosMesero()
+                    insert_mesero(nombre,clave,coddoc,3)
+                    .then(()=>{
+                       
+                        funciones.Aviso('Mesero creado exitosamente!!');
+                                              
+    
+                        getTblMeseros();
+                        
+                        btnMeseroGuardar.disabled = false;
+                        btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
+    
+                        $("#modalNuevoMesero").modal('hide');
+                        LimpiarDatosMesero()
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('Es posible que esta clave de mesero ya exista, por favor escriba otra');
+                        btnMeseroGuardar.disabled = false;
+                        btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
                 })
                 .catch(()=>{
-                    funciones.AvisoError('Es posible que esta clave de mesero ya exista, por favor escriba otra');
                     btnMeseroGuardar.disabled = false;
                     btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
                 })
+
+
+            
 
 
             }
@@ -561,6 +663,82 @@ function addEventListeners(){
 
     //MARCAS
     getTblMarcas();
+
+
+
+
+    //ADMINISTRADORES 
+    let btnNuevoAdmin = document.getElementById('btnNuevoAdmin');
+    btnNuevoAdmin.addEventListener('click',()=>{
+        LimpiarDatosAdmin();
+        $("#modalNuevoAdmin").modal('show');
+
+    });
+
+    let btnAGuardar = document.getElementById('btnAGuardar');
+    btnAGuardar.addEventListener('click',()=>{
+
+        funciones.Confirmacion('¿Está seguro que desea CREAR este nuevo ADMINISTRADOR?')
+        .then((value)=>{
+            if(value==true){
+
+                btnAGuardar.disabled = true;
+                btnAGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+
+                let nombre = document.getElementById('txtANombre').value || 'SN';
+                let clave = document.getElementById('txtAClave').value || 'SN';
+                let coddoc = document.getElementById('cmbASerie').value;
+
+                if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de administrador');return;};
+                if(clave=='SN'){funciones.AvisoError('Debe indicar una clave de administrador');return;};
+
+
+                api.verify_clave(clave)
+                .then(()=>{
+
+
+                    insert_mesero(nombre,clave,coddoc,1)
+                    .then(()=>{
+                        funciones.Aviso('Administrador creado exitosamente!!');
+                                          
+                        getTblAdmin();
+                        
+                        btnAGuardar.disabled = false;
+                        btnAGuardar.innerHTML = '<i class="fal fa-save"></i>';
+    
+                        $("#modalNuevoAdmin").modal('hide');
+                        LimpiarDatosAdmin()
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('Es posible que esta clave ya exista, por favor escriba otra');
+                        btnAGuardar.disabled = false;
+                        btnAGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
+
+
+                })
+                .catch(()=>{
+
+                    funciones.AvisoError('Esta clave de usuario ya existe, por favor, indique una diferente');
+                    btnAGuardar.disabled = false;
+                    btnAGuardar.innerHTML = '<i class="fal fa-save"></i>';
+
+                })
+
+
+
+
+            }
+        })
+
+    
+
+
+    });
+
+
+    getTblAdmin();
+
 
 
     funciones.slideAnimationTabs();
@@ -878,11 +1056,12 @@ function getDataMarcas(){
 
 
 
-function getDataMeseros(){
+function getDataMeseros(tipo){
 
     return new Promise((resolve,reject)=>{
         axios.post('/empleados/vendedores', {
-           sucursal:GlobalSucursal
+           sucursal:GlobalSucursal,
+           tipo:tipo
         })
         .then((response) => {
             const data = response.data.recordset;
@@ -904,7 +1083,7 @@ function getTblMeseros(){
     let container = document.getElementById('containerMeseros')
     container.innerHTML = GlobalLoader;
 
-    getDataMeseros()
+    getDataMeseros(3)
     .then((data)=>{
 
       let str = '';
@@ -956,14 +1135,15 @@ function getTblMeseros(){
 
 };
 
-function insert_mesero(nombre,clave,coddoc){
+function insert_mesero(nombre,clave,coddoc,tipo){
 
     return new Promise((resolve,reject)=>{
         axios.post('/empleados/insert_mesero', {
             sucursal:GlobalSucursal,
             nombre:nombre,
             clave:clave,
-            coddoc:coddoc
+            coddoc:coddoc,
+            tipo:tipo
         })
         .then((response) => {
             const data = response.data.recordset;
@@ -1213,7 +1393,7 @@ function delete_mesa(codigo){
 function LimpiarDatosMesero(){
     document.getElementById('txtMeseroNombre').value='';
     document.getElementById('txtMeseroClave').value='';
-}
+};
 
 
 //Marcas
@@ -1236,4 +1416,71 @@ function getTblMarcas(){
         funciones.AvisoError('No se cargaron las marcas');
     })
 
-}
+};
+
+
+
+
+function LimpiarDatosAdmin(){
+
+    document.getElementById('txtANombre').value='';
+    document.getElementById('txtAClave').value='';
+
+};
+
+function getTblAdmin(){
+
+    let container = document.getElementById('containerAdmin')
+    container.innerHTML = GlobalLoader;
+
+    getDataMeseros(1)
+    .then((data)=>{
+
+      let str = '';
+        data.map((r)=>{
+            let idbtnE = 'btnEliminarA' + r.CODIGO.toString();
+            str +=  `
+                <tr>
+                    <td>${r.NOMBRE}
+                        <br>
+                        <small class="negrita text-danger">${r.CLAVE}</small>
+                    </td>
+                    <td>${r.CODDOC}</td>
+                    <td>
+                        <button class="btn btn-md btn-circle btn-info hand shadow" id="" onclick="">
+                            <i class="fal fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-md btn-circle btn-danger hand shadow" id="${idbtnE}" onclick="deleteMesero('${r.CODIGO}','${idbtnE}')">
+                            <i class="fal fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `
+        })
+
+        let tbl =`
+            <table class="table table-responsive">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <td>ADMIN/CLAVE</td>
+                        <td>SERIE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>${str}</tbody>
+            </table>
+        `
+
+        container.innerHTML = tbl;
+
+    })
+    .catch(()=>{
+
+        funciones.AvisoError('No se pudo cargar la lista de Meseros')
+        container.innerHTML = 'No se cargaron datos...'
+    })
+
+};

@@ -6,6 +6,7 @@ let GlobalSelectedForm = 'LOGIN';
 let GlobalLogged = 0;
 
 let GlobalConfigClave = 'admin';
+let GlobalNivelUsuario = 0;
 
 function getMenuLateral(){
     $('#modalMenuLateral').modal('show');

@@ -273,5 +273,26 @@ let api = {
 
         })
 
+    },
+    verify_clave: (clave)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/empleados/verify_clave', {
+                sucursal:GlobalSucursal,
+                clave:clave
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                if(response.data.rowsAffected[0]==0){                  
+                    resolve();
+                }else{
+                    reject();
+                }
+            }, (error) => {
+                reject();
+            });
+
+        })
+
     }
 }

@@ -1,4 +1,7 @@
 let socket = io();
+GlobalLogged = 0;
+GlobalSucursal='';
+
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () =>

@@ -14,13 +14,28 @@ router.post("/empresas",async(req,res)=>{
 });
 
 
-router.post("/login",async(req,res)=>{
+router.post("/verify_clave",async(req,res)=>{
 
-    const {sucursal,user,pass} = req.body;
+    const {sucursal,clave} = req.body;
 
     
     let qry ='';
-    qry = `SELECT CODTIPOEMPLEADO AS TIPO FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND NOMEMPLEADO='${user}' AND CLAVE='${pass}' AND ACTIVO='SI';`
+    qry = `SELECT CLAVE FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND CLAVE='${clave}';`
+              
+    execute.Query(res,qry);
+
+});
+
+
+router.post("/login",async(req,res)=>{
+
+    const {sucursal,user,clave} = req.body;
+
+    
+    let qry ='';
+    qry = ` SELECT CODTIPOEMPLEADO AS TIPO 
+            FROM EMPLEADOS 
+            WHERE EMPNIT='${sucursal}' AND CLAVE='${clave}' AND ACTIVO='SI';`
               
     execute.Query(res,qry);
 });
@@ -28,10 +43,12 @@ router.post("/login",async(req,res)=>{
 // OBTIENE LA LISTA DE VENDEDORES DISPONIBLES DE LA LISTA DE USUARIOS
 router.post("/vendedores", async(req,res)=>{
     
-    const {sucursal} = req.body;
+    const {sucursal,tipo} = req.body;
         
     let qry =''; 
-    qry = `SELECT EMPNIT, CODEMPLEADO AS CODIGO, NOMEMPLEADO AS NOMBRE, CLAVE, WHATSAPP AS CODDOC FROM EMPLEADOS WHERE EMPNIT='${sucursal}' AND ACTIVO='SI' AND CODTIPOEMPLEADO=3`;     
+    qry = `SELECT EMPNIT, CODEMPLEADO AS CODIGO, NOMEMPLEADO AS NOMBRE, CLAVE, WHATSAPP AS CODDOC 
+            FROM EMPLEADOS
+            WHERE EMPNIT='${sucursal}' AND ACTIVO='SI' AND CODTIPOEMPLEADO=${tipo}`;     
         
     execute.Query(res,qry);
 
@@ -46,13 +63,13 @@ router.post("/vendedores", async(req,res)=>{
 
 router.post("/insert_mesero", async(req,res)=>{
    
-    const {sucursal,nombre,coddoc,clave} = req.body;
+    const {sucursal,nombre,coddoc,clave,tipo} = req.body;
         
     let qry ='';
 
     qry = `INSERT INTO EMPLEADOS
             (EMPNIT,CODTIPOEMPLEADO,DPI,IGSS,NOMEMPLEADO,DIRECCION,CODMUNICIPIO,CODDEPTO,TELEFONOS,WHATSAPP,EMAIL,OBS,ACTIVO,CLAVE) 
-        VALUES ('${sucursal}',3,'SN','SN','${nombre}','CIUDAD',1,1,'000','${coddoc}','SN','SN','SI','${clave}')`     
+        VALUES ('${sucursal}',${tipo},'SN','SN','${nombre}','CIUDAD',1,1,'000','${coddoc}','SN','SN','SI','${clave}')`     
   
     execute.Query(res,qry);
 
