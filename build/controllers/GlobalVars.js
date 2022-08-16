@@ -24,6 +24,7 @@ function closeMenuLateral(){
 //})
 
 let GlobalCodempleado = 0;
+let GlobalSelectedCodempleado =0;
 let GlobalSucursal='';
 let GlobalUser;
 let GlobalCoddoc;

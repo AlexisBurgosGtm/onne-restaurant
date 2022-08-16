@@ -35,7 +35,7 @@ function getView(){
 
             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-                <div class="card card-rounded shadow">    
+                <div class="card card-rounded shadow p-4">    
                     <div class="card-body">
 
                         <div class="text-center">
@@ -69,7 +69,7 @@ function getView(){
         
         <div class="row" >
 
-            <div class="col-6 p-2">
+            <div class="col-4 p-2">
                 <div class="p-4 bg-info-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"  onclick="getClave('C');">
                     <div class="">
                         <h3 class="display-6 d-block l-h-n m-0 fw-500">
@@ -81,7 +81,7 @@ function getView(){
                 </div>
             </div>    
 
-            <div class="col-6 p-2">
+            <div class="col-4 p-2">
                 <div class="p-4 bg-primary-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand"   onclick="getClave('D');">
                     <div class="">
                         <h3 class="display-6 d-block l-h-n m-0 fw-500">
@@ -91,7 +91,20 @@ function getView(){
                     </div>
                     <i class="fal fa-list position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
                 </div>
-            </div>    
+            </div>  
+            
+            <div class="col-4 p-2">
+                <div class="p-4 bg-warning-300 card-rounded shadow overflow-hidden position-relative text-secondary mb-g hand"   onclick="getClave('F');">
+                    <div class="">
+                        <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                            FACTURACIÓN
+                            <small class="m-0 l-h-n"></small>
+                        </h3>
+                    </div>
+                    <i class="fal fa-dollar-sign position-absolute pos-right pos-bottom opacity-50 mb-n1 mr-n1" style="font-size:4rem"></i>
+                </div>
+            </div>   
+            
 
             <div class="col-6 p-2">
                 <div id="btnMenAdmnin" class="p-4 bg-success-300 card-rounded shadow overflow-hidden position-relative text-white mb-g hand" onclick="getClave('A');">
@@ -317,7 +330,9 @@ function getClave(tipo){
         case 'C':
             classNavegar.comanda();
             break;
-    
+        case 'F':
+            classNavegar.facturacion();
+            break;
         case 'D':
             classNavegar.despacho();
             break;

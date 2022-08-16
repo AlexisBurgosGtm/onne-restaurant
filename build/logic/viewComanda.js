@@ -289,6 +289,7 @@ function getView(){
 
 async function addListeners(){
     
+    GlobalSelectedIdMesa =0;
 
     document.getElementById('txtBuscarProd').addEventListener('keyup',()=>{
         if(document.getElementById('txtBuscarProd').value==''){return}
@@ -431,14 +432,25 @@ async function addListeners(){
                                         
                                 $('#modalFinalizar').modal('hide');
 
+                                deleteTempComanda(GlobalSelectedIdMesa);   
+
                                 funciones.Aviso('Cuenta Finalizada Exitosamente!!')
                                 socket.emit('comandas finalizada','')
                                 
-                                        
-                                document.getElementById('tab-mesas').click();
-                                getMesas();  
+                                
+                                desocupar_mesa(GlobalSelectedIdMesa)
+                                .then(()=>{
 
-                                deleteTempComanda(GlobalSelectedIdMesa);                         
+                                    document.getElementById('tab-mesas').click();
+                                    getMesas();  
+    
+                                   
+                                })
+                                .catch(()=>{
+                                    funciones.AvisoError('No se logró desocupar la mesa');
+                                })
+                                
+                                                     
 
 
                             })
@@ -537,6 +549,48 @@ function getClaveMesero(usuario,clave,codigo,coddoc){
 
 // tab mesas
 function getMesas(){
+
+    let container = document.getElementById('tblMesas');
+    container.innerHTML = GlobalLoader;
+        
+    let strdata = '';
+
+    axios.post('/comandas/mesas', {  
+        sucursal: GlobalSucursal
+    })
+    .then((response) => {
+        const data = response.data.recordset;
+        data.map((rows)=>{
+            let color = ''; if(rows.OCUPADA=='NO'){color='success'}else{color='danger'}
+                strdata = strdata + `
+            <div class="col-xs-3 col-sm-3 col-xl-3 col-md-3 col-lg-3 p-2">
+
+                <div class="card card-rounded shadow  bg-${color}-300 hand" style="font-size:60%" onclick="selectMesa(${rows.ID},'${rows.NOMBRE}');">
+                    <div class="card-body">
+                        <div class="p-3 rounded overflow-hidden position-relative text-white mb-g">
+                            <div class="">
+                                <h3 class="display-6 d-block l-h-n m-0 fw-500">
+                                    ${rows.NOMBRE}
+                                    <small class="m-0 l-h-n">Código: ${rows.CODIGO}</small>
+                                </h3>
+                            </div>
+                            <i class="fal fa-utensils position-absolute pos-right pos-bottom opacity-70 mb-n1 mr-n1" style="font-size:4rem"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                `
+        })
+        container.innerHTML = strdata;
+
+    }, (error) => {
+        funciones.AvisoError('Error en la solicitud');
+
+    });  
+};
+
+function BACKUP_getMesas(){
 
     let container = document.getElementById('tblMesas');
     container.innerHTML = GlobalLoader;
@@ -733,6 +787,28 @@ function solicitarCuenta(nit,nombre,direccion,factura,correlativo){
 
 };
 
+function desocupar_mesa(idmesa){
+        
+    return new Promise((resolve,reject)=>{
+        axios.post('/comandas/desocupar_mesa', {
+            id:idmesa,
+            sucursal:GlobalSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            reject(error);
+        });
+
+    })
+
+};
+
 
 function deleteTempComanda(idmesa){
         
@@ -754,7 +830,7 @@ function deleteTempComanda(idmesa){
 
     })
 
-}
+};
 
 
 

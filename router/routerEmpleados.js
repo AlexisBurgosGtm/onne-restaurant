@@ -113,7 +113,8 @@ router.post("/select_mesas", async(req,res)=>{
         
     let qry ='';
 
-    qry = `SELECT ID AS CODIGO, CODMESA, DESMESA, OCUPADA, CUENTA FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}' `;     
+    qry = `SELECT ID AS CODIGO, CODMESA, DESMESA, OCUPADA, CUENTA, SECTOR
+             FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}' `;     
   
     execute.Query(res,qry);
 
@@ -121,12 +122,28 @@ router.post("/select_mesas", async(req,res)=>{
 
 router.post("/insert_mesa", async(req,res)=>{
    
-    const {sucursal,codmesa,desmesa} = req.body;
+    const {sucursal,codmesa,desmesa,sector} = req.body;
         
     let qry ='';
 
-    qry = `INSERT INTO RESTAURANTE_MESAS (EMPNIT,CODMESA,DESMESA,OCUPADA,CUENTA)
-            VALUES ('${sucursal}','${codmesa}','${desmesa}','NO','NO');`;     
+    qry = `INSERT INTO RESTAURANTE_MESAS (EMPNIT,CODMESA,DESMESA,OCUPADA,CUENTA,SECTOR)
+            VALUES ('${sucursal}','${codmesa}','${desmesa}','NO','NO',${sector});`;     
+  
+    execute.Query(res,qry);
+
+});
+
+router.post("/edit_mesa", async(req,res)=>{
+   
+    const {id,sucursal,codmesa,desmesa,sector} = req.body;
+        
+    let qry ='';
+
+    qry = `UPDATE RESTAURANTE_MESAS 
+                SET CODMESA='${codmesa}',
+                    DESMESA='${desmesa}',
+                    SECTOR=${sector}
+                WHERE EMPNIT='${sucursal}' AND ID=${id};`;     
   
     execute.Query(res,qry);
 

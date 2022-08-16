@@ -287,8 +287,22 @@ function getView(){
                                         <input type="text" class="form-control" id="txtMesaNombre">
                                     </div>
 
-                                  
-                                                                                       
+                                    <div class="form-group">
+                                        <label>Sector</label>
+                                        <select class="form-control" id="cmbMesaSector">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                                            
                                 </div>
                             </div>
                            
@@ -402,6 +416,9 @@ function getView(){
 };
 
 function addEventListeners(){
+
+    GlobalSelectedIdMesa =0;
+
 
     let btnAtrasAdmin = document.getElementById('btnAtrasAdmin');
     btnAtrasAdmin.addEventListener('click',()=>{
@@ -550,27 +567,75 @@ function addEventListeners(){
     let btnMeseroGuardar = document.getElementById('btnMeseroGuardar');
     btnMeseroGuardar.addEventListener('click',()=>{
 
-        funciones.Confirmacion('¿Está seguro que desea CREAR este nuevo MESERO?')
-        .then((value)=>{
-            if(value==true){
-
-                btnMeseroGuardar.disabled = true;
-                btnMeseroGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
-
-                let nombre = document.getElementById('txtMeseroNombre').value || 'SN';
-                let clave = document.getElementById('txtMeseroClave').value || 'SN';
-                let coddoc = document.getElementById('cmbMeseroSerie').value;
-
-                if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesero');return;};
-                if(clave=='SN'){funciones.AvisoError('Debe indicar una clave de mesero');return;};
+        if(GlobalSelectedCodempleado==0){
+            funciones.Confirmacion('¿Está seguro que desea CREAR este nuevo MESERO?')
+            .then((value)=>{
+                if(value==true){
+    
+                    btnMeseroGuardar.disabled = true;
+                    btnMeseroGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+    
+                    let nombre = document.getElementById('txtMeseroNombre').value || 'SN';
+                    let clave = document.getElementById('txtMeseroClave').value || 'SN';
+                    let coddoc = document.getElementById('cmbMeseroSerie').value;
+    
+                    if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesero');return;};
+                    if(clave=='SN'){funciones.AvisoError('Debe indicar una clave de mesero');return;};
+                    
+    
+                    api.verify_clave(clave)
+                    .then(()=>{
+                        insert_mesero(nombre,clave,coddoc,3)
+                        .then(()=>{
+                           
+                            funciones.Aviso('Mesero creado exitosamente!!');
+                                                  
+        
+                            getTblMeseros();
+                            
+                            btnMeseroGuardar.disabled = false;
+                            btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
+        
+                            $("#modalNuevoMesero").modal('hide');
+                            LimpiarDatosMesero()
+                        })
+                        .catch(()=>{
+                            funciones.AvisoError('Es posible que esta clave de mesero ya exista, por favor escriba otra');
+                            btnMeseroGuardar.disabled = false;
+                            btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                        })
+                    })
+                    .catch(()=>{
+                        btnMeseroGuardar.disabled = false;
+                        btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
+    
+    
                 
-
-                api.verify_clave(clave)
-                .then(()=>{
-                    insert_mesero(nombre,clave,coddoc,3)
+    
+    
+                }
+            })
+        }else{
+            funciones.Confirmacion('¿Está seguro que desea CREAR este nuevo MESERO?')
+            .then((value)=>{
+                if(value==true){
+    
+                    btnMeseroGuardar.disabled = true;
+                    btnMeseroGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+    
+                    let nombre = document.getElementById('txtMeseroNombre').value || 'SN';
+                    let clave = document.getElementById('txtMeseroClave').value || 'SN';
+                    let coddoc = document.getElementById('cmbMeseroSerie').value;
+    
+                    if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesero');return;};
+                    if(clave=='SN'){funciones.AvisoError('Debe indicar una clave de mesero');return;};
+                    
+    
+                    edit_mesero(GlobalSelectedCodempleado,nombre,clave,coddoc)
                     .then(()=>{
                        
-                        funciones.Aviso('Mesero creado exitosamente!!');
+                        funciones.Aviso('Mesero actualizado exitosamente!!');
                                               
     
                         getTblMeseros();
@@ -582,22 +647,19 @@ function addEventListeners(){
                         LimpiarDatosMesero()
                     })
                     .catch(()=>{
-                        funciones.AvisoError('Es posible que esta clave de mesero ya exista, por favor escriba otra');
+                        funciones.AvisoError('No fue posible actualizar el mesero');
                         btnMeseroGuardar.disabled = false;
                         btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
                     })
-                })
-                .catch(()=>{
-                    btnMeseroGuardar.disabled = false;
-                    btnMeseroGuardar.innerHTML = '<i class="fal fa-save"></i>';
-                })
-
-
-            
-
-
-            }
-        })
+    
+    
+                
+    
+    
+                }
+            })
+        }
+       
 
     
 
@@ -610,7 +672,8 @@ function addEventListeners(){
     //Mesas
     let btnNuevaMesa = document.getElementById('btnNuevaMesa');
     btnNuevaMesa.addEventListener('click',()=>{
-
+        
+        GlobalSelectedIdMesa=0;
         LimpiarDatosMesa();
         $("#modalNuevaMesa").modal('show');
 
@@ -619,42 +682,85 @@ function addEventListeners(){
     let btnMesaGuardar = document.getElementById('btnMesaGuardar');
     btnMesaGuardar.addEventListener('click',()=>{
 
+        if(GlobalSelectedIdMesa==0){
 
-        funciones.Confirmacion('¿Está seguro que desea CREAR esta nueva MESA?')
-        .then((value)=>{
-            if(value==true){
+            funciones.Confirmacion('¿Está seguro que desea CREAR esta nueva MESA?')
+            .then((value)=>{
+                if(value==true){
+    
+                    btnMesaGuardar.disabled = true;
+                    btnMesaGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+    
+                    let codigo = document.getElementById('txtMesaCodigo').value || 'SN';
+                    let nombre = document.getElementById('txtMesaNombre').value || 'SN';
+                    let sector = document.getElementById('cmbMesaSector').value;
+                  
+                    if(codigo=='SN'){funciones.AvisoError('Debe indicar un código de mesa');return;};
+                    if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesa');return;};
+                    
+                    insert_mesa(codigo,nombre,sector)
+                    .then(()=>{
+    
+                        funciones.Aviso('Mesa creada exitosamente!!')
+    
+                        getTblMesas();
+    
+                        btnMesaGuardar.disabled = false;
+                        btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
+    
+                        $("#modalNuevaMesa").modal('hide');
+                        LimpiarDatosMesa()
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No se pudo guardar la mesa');
+                        btnMesaGuardar.disabled = false;
+                        btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
+    
+    
+                }
+            })
+        }else{
 
-                btnMesaGuardar.disabled = true;
-                btnMesaGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+            funciones.Confirmacion('¿Está seguro que desea EDITAR esta MESA?')
+            .then((value)=>{
+                if(value==true){
+    
+                    btnMesaGuardar.disabled = true;
+                    btnMesaGuardar.innerHTML = '<i class="fal fa-save fa-spin"></i>';
+    
+                    let codigo = document.getElementById('txtMesaCodigo').value || 'SN';
+                    let nombre = document.getElementById('txtMesaNombre').value || 'SN';
+                    let sector = document.getElementById('cmbMesaSector').value;
+                  
+                    if(codigo=='SN'){funciones.AvisoError('Debe indicar un código de mesa');return;};
+                    if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesa');return;};
+                    
+                    edit_mesa(GlobalSelectedIdMesa,codigo,nombre,sector)
+                    .then(()=>{
+    
+                        funciones.Aviso('Mesa actualizada exitosamente!!')
+    
+                        getTblMesas();
+    
+                        btnMesaGuardar.disabled = false;
+                        btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
+    
+                        $("#modalNuevaMesa").modal('hide');
+                        LimpiarDatosMesa()
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No se pudo actualizar la mesa');
+                        btnMesaGuardar.disabled = false;
+                        btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
+                    })
+    
+    
+                }
+            })
+        }
 
-                let codigo = document.getElementById('txtMesaCodigo').value || 'SN';
-                let nombre = document.getElementById('txtMesaNombre').value || 'SN';
-              
-                if(codigo=='SN'){funciones.AvisoError('Debe indicar un código de mesa');return;};
-                if(nombre=='SN'){funciones.AvisoError('Debe indicar un nombre de mesa');return;};
-                
-                insert_mesa(codigo,nombre)
-                .then(()=>{
-
-                    funciones.Aviso('Mesa creada exitosamente!!')
-
-                    getTblMesas();
-
-                    btnMesaGuardar.disabled = false;
-                    btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
-
-                    $("#modalNuevaMesa").modal('hide');
-                    LimpiarDatosMesa()
-                })
-                .catch(()=>{
-                    funciones.AvisoError('No se pudo guardar la mesa');
-                    btnMesaGuardar.disabled = false;
-                    btnMesaGuardar.innerHTML = '<i class="fal fa-save"></i>';
-                })
-
-
-            }
-        })
+  
 
     });
 
@@ -1097,7 +1203,7 @@ function getTblMeseros(){
                     </td>
                     <td>${r.CODDOC}</td>
                     <td>
-                        <button class="btn btn-md btn-circle btn-info hand shadow" id="" onclick="">
+                        <button class="btn btn-md btn-circle btn-info hand shadow" id="" onclick="editarMesero('${r.CODIGO}','${r.NOMBRE}','${r.CODDOC}','${r.CLAVE}')">
                             <i class="fal fa-edit"></i>
                         </button>
                     </td>
@@ -1144,6 +1250,33 @@ function insert_mesero(nombre,clave,coddoc,tipo){
             clave:clave,
             coddoc:coddoc,
             tipo:tipo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();    
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
+
+};
+
+function edit_mesero(codigo,nombre,clave,coddoc){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/empleados/edit_mesero', {
+            sucursal:GlobalSucursal,
+            nombre:nombre,
+            clave:clave,
+            coddoc:coddoc,
+            codigo:codigo
         })
         .then((response) => {
             const data = response.data.recordset;
@@ -1220,21 +1353,41 @@ function delete_mesero(codigo){
 };
 
 function LimpiarDatosMesero(){
+    GlobalSelectedCodempleado=0;
     document.getElementById('txtMeseroNombre').value='';
     document.getElementById('txtMeseroClave').value='';
-}
+};
+
+function editarMesero(codigo,nombre,coddoc,clave){
+
+    funciones.Confirmacion('¿Está seguro que desea EDITAR este Mesero?')
+    .then((value)=>{
+        if(value==true){
+
+            GlobalSelectedCodempleado = Number(codigo);
+            document.getElementById('txtMeseroNombre').value = nombre;
+            document.getElementById('txtMeseroClave').value = clave;
+            document.getElementById('cmbMeseroSerie').value = coddoc;
+            $("#modalNuevoMesero").modal('show');
+            
+        }
+    })
+
+  
+};
 
 
 
 
 //Mesas
-function insert_mesa(codigo,nombre){
+function insert_mesa(codigo,nombre,sector){
 
     return new Promise((resolve,reject)=>{
         axios.post('/empleados/insert_mesa', {
             sucursal:GlobalSucursal,
             codmesa:codigo,
-            desmesa:nombre
+            desmesa:nombre,
+            sector:sector
         })
         .then((response) => {
             const data = response.data.recordset;
@@ -1294,8 +1447,9 @@ function getTblMesas(){
                             <br>
                             <small class="negrita">Cod:${r.CODMESA}</small>
                         </td>
+                        <td>${r.SECTOR}</td>
                         <td>
-                            <button class="btn btn-info btn-md btn-circle hand shadow">
+                            <button class="btn btn-info btn-md btn-circle hand shadow" onclick="editarMesa('${r.CODIGO}','${r.CODMESA}','${r.DESMESA}','${r.SECTOR}')">
                                 <i class="fal fa-edit"></i>
                             </button>
                         </td>
@@ -1310,6 +1464,7 @@ function getTblMesas(){
                         <thead class="bg-info text-white">
                             <tr>
                                 <td>DESCRIPCION</td>
+                                <td>SECTOR</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -1328,6 +1483,7 @@ function getTblMesas(){
 };
 
 function LimpiarDatosMesa(){
+    GlobalSelectedIdMesa=0;
    document.getElementById('txtMesaCodigo').value = '';
    document.getElementById('txtMesaNombre').value = '';
 
@@ -1390,15 +1546,59 @@ function delete_mesa(codigo){
 
 };
 
-function LimpiarDatosMesero(){
-    document.getElementById('txtMeseroNombre').value='';
-    document.getElementById('txtMeseroClave').value='';
+
+
+function editarMesa(idmesa,codigo,nombre,sector){
+
+
+    funciones.Confirmacion('¿Está seguro que desea EDITAR esta mesa?')
+    .then((value)=>{
+        if(value==true){
+
+            GlobalSelectedIdMesa = Number(idmesa);
+
+            document.getElementById('txtMesaCodigo').value = codigo;
+            document.getElementById('txtMesaNombre').value = nombre;
+            document.getElementById('cmbMesaSector').value = sector;
+           
+            $("#modalNuevaMesa").modal('show');
+
+        }
+    })
+
+   
+    
+};
+
+function edit_mesa(idmesa, codigo, nombre, sector){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/empleados/edit_mesa', {
+            sucursal:GlobalSucursal,
+            id:idmesa,
+            codmesa:codigo,
+            desmesa:nombre,
+            sector:sector
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();    
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+
+
 };
 
 
 //Marcas
-
-
 
 function getTblMarcas(){
 

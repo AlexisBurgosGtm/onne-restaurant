@@ -25,10 +25,20 @@ router.post("/solicitarcuenta", async(req,res)=>{
 				    TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,TOTALUNIDADES,TOTALCOSTO,TOTALPRECIO AS ENTREGADOS_TOTALPRECIO,COSTO,COSTO,0 AS BONIF,
                     0 AS TOTALBONIF,CODEMPLEADO AS NOSERIE,0 AS EXENTO,OBS,'${fecha}' AS LASTUPDATE, 'P' AS TIPOPROD, 'P' AS TIPOPRECIO 
 	            FROM TEMP_COMANDA WHERE EMPNIT='${sucursal}' AND IDMESA=${id};
-    UPDATE RESTAURANTE_MESAS SET CUENTA='SI', OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}';
-    UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}'
+    UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}';
     `;
 
+
+    execute.Query(res,qry);
+    
+});
+
+
+router.post("/desocupar_mesa", async(req,res)=>{
+    const {id,sucursal} = req.body;
+
+    let qry = '';
+    qry = `UPDATE RESTAURANTE_MESAS SET OCUPADA='NO' WHERE ID=${id} AND EMPNIT='${sucursal}';`;
 
     execute.Query(res,qry);
     
@@ -61,7 +71,8 @@ router.post("/solicitarcuenta", async(req,res)=>{
 //obtiene las mesas
 router.post('/mesas',async(req,res)=>{
     const sucursal = req.body.sucursal;
-    let qry = `SELECT ID, CODMESA AS CODIGO, DESMESA AS NOMBRE, OCUPADA FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}' ORDER BY DESMESA`
+    let qry = `SELECT ID, CODMESA AS CODIGO, DESMESA AS NOMBRE, OCUPADA FROM RESTAURANTE_MESAS WHERE EMPNIT='${sucursal}' 
+                ORDER BY CODMESA`
     execute.Query(res,qry);
 
 })

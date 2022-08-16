@@ -32,6 +32,18 @@ const classNavegar ={
         })             
         
     },
+    facturacion: ()=>{
+
+        //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
+
+        funciones.loadScript('../logic/viewFacturacion.js','contenedor')
+        .then(()=>{
+            GlobalSelectedForm='FACTURACION';
+            initView();
+            document.getElementById('lbUsuario').innerText = 'Facturación';
+        })             
+        
+    },
     administracion: ()=>{
         //if(GlobalLogged==0){funciones.AvisoError('Primero debe iniciar sesión'); return};
 
