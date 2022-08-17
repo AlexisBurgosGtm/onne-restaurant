@@ -83,7 +83,8 @@ router.post("/edit_mesero", async(req,res)=>{
         
     let qry ='';
 
-    qry = `UPDATE EMPLEADOS SET NOMEMPLEADO='${nombre}',WHATSAPP='${coddoc}',CLAVE='${clave}' WHERE EMPNIT='${sucursal}' AND CODEMPLEADO=${codigo} 
+    qry = `UPDATE EMPLEADOS SET NOMEMPLEADO='${nombre}',WHATSAPP='${coddoc}',CLAVE='${clave}' 
+            WHERE EMPNIT='${sucursal}' AND CODEMPLEADO=${codigo} 
        `     
   
     execute.Query(res,qry);

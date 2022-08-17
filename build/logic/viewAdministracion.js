@@ -1647,7 +1647,7 @@ function getTblAdmin(){
                     </td>
                     <td>${r.CODDOC}</td>
                     <td>
-                        <button class="btn btn-md btn-circle btn-info hand shadow" id="" onclick="">
+                        <button class="btn btn-md btn-circle btn-info hand shadow hidden" id="" onclick="">
                             <i class="fal fa-edit"></i>
                         </button>
                     </td>
