@@ -94,10 +94,10 @@ function getView(){
             </div>  
             
             <div class="col-4 p-2">
-                <div class="p-4 bg-warning-300 card-rounded shadow overflow-hidden position-relative text-secondary mb-g hand"   onclick="getClave('F');">
+                <div class="p-4 bg-warning-300 card-rounded shadow overflow-hidden position-relative text-secondary mb-g hand"  onclick="getClave('F');">
                     <div class="">
                         <h3 class="display-6 d-block l-h-n m-0 fw-500">
-                            FACTURACIÓN
+                            ORDENES
                             <small class="m-0 l-h-n"></small>
                         </h3>
                     </div>
@@ -181,7 +181,7 @@ function getView(){
 
 async function addListeners(){
 
-    GlobalNivelUsuario = 0;
+    //GlobalNivelUsuario = 0;
   
     let cmbEmpresas = document.getElementById('cmbEmpresas');
    
@@ -255,6 +255,12 @@ async function addListeners(){
 
      
     });
+    
+
+    if(GlobalNivelUsuario==1){}else{
+        document.getElementById("btnMenAdmnin").style = 'visibility:hidden';
+        document.getElementById("btnMenReportes").style = 'visibility:hidden';
+    }
 
 };
 

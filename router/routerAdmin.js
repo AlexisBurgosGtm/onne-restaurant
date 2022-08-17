@@ -46,6 +46,33 @@ WHERE        (TIPODOCUMENTOS.TIPODOC = 'ENV') AND (DOCUMENTOS.EMPNIT = '${sucurs
 });
 
 
+router.post("/select_ordenes", async(req,res)=>{
+    const {sucursal,fecha} = req.body;
+        
+    let qry ='';
+
+    qry = `SELECT        DOCUMENTOS.FECHA, DOCUMENTOS.CODDOC, DOCUMENTOS.CORRELATIVO, DOCUMENTOS.HORA, DOCUMENTOS.MINUTO, DOCUMENTOS.DOC_NIT AS NIT, DOCUMENTOS.DOC_NOMCLIE AS NOMCLIE, 
+    DOCUMENTOS.DOC_DIRCLIE AS DIRCLIE, DOCUMENTOS.TOTALPRECIO, DOCUMENTOS.OBSMARCA, RESTAURANTE_MESAS.DESMESA
+FROM            DOCUMENTOS LEFT OUTER JOIN
+    RESTAURANTE_MESAS ON DOCUMENTOS.NOCORTE = RESTAURANTE_MESAS.ID AND DOCUMENTOS.EMPNIT = RESTAURANTE_MESAS.EMPNIT LEFT OUTER JOIN
+    TIPODOCUMENTOS ON DOCUMENTOS.EMPNIT = TIPODOCUMENTOS.EMPNIT AND DOCUMENTOS.CODDOC = TIPODOCUMENTOS.CODDOC
+WHERE        (DOCUMENTOS.EMPNIT = '${sucursal}') AND (TIPODOCUMENTOS.TIPODOC = 'ENV') AND (DOCUMENTOS.FECHA = '${fecha}')`     
+  
+    execute.Query(res,qry);
+
+});
+
+
+router.post("/select_ordenes_detalle", async(req,res)=>{
+    const {sucursal,coddoc,correlativo} = req.body;
+        
+    let qry ='';
+
+    qry = `SELECT CODPROD, DESPROD, CANTIDAD, TOTALUNIDADES, PRECIO, TOTALPRECIO FROM DOCPRODUCTOS WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}' AND CORRELATIVO=${correlativo}`     
+  
+    execute.Query(res,qry);
+
+});
 
 
 module.exports = router;
