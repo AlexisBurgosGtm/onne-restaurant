@@ -63,11 +63,22 @@ function getView(){
             <div class="row">
                 <div class="card card-rounded shadow p-4 col-12 bg-success text-white">
                     <h5>Catálogo de productos</h5>
+                    <select class="form-control col-6" id="tipoLista">
+                        <option value="SI" class>Habilitados</option>
+                        <option value="NO" class="text-danger">Deshabilitados</option>
+                    </select>
                 </div>
             </div>
 
             <div class="row">
-
+              
+                <div class="form-group">
+                    <label></label>
+                    <input type="text" class="form-control" placeholder="Escriba y presione BUSCAR.." id="txtBuscarProd">
+                    <button class="btn btn-md btn-info hand shadow">
+                        <i class="fal fa-search"></i>
+                    </button>
+                </div>
                 <div class="card card-rounded shadow p-4 col-12">
                     <div class="table-responsive" id="containerProductos">
 
@@ -433,6 +444,11 @@ function addEventListeners(){
         $("#modalNuevoProducto").modal('show');
     });
 
+
+    let tipoLista = document.getElementById('tipoLista');
+    tipoLista.addEventListener('change',()=>{
+        getListadoProductos()
+    });
 
     getListadoProductos();
 
@@ -875,6 +891,9 @@ function LimpiarDatos(){
 
 function getListadoProductos(){
 
+
+        let tipo = document.getElementById('tipoLista').value;
+
             let container = document.getElementById('containerProductos');
             container.innerHTML = GlobalLoader;
       
@@ -882,7 +901,8 @@ function getListadoProductos(){
             let id = 0;
 
             axios.post('/productos/listadoproductos', {
-                sucursal:GlobalSucursal
+                sucursal:GlobalSucursal,
+                tipo:tipo
             })
             .then((response) => {
                 const data = response.data.recordset;
@@ -1072,43 +1092,74 @@ function deleteProducto(codprod,desprod, idbtn){
 
     let btn = document.getElementById(idbtn);
 
+    funciones.showToast('Verificando movimientos del producto')
 
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
 
-    funciones.Confirmacion('¿Está seguro que desea ELIMINAR ESTE PRODUCTO ' + desprod + '?')
-    .then((value)=>{
-        if(value==true){
+    api.verify_movimientos(codprod)
+    .then(()=>{
 
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
 
-
-            funciones.solicitarClave()
-            .then((name)=>{
-                if(name==GlobalConfigClave){
-                            btn.disabled = true;
-                            btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
-                
-                            delete_producto(codprod)
-                            .then(()=>{
-                                funciones.Aviso('Producto eliminado exitosamente!!');
-                                getListadoProductos();
-                
-                                btn.disabled = false;
-                                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
-                
-                            })
-                            .catch(()=>{
-                                funciones.AvisoError('No se pudo eliminar');
-                
-                                btn.disabled = false;
-                                btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
-                            })
-
-                }
-            })
-
-       
-
-        }
+        funciones.Confirmacion('¿Está seguro que desea ELIMINAR ESTE PRODUCTO ' + desprod + '?')
+        .then((value)=>{
+            if(value==true){
+    
+    
+    
+                funciones.solicitarClave()
+                .then((name)=>{
+                    if(name==GlobalConfigClave){
+                                btn.disabled = true;
+                                btn.innerHTML = '<i class="fal fa-trash fa-spin"></i>';
+                    
+                                delete_producto(codprod)
+                                .then(()=>{
+                                    funciones.Aviso('Producto eliminado exitosamente!!');
+                                    getListadoProductos();
+                    
+                                    btn.disabled = false;
+                                    btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+                    
+                                })
+                                .catch(()=>{
+                                    funciones.AvisoError('No se pudo eliminar');
+                    
+                                    btn.disabled = false;
+                                    btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+                                })
+    
+                    }
+                })
+    
+           
+    
+            }
+        })
     })
+    .catch(()=>{
+        //btn.disabled = false;
+        //btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+
+        funciones.showToast('No puede eliminar un producto que tiene movimientos, en su lugar, lo voy a deshabilitar');
+       
+        deshab_producto(codprod,'NO')
+        .then(()=>{
+            funciones.showToast('Producto deshabilitados exitosamente!!');
+            getTblListado();
+        })
+        .catch(()=>{
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fal fa-trash"></i>Eliminar';
+            
+            funciones.AvisoError('No se pudo deshabilitar, inténtelo más tarde')
+        })
+    })
+
+
+   
 
 };
 
@@ -1135,6 +1186,31 @@ function delete_producto(codprod){
     })
 
 };
+
+function deshab_producto(codprod,tipo){
+  
+    
+    return new Promise((resolve,reject)=>{
+        axios.post('/productos/deshab_producto', {
+            sucursal:GlobalSucursal,
+            codprod:codprod,
+            tipo:tipo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            if(response.data.rowsAffected[0]==0){
+                reject();
+            }else{
+                resolve(data);
+            }
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            reject(error);
+        });
+
+    })
+}
+
 
 
 function getDataMarcas(){

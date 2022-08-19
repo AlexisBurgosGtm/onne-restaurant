@@ -15,7 +15,17 @@ router.post("/verify_codprod", async(req,res)=>{
 
 });
 
+router.post("/verify_movimiento_codprod", async(req,res)=>{
+   
+    const {sucursal,codprod} = req.body;
+        
+    let qry ='';
 
+    qry = `SELECT TOP 1 CODPROD FROM DOCPRODUCTOS WHERE EMPNIT = '${sucursal}' AND CODPROD='${codprod}'; `     
+  
+    execute.Query(res,qry);
+
+});
 
 router.post("/insert_producto", async(req,res)=>{
    
@@ -71,7 +81,7 @@ router.post("/edit_producto", async(req,res)=>{
 
 router.post("/listadoproductos", async(req,res)=>{
    
-    const {sucursal} = req.body;
+    const {sucursal,tipo} = req.body;
         
     let qry ='';
 
@@ -80,7 +90,7 @@ router.post("/listadoproductos", async(req,res)=>{
             FROM  PRODUCTOS LEFT OUTER JOIN
                 PRECIOS ON PRODUCTOS.CODPROD = PRECIOS.CODPROD AND PRODUCTOS.EMPNIT = PRECIOS.EMPNIT LEFT OUTER JOIN
                 MARCAS ON PRODUCTOS.EMPNIT = MARCAS.EMPNIT AND PRODUCTOS.CODMARCA = MARCAS.CODMARCA
-        WHERE (PRODUCTOS.EMPNIT = '${sucursal}')`     
+        WHERE (PRODUCTOS.EMPNIT = '${sucursal}') AND (PRODUCTOS.HABILITADO='${tipo}')`     
   
     execute.Query(res,qry);
 
@@ -119,6 +129,19 @@ router.post("/delete_producto", async(req,res)=>{
 
 });
 
+
+router.post("/deshab_producto", async(req,res)=>{
+   
+    const {sucursal,codprod,tipo} = req.body;
+        
+    let qry ='';
+
+    qry = `UPDATE PRODUCTOS SET HABILITADO='${tipo}' WHERE EMPNIT='${sucursal}' AND CODPROD='${codprod}';
+          `     
+  
+    execute.Query(res,qry);
+
+});
 
 
 

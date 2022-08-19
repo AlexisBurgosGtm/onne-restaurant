@@ -294,5 +294,26 @@ let api = {
 
         })
 
+    },
+    verify_movimientos: (codprod)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/productos/verify_movimiento_codprod', {
+                sucursal:GlobalSucursal,
+                codprod:codprod
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                if(response.data.rowsAffected[0]==0){                  
+                    resolve();
+                }else{
+                    reject();
+                }
+            }, (error) => {
+                reject();
+            });
+
+        })
+
     }
 }
